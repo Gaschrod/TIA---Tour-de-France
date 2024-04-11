@@ -20,8 +20,8 @@
 /* --------------------------------------------------------------------- */
 
 
-produire_reponse([fin],L1) :-
-    L1 = [merci, de, m, '\'', avoir, consulte], !.
+produire_reponse([fin],[L1]) :-
+    L1 = 'merci de m\'avoir consulte !', !.
 
 produire_reponse(L,Rep) :-
     mclef(M,_), member(M,L),
@@ -30,10 +30,11 @@ produire_reponse(L,Rep) :-
     call(Body), !.
 
 produire_reponse(_,[S1,S2]) :-
-    S1 = 'Je ne sais pas. ',
-    S2 = 'Les étudiants vont m\'aider, vous le verrez'.
+    S1 = 'je ne sais pas.',
+    S2 = 'les étudiants vont m\'aider, vous le verrez'.
 
 match_pattern(Pattern,Lmots) :-
+    %Ici on utiliser une fonction de distance de Hamming sur chaque mot de la liste avec chaque mot du pattern
     sublist(Pattern,L_mots).
 
 match_pattern(LPatterns,Lmots) :-
@@ -45,6 +46,7 @@ match_pattern_dist([N,Pattern|Lpatterns],Lmots) :-
     match_pattern_dist(Lpatterns,Lmots_rem).
 
 within_dist(_,Pattern,Lmots,Lmots_rem) :-
+    /*N +, Pattern +, Lmots +, Lmots_rem -*/
     prefixrem(Pattern,Lmots,Lmots_rem).
 within_dist(N,Pattern,[_|Lmots],Lmots_rem) :-
     N > 1, Naux is N-1,
@@ -71,6 +73,12 @@ nb_equipes(4).
 mclef(commence,10).
 mclef(equipe,5).
 mclef(quipe,5).
+mclef(occupee,5).
+mclef(depasser,5).
+mclef(combien, 5)
+mclef(ordre, 5)
+mclef(plus, 5)
+mclef(chance, 5)
 
 % --------------------------------------------------------------- %
 
@@ -82,18 +90,54 @@ regle_rep(commence,1,
 
 regle_rep(equipe,5,
   [ [ combien ], 3, [ coureurs], 5, [ equipe ] ],
-  [ chaque, equipe, compte, X, coureurs ]) :- 
+  [ chaque, equipe, compte, X, "coureurs." ]) :- 
 
        nb_coureurs(X).
 
 regle_rep(quipe,5,
   [ [ combien ], 3, [ coureurs], 5, [ quipe ] ],
-  [ "chaque equipe compte ", X_in_chars, "coureurs" ]) :- 
+  [ "chaque equipe compte", X_in_chars, "coureurs." ]) :- 
 
        nb_coureurs(X),
        write_to_chars(X,X_in_chars).
 
-write_to_chars(3,"3 ").
+write_to_chars(3,"3").
+
+% ----------------------------------------------------------------% 
+
+regle_rep(occupee,5,
+  [ [ deplacer ], [courreur], [ case ], [ occupee ] ],
+  [ non ]).
+
+% ----------------------------------------------------------------%
+
+regle_rep(depasser,5,
+  [ [ depasser], [groupe], [ courreur ] ],
+  [ 'oui, il est permis de depasser par le bas-cote de la route pour autant que le coureur arrive sur une case non occupee. Si ce n\'est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu\'il voulait depasser.' ]).
+
+% ----------------------------------------------------------------%
+
+regle_rep(combien,5,
+  [ [combien], [ tirer ], [ carte ] ],
+  [ 'au d\'ebut du jeu, les joueurs tirent 5 cartes, selon un tirage aleatoire.' ]).
+
+% ----------------------------------------------------------------%
+
+regle_rep(ordre,5,
+  [ [ ordre ], [ tirer ], [cartes] ],
+  [ 'l\'ordre suivant : equipe d\'Italie, equipe de Hollande, equipe de Belgique, equipe d\'Allemagne.' ]).
+
+% ----------------------------------------------------------------%
+
+regle_rep(plus,5,
+  [ [ plus ],  [de], [ carte ]],
+  [ 'tirez un nouveau lot de 5 cartes' ]).
+
+% ----------------------------------------------------------------%
+
+regle_rep(chance,5,
+  [ [ carte ], [ chance ] ],
+  [ 'les cartes chances peuvent soit faire reculer jusqu\'a 3 cases ou au contraire faire avancer.' ]).
 
 
 
