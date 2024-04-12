@@ -33,6 +33,8 @@ function Start_the_game() {
 
     console.log("Le jeu a démarré !");
     console.log("Jeu de cartes des secondes généré :", tableau);
+
+    afficherJoueursEtCartesHTML(); 
 }
 
 function RandomCarte() {
@@ -52,6 +54,7 @@ function RandomCarte() {
     console.log("Cartes restantes dans le tableau :", tableau.length);
     console.log("Cartes du Joueur " + (joueurCourant + 1) + " :", window[joueurs[joueurCourant]]);
 
+    afficherJoueursEtCartesHTML(); 
 
 }
 
@@ -65,6 +68,10 @@ function Change_de_joueur() {
     } while (totalPlayers == 1 && joueurs[joueurCourant].includes("bot"));
 
     console.log("tour du Joueur courant :", joueurCourant + 1);
+
+    afficherJoueursEtCartesHTML(); 
+
+
 }
 
 function jouer_carte() {
@@ -84,5 +91,35 @@ function jouer_carte() {
     } else {
         console.log("Le joueur n'a pas de carte à jouer !");
     }
+
+    afficherJoueursEtCartesHTML(); 
+
 }
 
+
+function afficherJoueursEtCartesHTML() {
+    var container = document.getElementById("joueursEtCartesContainer");
+    container.innerHTML = ""; // Effacer le contenu précédent
+
+    for (var i = 0; i < joueurs.length; i++) {
+        var joueur = joueurs[i];
+        var cartesDuJoueur = window[joueur];
+        var joueurDiv = document.createElement("div");
+        joueurDiv.innerHTML = "<h3>" + joueur + "</h3>";
+        if (cartesDuJoueur.length > 0) {
+            var cartesListe = document.createElement("ul");
+            for (var j = 0; j < cartesDuJoueur.length; j++) {
+                var carte = cartesDuJoueur[j];
+                var carteItem = document.createElement("li");
+                carteItem.textContent = "Carte " + (j + 1) + " : [" + carte[0] + ", " + carte[1] + "]";
+                cartesListe.appendChild(carteItem);
+            }
+            joueurDiv.appendChild(cartesListe);
+        } else {
+            var pasDeCartes = document.createElement("p");
+            pasDeCartes.textContent = "Pas de cartes";
+            joueurDiv.appendChild(pasDeCartes);
+        }
+        container.appendChild(joueurDiv);
+    }
+}
