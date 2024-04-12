@@ -2,8 +2,23 @@ var joueurs = ['j1_carte', 'j2_carte', 'j3_carte', 'j4_carte'];
 var tableau = [];
 var joueurCourant = 0; 
 
+
 function Start_the_game() {
-    
+    var selectedHumanPlayers = parseInt(document.getElementById("selectHumanPlayers").value);
+    var selectedBots = parseInt(document.getElementById("selectBots").value);
+    var totalPlayers = selectedHumanPlayers + selectedBots;
+  
+    if (totalPlayers > 4 || selectedHumanPlayers < 1) {
+      alert("Veuillez choisir entre 1 et 2 joueurs humains, et jusqu'à 2 bots.");
+      return;
+    }
+  
+    alert("Vous avez choisi " + selectedHumanPlayers + " joueur(s) humain(s) et " + selectedBots + " bot(s) pour la partie !");
+
+  
+
+
+
     for (var i = 0; i < joueurs.length; i++) {
         window[joueurs[i]] = [];
     }
@@ -41,9 +56,15 @@ function RandomCarte() {
 }
 
 function Change_de_joueur() {
+    var selectedHumanPlayers = parseInt(document.getElementById("selectHumanPlayers").value);
+    var selectedBots = parseInt(document.getElementById("selectBots").value);
+    var totalPlayers = selectedHumanPlayers + selectedBots;
     
-    joueurCourant = (joueurCourant + 1) % joueurs.length;
-    console.log("tour du Joueur courant :", joueurCourant + 1 ); 
+    do {
+        joueurCourant = (joueurCourant + 1) % totalPlayers;
+    } while (totalPlayers == 1 && joueurs[joueurCourant].includes("bot"));
+
+    console.log("tour du Joueur courant :", joueurCourant + 1);
 }
 
 function jouer_carte() {
