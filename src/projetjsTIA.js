@@ -13,7 +13,7 @@ function Start_the_game() {
       return;
     }
   
-    alert("Vous avez choisi " + selectedHumanPlayers + " joueur(s) humain(s) et " + selectedBots + " bot(s) pour la partie !");
+    //alert("Vous avez choisi " + selectedHumanPlayers + " joueur(s) humain(s) et " + selectedBots + " bot(s) pour la partie !");
 
   
 
@@ -74,52 +74,66 @@ function Change_de_joueur() {
 
 }
 
-function jouer_carte() {
-    // Récupérer les cartes du joueur courant
-    var mainJoueurCourant = window[joueurs[joueurCourant]];
-
-    // Supposons que vous ayez une logique pour que le joueur sélectionne une carte de sa main
-    // Ici, je suppose simplement qu'il joue la première carte de sa main
-    if (mainJoueurCourant.length > 0) {
-        var carteJouee = mainJoueurCourant.shift(); // Retirer la première carte de la main du joueur courant
-        console.log("Carte jouée par Joueur " + (joueurCourant + 1) + " :", carteJouee);
-
-        // Remettre la carte jouée au bon endroit dans le tableau de cartes
-        tableau.push(carteJouee);
-        console.log("Carte remise dans le tableau :", carteJouee);
-        console.log("Cartes restantes dans le tableau :", tableau.length);
-    } else {
-        console.log("Le joueur n'a pas de carte à jouer !");
-    }
-
-    afficherJoueursEtCartesHTML(); 
-
-}
-
 
 function afficherJoueursEtCartesHTML() {
     var container = document.getElementById("joueursEtCartesContainer");
-    container.innerHTML = ""; // Effacer le contenu précédent
+    container.innerHTML = ""; // Pour effacer le contenu précédent
 
     for (var i = 0; i < joueurs.length; i++) {
+
         var joueur = joueurs[i];
         var cartesDuJoueur = window[joueur];
         var joueurDiv = document.createElement("div");
+
         joueurDiv.innerHTML = "<h3>" + joueur + "</h3>";
+
         if (cartesDuJoueur.length > 0) {
             var cartesListe = document.createElement("ul");
+
             for (var j = 0; j < cartesDuJoueur.length; j++) {
-                var carte = cartesDuJoueur[j];
-                var carteItem = document.createElement("li");
-                carteItem.textContent = "Carte " + (j + 1) + " : [" + carte[0] + ", " + carte[1] + "]";
-                cartesListe.appendChild(carteItem);
+                (function(joueur, carteIndex) {
+                    var carte = cartesDuJoueur[carteIndex];
+                    var carteTexte = "Carte " + (carteIndex + 1) + " : [" + carte[0] + ", " + carte[1] + "]";
+                    var carteItem = document.createElement("li");
+
+                    carteItem.textContent = carteTexte;
+                    // Ajoutez un identifiant unique au texte de chaque carte pour la référencer lors du clic
+                    carteItem.id = joueur + "_carte_texte_" + carteIndex;
+                    // Ajoutez un gestionnaire d'événements de clic à chaque texte de carte
+                    carteItem.addEventListener("click", function() {
+                        jouer_carte(joueur, carteIndex); 
+                    });
+                    cartesListe.appendChild(carteItem);
+                })(joueur, j);
             }
             joueurDiv.appendChild(cartesListe);
+
         } else {
             var pasDeCartes = document.createElement("p");
             pasDeCartes.textContent = "Pas de cartes";
             joueurDiv.appendChild(pasDeCartes);
         }
         container.appendChild(joueurDiv);
+    }
+}
+
+function jouer_carte(joueur, carteIndex) {
+    // Pour récupérer les cartes du joueur
+    var mainJoueur = window[joueur];
+
+    // Vérifier si l'index de la carte est valide
+    if (carteIndex >= 0 && carteIndex < mainJoueur.length) {
+        var carteJouee = mainJoueur.splice(carteIndex, 1)[0]; 
+        console.log("Carte jouée par " + joueur + " :", carteJouee);
+
+        // Remettre la carte jouée au bon endroit dans le tableau de cartes
+        tableau.push(carteJouee);
+        console.log("Carte remise dans le tableau :", carteJouee);
+        console.log("Cartes restantes dans le tableau :", tableau.length);
+
+        // Mettre à jour l'interface
+        afficherJoueursEtCartesHTML();
+    } else {
+        console.log("Index de carte invalide !");
     }
 }
