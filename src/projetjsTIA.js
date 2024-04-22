@@ -63,6 +63,20 @@ function Start_the_game() {
     }
 
     afficherJoueursEtCartesHTML(nomsJoueurs); 
+
+    // Supprime le bouton de démarrage et les deux autres bouttons de sélection
+    var startButton = document.getElementById("myButton");
+    if (startButton) {
+        startButton.remove();
+    }   
+    var selectHumanPlayerstoerasebutton = document.getElementById("selectHumanPlayers");
+    var selectBotstoerasebutton = document.getElementById("selectBots");
+    if (selectHumanPlayerstoerasebutton) {
+        selectHumanPlayerstoerasebutton.remove();
+    }
+    if (selectBotstoerasebutton) {
+        selectBotstoerasebutton.remove();
+    }
 }
 
 
@@ -98,7 +112,6 @@ function RandomCarte(playerIndex) {
 
 // Fonction pour afficher les joueurs et leurs cartes dans l'interface
 function afficherJoueursEtCartesHTML() {
-    // Récupérer le conteneur HTML
     var container = document.getElementById("joueursEtCartesContainer");
     container.innerHTML = ""; // Pour effacer le contenu précédent
     
@@ -123,7 +136,12 @@ function afficherJoueursEtCartesHTML() {
                 var valeurCarte = carte[0]; // La première valeur de la carte
 
                 var carteItem = document.createElement("li");
-                carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
+                var carteText = document.createTextNode("Carte " + (j + 1) + " : " + valeurCarte);
+                var button = document.createElement("button");
+                button.textContent = "Jouer";
+                button.setAttribute("onclick", "jouer_carte('" + joueur + "', " + j + ")");
+                carteItem.appendChild(carteText);
+                carteItem.appendChild(button);
                 cartesListe.appendChild(carteItem);
             }
             joueurDiv.appendChild(cartesListe);
@@ -136,10 +154,12 @@ function afficherJoueursEtCartesHTML() {
     }
 }
 
+
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
-// fonction ko pour le moment
+
+
 
 
 // Fonction pour jouer une carte
@@ -152,10 +172,18 @@ function jouer_carte(joueur, carteIndex) {
         var carteJouee = mainJoueur.splice(carteIndex, 1)[0]; 
         console.log("Carte jouée par " + joueur + " :", carteJouee);
 
-        // Remettre la carte jouée au bon endroit dans le tableau de cartes
+        // Remet la carte jouée au bon endroit dans le tableau de cartes
         tableau.push(carteJouee);
         console.log("Carte remise dans le tableau :", carteJouee);
         console.log("Cartes restantes dans le tableau :", tableau.length);
+
+        // Vérifie si le deck du joueur est vide
+        if (mainJoueur.length === 0) {
+            // Si le deck est vide, piocher 5 nouvelles cartes
+            for (var i = 0; i < 5; i++) {
+                RandomCarte(joueurs.indexOf(joueur));
+            }
+        }
 
         // Mettre à jour l'interface
         afficherJoueursEtCartesHTML();
@@ -163,3 +191,4 @@ function jouer_carte(joueur, carteIndex) {
         console.log("Index de carte invalide !");
     }
 }
+
