@@ -3,6 +3,7 @@ var joueurs = ['j1_carte', 'j2_carte', 'j3_carte', 'j4_carte'];
 var nomsJoueurs = []; 
 var tableau = [];
 var joueurCourant = 0; 
+var tour = 0;
 
 // Fonction pour démarrer le jeu
 function Start_the_game() {
@@ -110,22 +111,24 @@ function RandomCarte(playerIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-// Fonction pour afficher les joueurs et leurs cartes dans l'interface
+// Fonction pour afficher les joueurs et leurs cartes
 function afficherJoueursEtCartesHTML() {
     var container = document.getElementById("joueursEtCartesContainer");
-    container.innerHTML = ""; // Pour effacer le contenu précédent
-    
-    console.log("Noms des joueurs :", nomsJoueurs);
+    container.innerHTML = ""; // Efface le contenu précédent
 
-    // Pour chaque joueur, affiche son nom et ses cartes
     for (var i = 0; i < joueurs.length; i++) {
         var joueur = joueurs[i];
-        var nomJoueur = nomsJoueurs[i]; // Récupérer le nom du joueur correspondant
+        var nomJoueur = nomsJoueurs[i];
         var joueurDiv = document.createElement("div");
+        joueurDiv.classList.add("joueur-container");
 
-        var nomAffiche = "Joueur " + (i + 1) + " : " + nomJoueur; // Construire le nom à afficher
-
+        var nomAffiche = "Joueur " + (i + 1) + " : " + nomJoueur;
         joueurDiv.innerHTML = "<h3>" + nomAffiche + "</h3>";
+        
+        // Ajoute le texte "Cartes seconde" sous le nom du joueur
+        var cartesSecondeTexte = document.createElement("p");
+        cartesSecondeTexte.textContent = "Cartes seconde:";
+        joueurDiv.appendChild(cartesSecondeTexte);
 
         var cartesDuJoueur = window[joueur];
         if (cartesDuJoueur.length > 0) {
@@ -133,15 +136,16 @@ function afficherJoueursEtCartesHTML() {
 
             for (var j = 0; j < cartesDuJoueur.length; j++) {
                 var carte = cartesDuJoueur[j];
-                var valeurCarte = carte[0]; // La première valeur de la carte
+                var valeurCarte = carte[0];
 
                 var carteItem = document.createElement("li");
-                var carteText = document.createTextNode("Carte " + (j + 1) + " : " + valeurCarte);
-                var button = document.createElement("button");
-                button.textContent = "Jouer";
-                button.setAttribute("onclick", "jouer_carte('" + joueur + "', " + j + ")");
-                carteItem.appendChild(carteText);
-                carteItem.appendChild(button);
+                carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
+
+                var jouerButton = document.createElement("button");
+                jouerButton.textContent = "Jouer";
+                jouerButton.setAttribute("onclick", "jouer_carte('" + joueur + "', " + j + ")");
+
+                carteItem.appendChild(jouerButton);
                 cartesListe.appendChild(carteItem);
             }
             joueurDiv.appendChild(cartesListe);
@@ -153,6 +157,9 @@ function afficherJoueursEtCartesHTML() {
         container.appendChild(joueurDiv);
     }
 }
+
+
+
 
 
 // ---------------------------------------------------------------------
