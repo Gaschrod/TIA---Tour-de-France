@@ -1,29 +1,45 @@
+//variable de bases 
 var joueurs = ['j1_carte', 'j2_carte', 'j3_carte', 'j4_carte'];
+var nomsJoueurs = []; 
 var tableau = [];
 var joueurCourant = 0; 
 
-
+// Fonction pour démarrer le jeu
 function Start_the_game() {
     var selectedHumanPlayers = parseInt(document.getElementById("selectHumanPlayers").value);
     var selectedBots = parseInt(document.getElementById("selectBots").value);
     var totalPlayers = selectedHumanPlayers + selectedBots;
   
-    if (totalPlayers > 4 || selectedHumanPlayers < 1) {
-      alert("Veuillez choisir entre 1 et 2 joueurs humains, et jusqu'à 2 bots.");
-      return;
+    // Vérifie si le nombre total de joueurs est compris entre 2 et 4
+    if (totalPlayers < 2 || totalPlayers > 4) {
+        alert("Veuillez sélectionner entre 2 et 4 joueurs.");
+        return;
     }
-  
-    //alert("Vous avez choisi " + selectedHumanPlayers + " joueur(s) humain(s) et " + selectedBots + " bot(s) pour la partie !");
 
-  
+    // Génère les noms des joueurs humains
+    for (var i = 1; i <= selectedHumanPlayers; i++) {
+        var nom = prompt("Nom du Joueur " + i + " :");
+        if (nom === null || nom === "") {
+            alert("Veuillez entrer un nom pour tous les utilisateurs.");
+            return;
+        }
+        nomsJoueurs.push(nom);
+    }
 
+    // Génère les noms des bots
+    for (var i = 1; i <= selectedBots; i++) {
+        nomsJoueurs.push("Bot " + i);
+    }
 
+    
+    console.log("Noms des joueurs :", nomsJoueurs);
 
+    // Initialise les decks des joueurs
     for (var i = 0; i < joueurs.length; i++) {
         window[joueurs[i]] = [];
     }
 
-    // Création du tableau de jeu
+    // Création du jeu de carte des secondes (12 cartes de 1 à 12, chacune répétée 8 fois)
     for (var i = 1; i <= 12; i++) {
         for (var j = 1; j <= 8; j++) {
             var carte = [i, j];
@@ -31,83 +47,86 @@ function Start_the_game() {
         }
     }
 
-    console.log("Le jeu a démarré !");
+    console.log("Le jeu a démarré gg!");
     console.log("Jeu de cartes des secondes généré :", tableau);
 
-    afficherJoueursEtCartesHTML(); 
+    // Distribue 5 cartes à chaque joueur
+    for (var i = 0; i < totalPlayers; i++) {
+        for (var j = 0; j < 5; j++) {
+            RandomCarte(i);
+        }
+    }
+
+    // Affiche les decks de chaque joueur une seule fois après la distribution des cartes
+    for (var i = 0; i < joueurs.length; i++) {
+        console.log("Le deck de " + nomsJoueurs[i] + " est :", window[joueurs[i]]);
+    }
+
+    afficherJoueursEtCartesHTML(nomsJoueurs); 
 }
 
-function RandomCarte() {
+
+
+
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+// Fonction pour piocher une carte aléatoire
+function RandomCarte(playerIndex) {
+
+    // Vérifie si le tableau de cartes est vide
     if (tableau.length === 0) {
-        console.log("Plus de cartes à piocher !");
+        console.log("Plus de cartes à piocher, mince alors !");
         return;
     }
 
-    // Choisir aléatoirement une carte du tableau
+    // Choisis aléatoirement une carte du tableau
     var carteIndex = Math.floor(Math.random() * tableau.length);
     var cartePiochee = tableau.splice(carteIndex, 1)[0]; 
 
-    // Distribuer la carte au joueur courant
-    window[joueurs[joueurCourant]].push(cartePiochee);
-
-    console.log("Carte piochée par Joueur " + (joueurCourant + 1) + " :", cartePiochee);
-    console.log("Cartes restantes dans le tableau :", tableau.length);
-    console.log("Cartes du Joueur " + (joueurCourant + 1) + " :", window[joueurs[joueurCourant]]);
+    // Distribue la carte au joueur correspondant
+    window[joueurs[playerIndex]].push(cartePiochee);
 
     afficherJoueursEtCartesHTML(); 
-
 }
 
-function Change_de_joueur() {
-    var selectedHumanPlayers = parseInt(document.getElementById("selectHumanPlayers").value);
-    var selectedBots = parseInt(document.getElementById("selectBots").value);
-    var totalPlayers = selectedHumanPlayers + selectedBots;
-    
-    do {
-        joueurCourant = (joueurCourant + 1) % totalPlayers;
-    } while (totalPlayers == 1 && joueurs[joueurCourant].includes("bot"));
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
-    console.log("tour du Joueur courant :", joueurCourant + 1);
-
-    afficherJoueursEtCartesHTML(); 
-
-
-}
-
-
+// Fonction pour afficher les joueurs et leurs cartes dans l'interface
 function afficherJoueursEtCartesHTML() {
+    // Récupérer le conteneur HTML
     var container = document.getElementById("joueursEtCartesContainer");
     container.innerHTML = ""; // Pour effacer le contenu précédent
+    
+    console.log("Noms des joueurs :", nomsJoueurs);
 
+    // Pour chaque joueur, affiche son nom et ses cartes
     for (var i = 0; i < joueurs.length; i++) {
-
         var joueur = joueurs[i];
-        var cartesDuJoueur = window[joueur];
+        var nomJoueur = nomsJoueurs[i]; // Récupérer le nom du joueur correspondant
         var joueurDiv = document.createElement("div");
 
-        joueurDiv.innerHTML = "<h3>" + joueur + "</h3>";
+        var nomAffiche = "Joueur " + (i + 1) + " : " + nomJoueur; // Construire le nom à afficher
 
+        joueurDiv.innerHTML = "<h3>" + nomAffiche + "</h3>";
+
+        var cartesDuJoueur = window[joueur];
         if (cartesDuJoueur.length > 0) {
             var cartesListe = document.createElement("ul");
 
             for (var j = 0; j < cartesDuJoueur.length; j++) {
-                (function(joueur, carteIndex) {
-                    var carte = cartesDuJoueur[carteIndex];
-                    var carteTexte = "Carte " + (carteIndex + 1) + " : [" + carte[0] + ", " + carte[1] + "]";
-                    var carteItem = document.createElement("li");
+                var carte = cartesDuJoueur[j];
+                var valeurCarte = carte[0]; // La première valeur de la carte
 
-                    carteItem.textContent = carteTexte;
-                    // Ajoutez un identifiant unique au texte de chaque carte pour la référencer lors du clic
-                    carteItem.id = joueur + "_carte_texte_" + carteIndex;
-                    // Ajoutez un gestionnaire d'événements de clic à chaque texte de carte
-                    carteItem.addEventListener("click", function() {
-                        jouer_carte(joueur, carteIndex); 
-                    });
-                    cartesListe.appendChild(carteItem);
-                })(joueur, j);
+                var carteItem = document.createElement("li");
+                carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
+                cartesListe.appendChild(carteItem);
             }
             joueurDiv.appendChild(cartesListe);
-
         } else {
             var pasDeCartes = document.createElement("p");
             pasDeCartes.textContent = "Pas de cartes";
@@ -117,11 +136,18 @@ function afficherJoueursEtCartesHTML() {
     }
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// fonction ko pour le moment
+
+
+// Fonction pour jouer une carte
 function jouer_carte(joueur, carteIndex) {
     // Pour récupérer les cartes du joueur
     var mainJoueur = window[joueur];
 
-    // Vérifier si l'index de la carte est valide
+    // Vérifie si l'index de la carte est valide
     if (carteIndex >= 0 && carteIndex < mainJoueur.length) {
         var carteJouee = mainJoueur.splice(carteIndex, 1)[0]; 
         console.log("Carte jouée par " + joueur + " :", carteJouee);
