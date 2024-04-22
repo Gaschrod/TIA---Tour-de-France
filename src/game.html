@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Game</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Assurez-vous que le chemin est correct -->
+</head>
+<body>
+    <div class="parent">
+    <div class="div1">
+    <p id="Navbar">Welcome to My Game!</p>
+    </div>
+
+    <div class="div2">
+    <img src="img/carte.png" alt="My Image" id="fullScreenImage">
+    </div>
+
+    <div class="div3">
+    <button id="myButton2" onclick="RandomCarte()">Piocher une carte</button>
+    </div>
+
+    <div class="div4">
+    <p id="joueur">Joueur actuel : </p>
+    <p>Position des joueurs : <br>
+        Equipe d'Italie : 1 - 2 - 4 - 8 - 12 <br>
+        Equipe de Hollande : 5 - 7 - 10 - 11 - 12 <br>
+        Equipe de Belgique : 3 - 5 - 7 - 9 - 12 <br>
+        Equipe d'Allemagne : 1 - 6 - 7 - 8 - 10 <br>
+    </p>
+    </div>
+    <!--<button id="myButton3" onclick="jouer_carte()">Jouer la carte au choix</button>-->
+
+    <div class="div5">
+    <button id="myButton4" onclick="Change_de_joueur()">passe au joueur suivant</button>
+    </div>
+
+    <div class="div6">
+    <p id="chatbot">Chatbot : </p>
+    </div>    
+    </div>
+    <script src="js/projetjsTIA.js"></script>
+</body>
+</html>
