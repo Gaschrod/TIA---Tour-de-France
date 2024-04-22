@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>tia projet</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Jeu de cartes</h1>
+
+    <h2>Choisissez le nombre de joueurs humains :</h2>
+    <select id="selectHumanPlayers">
+        <option value="1">1 joueur humain</option>
+        <option value="2">2 joueurs humains</option>
+    </select>
+    <select id="selectBots">
+        <option value="0">0 bot</option>
+        <option value="1">1 bot</option>
+        <option value="2">2 bots</option>
+    </select>
+    <button id="myButton" onclick="Start_the_game()">Start</button>
+
+    <h2>Autre info :</h2>
+
+    <button id="myButton2" onclick="RandomCarte()">Piocher une carte</button>
+    <button id="myButton4" onclick="Change_de_joueur()">passe au joueur suivant</button>
+
+    <div id="joueursEtCartesContainer"></div>
+
+    <script src="projetjsTIA.js"></script>
+</body>
+</html>
