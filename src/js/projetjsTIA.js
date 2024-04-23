@@ -6,7 +6,7 @@ var joueurCourant = 0;
 var tour = 0;
 
 // Fonction pour démarrer le jeu
-function Start_the_game() {
+function choice_player(nomsJoueurs){
     var selectedHumanPlayers = parseInt(document.getElementById("selectHumanPlayers").value);
     var selectedBots = parseInt(document.getElementById("selectBots").value);
     var totalPlayers = selectedHumanPlayers + selectedBots;
@@ -34,7 +34,11 @@ function Start_the_game() {
 
     
     console.log("Noms des joueurs :", nomsJoueurs);
+    window.location.href = 'game.html';
 
+}
+
+function init_deck(tableau, totalPlayers) {
     // Initialise les decks des joueurs
     for (var i = 0; i < joueurs.length; i++) {
         window[joueurs[i]] = [];
@@ -79,7 +83,6 @@ function Start_the_game() {
         selectBotstoerasebutton.remove();
     }
 }
-
 
 
 

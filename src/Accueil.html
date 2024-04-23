@@ -10,23 +10,27 @@
       <meta name="viewport" content="width=device-width" />
     </head>
     <body >
-      <h1>Jeu de cartes</h1>
+      <div class="grid_parent"> 
+        <div class="div1">
+          <p id="Navbar">Bienvenue dans le jeu de cartes!</p>     
     
-      <h2>Choisissez le nombre de joueurs humains :</h2>
-      <select id="selectHumanPlayers">
-        <option value="1">1 joueur humain</option>
-        <option value="2">2 joueurs humains</option>
-      </select>
-      <select id="selectBots">
-        <option value="0">0 bot</option>
-        <option value="1">1 bot</option>
-        <option value="2">2 bots</option>
-      </select>
-
-      <h2>Autre info :</h2>
-     
-      <button id="myButton" onclick="Start_the_game()">Start</button>
-
+        <h2>Choisissez le nombre de joueurs humains :</h2>
+        <select id="selectHumanPlayers">
+          <option value="1">1 joueur humain</option>
+          <option value="2">2 joueurs humains</option>
+        </select>
+        <select id="selectBots">
+          <option value="0">0 bot</option>
+          <option value="1">1 bot</option>
+          <option value="2">2 bots</option>
+        </select>
+  
+        <h2>Autre info :</h2>
+       
+        <button id="myButton" onclick="choice_player(nomsJoueurs)">Start</button>
+      </div>
+      </div>
+ 
 
       <script src="js/projetjsTIA.js"></script>
   </body>
