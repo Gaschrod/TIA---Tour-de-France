@@ -199,3 +199,85 @@ function jouer_carte(joueur, carteIndex) {
     }
 }
 
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+// Initialisation des positions des cyclistes
+const positions = {
+    1: { section: 1, rangée: "milieu", case: 0 },
+    2: { section: 1, rangée: "milieu", case: 0 },
+    3: { section: 1, rangée: "milieu", case: 0 }
+};
+
+
+// Déclaration de sectionsRangées pour définir les rangées valides pour chaque section
+const sectionsRangées = {
+    1: ["interieur", "milieu", "exterieur"],
+    2: ["interieur", "milieu"],
+    3: ["interieur", "milieu", "exterieur"],
+    4: ["interieur", "milieu", "exterieur"],
+    5: ["milieu", "exterieur"],
+    6: ["milieu"],
+    7: ["milieu", "exterieur"],
+    8: ["interieur", "milieu", "exterieur"],
+    9: ["interieur", "milieu", "exterieur"]
+};
+
+function avancer() {
+    // Récupérer les valeurs sélectionnées par l'utilisateur
+    const cycliste = parseInt(document.getElementById('cycliste').value);
+    const casesAAvancer = parseInt(document.getElementById('note').value);
+    const rangée = document.getElementById('rangée').value;
+
+    
+    if (isNaN(casesAAvancer) || casesAAvancer <= 0) {
+        alert("Veuillez saisir un nombre valide de cases à avancer.");
+        return;
+    }
+
+    // ancienne position du cycliste
+    const anciennePosition = {
+        section: positions[cycliste].section,
+        rangée: positions[cycliste].rangée,
+        case: positions[cycliste].case
+    };
+
+    // Mettre à jour la position du cycliste
+    positions[cycliste].rangée = rangée;
+    positions[cycliste].case += casesAAvancer;
+
+    // pour ne pas dépasser le plateau de jeu 
+    if (positions[cycliste].case > 105) {
+        positions[cycliste].case = 105;
+    }
+
+    // Vérifier si le cycliste atteint les limites d'une section et le déplacer dans la section suivante si nécessaire
+    const sectionsLimites = [8, 18, 21, 35, 72, 75, 94, 95, 105];
+    for (let i = 0; i < sectionsLimites.length; i++) {
+        if (positions[cycliste].case > sectionsLimites[i]) {
+            let sectionSuivante = i + 2;
+            if (!sectionsRangées[sectionSuivante] || !sectionsRangées[sectionSuivante].includes(rangée)) {
+                alert("La rangée sélectionnée n'existe pas dans la section suivante. Veuillez choisir une rangée valide.");
+                // Rétablir la position précédente du cycliste dans la rangée ou il était
+                positions[cycliste].section = anciennePosition.section;
+                positions[cycliste].rangée = anciennePosition.rangée;
+                positions[cycliste].case = anciennePosition.case;
+                return;
+            } else {
+                positions[cycliste].section = sectionSuivante; 
+            }
+        }
+    }
+
+    // affichage dans la console des positions des cyclistes
+    let positionsString = "";
+    for (let i = 1; i <= 3; i++) {
+        positionsString += "cycliste " + i + " : section " + positions[i].section + ", rangée " + positions[i].rangée + ", case " + positions[i].case + " || ";
+    }
+    console.log(positionsString);
+}
+
+
+
