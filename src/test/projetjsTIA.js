@@ -126,7 +126,7 @@ function Start_the_game() {
 function demarrerTour() {
     alert("Début du tour " + tourActuel);
     alert("C'est à Joueur " + (nomsJoueurs[index]) + " de jouer !");
-   
+    cyclistesJouesDansTour = 0;
 
 }
 
