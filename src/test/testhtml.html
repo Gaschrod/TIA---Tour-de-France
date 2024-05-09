@@ -23,8 +23,7 @@
 
     <h2>Autre info :</h2>
     
-    <button id="myButton2" onclick="RandomCarte()">Piocher une carte</button>
-    <button id="myButton4" onclick="Change_de_joueur()">passe au joueur suivant</button>
+    <button id="bouton" onclick="montrerElementSuivant()">Cliquez ici</button>
 
     <br><br>
     <div id="game">
@@ -37,7 +36,10 @@
             <option value="2">Cycliste 2</option>
             <option value="3">Cycliste 3</option>
         </select>
-    
+        <br><br>
+        <label for="note">Avancer le cycliste de:</label>
+        <input type="number" id="note" min="0" max="10">
+        
         <br><br>
         <label for="rangée">Choisir la rangée :</label>
         <select id="rangée">
@@ -46,7 +48,7 @@
             <option value="exterieur">Rangée éxterieur</option>
         </select>
         <br>
-        
+        <button id="myButton6" onclick="avancer()">avancer</button>
     </div>
 
     <div id="joueursEtCartesContainer"></div>
