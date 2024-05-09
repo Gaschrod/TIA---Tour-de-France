@@ -4,6 +4,8 @@ var nomsJoueurs = [];
 var tableau = [];
 var tourActuel = 1;
 var index = 0;
+var cyclistesJouesDansTour = 0; 
+
 
 // Initialisation des positions des cyclistes
 const positions = {
@@ -124,7 +126,8 @@ function Start_the_game() {
 function demarrerTour() {
     alert("Début du tour " + tourActuel);
     alert("C'est à Joueur " + (nomsJoueurs[index]) + " de jouer !");
-    
+   
+
 }
 
 
@@ -156,22 +159,37 @@ function RandomCarte(playerIndex) {
 // ---------------------------------------------------------------------
 
 
-function joueurSuivant(){
-    // Récupérer l'indice de l'élément actuel
-    var indice = index + 1;
+function joueurSuivant() {
+    // Incrémente le compteur de cyclistes joués dans ce tour
+    cyclistesJouesDansTour++;
 
-    // Afficher l'élément avec son indice
-    console.log(nomsJoueurs[index] + ' est en indice ' + indice);
-        
-    // Passage à l'élément suivant
-    index++;
+    // Vérifie si tous les cyclistes ont joué dans ce tour
+    if (cyclistesJouesDansTour === nomsJoueurs.length * 3) {
+        // Réinitialise le compteur de cyclistes joués dans ce tour
+        cyclistesJouesDansTour = 0;
 
-    // Si on a dépassé la fin du tableau, revenir au début
-    if (index >= nomsJoueurs.length) {
-        index = 0;
-        tourActuel
+        // Passe au tour suivant
+        index++;
+
+        // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
+        if (index >= nomsJoueurs.length) {
+            index = 0;
+            tourActuel++;
+            alert("Fin du tour " + (tourActuel - 1) + ", Début du tour " + tourActuel + " !");
+            alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        } else {
+            alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        }
+    } else {
+        // Passe au joueur suivant
+        index++;
+
+        // Si on a dépassé la fin du tableau, revenir au début
+        if (index >= nomsJoueurs.length) {
+            index = 0;
+        }
+        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
     }
-    alert("C est au tour du Joueur " + nomsJoueurs[index]);
 }
 
 // ---------------------------------------------------------------------
@@ -179,6 +197,7 @@ function joueurSuivant(){
 // ---------------------------------------------------------------------
 
 // Fonction pour afficher les joueurs et leurs cartes
+// Fonction pour afficher les joueurs et leurs cartes en fonction du tour
 function afficherJoueursEtCartesHTML() {
     var container = document.getElementById("joueursEtCartesContainer");
     container.innerHTML = ""; // Efface le contenu précédent
@@ -208,17 +227,20 @@ function afficherJoueursEtCartesHTML() {
                 var carteItem = document.createElement("li");
                 carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
 
-                var jouerButton = document.createElement("button");
-                jouerButton.textContent = "Jouer";
+                // Vérifier si c'est le tour du joueur actuel
+                if (i === index) {
+                    var jouerButton = document.createElement("button");
+                    jouerButton.textContent = "Jouer";
 
-                // Utiliser une fonction anonyme pour passer l'index de la carte à la fonction jouer_carte
-                jouerButton.onclick = (function(joueur, index) {
-                    return function() {
-                        jouer_carte(joueur, index);
-                    };
-                })(joueur, j);
+                    // Utiliser une fonction anonyme pour passer l'index de la carte à la fonction jouer_carte
+                    jouerButton.onclick = (function(joueur, index) {
+                        return function() {
+                            jouer_carte(joueur, index);
+                        };
+                    })(joueur, j);
 
-                carteItem.appendChild(jouerButton);
+                    carteItem.appendChild(jouerButton);
+                }
                 cartesListe.appendChild(carteItem);
             }
             joueurDiv.appendChild(cartesListe);
