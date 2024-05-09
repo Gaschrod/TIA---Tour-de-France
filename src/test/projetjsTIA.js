@@ -2,8 +2,10 @@
 var joueurs = ['j1_carte', 'j2_carte', 'j3_carte', 'j4_carte'];
 var nomsJoueurs = []; 
 var tableau = [];
-var joueurCourant = 1; 
 var tourActuel = 1;
+var index = 0;
+var cyclistesJouesDansTour = 0; 
+
 
 // Initialisation des positions des cyclistes
 const positions = {
@@ -123,12 +125,10 @@ function Start_the_game() {
 // Fonction pour démarrer un tour
 function demarrerTour() {
     alert("Début du tour " + tourActuel);
-    alert("C'est à Joueur " + (joueurCourant) + " de jouer !");
-    
+    alert("C'est à Joueur " + (nomsJoueurs[index]) + " de jouer !");
+   
+
 }
-
-
-
 
 
 // ---------------------------------------------------------------------
@@ -158,20 +158,46 @@ function RandomCarte(playerIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-// Fonction pour passer au joueur suivant
+
 function joueurSuivant() {
-    joueurCourant++;
-    if (joueurCourant >= nomsJoueurs.length) {
-        joueurCourant = 1;
-        tourActuel++;
+    // Incrémente le compteur de cyclistes joués dans ce tour
+    cyclistesJouesDansTour++;
+
+    // Vérifie si tous les cyclistes ont joué dans ce tour
+    if (cyclistesJouesDansTour === nomsJoueurs.length * 3) {
+        // Réinitialise le compteur de cyclistes joués dans ce tour
+        cyclistesJouesDansTour = 0;
+
+        // Passe au tour suivant
+        index++;
+
+        // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
+        if (index >= nomsJoueurs.length) {
+            index = 0;
+            tourActuel++;
+            alert("Fin du tour " + (tourActuel - 1) + ", Début du tour " + tourActuel + " !");
+            alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        } else {
+            alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        }
+    } else {
+        // Passe au joueur suivant
+        index++;
+
+        // Si on a dépassé la fin du tableau, revenir au début
+        if (index >= nomsJoueurs.length) {
+            index = 0;
+        }
+        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
     }
-    alert("Tour du Joueur " + (joueurCourant));
 }
+
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
 // Fonction pour afficher les joueurs et leurs cartes
+// Fonction pour afficher les joueurs et leurs cartes en fonction du tour
 function afficherJoueursEtCartesHTML() {
     var container = document.getElementById("joueursEtCartesContainer");
     container.innerHTML = ""; // Efface le contenu précédent
@@ -201,17 +227,20 @@ function afficherJoueursEtCartesHTML() {
                 var carteItem = document.createElement("li");
                 carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
 
-                var jouerButton = document.createElement("button");
-                jouerButton.textContent = "Jouer";
+                // Vérifier si c'est le tour du joueur actuel
+                if (i === index) {
+                    var jouerButton = document.createElement("button");
+                    jouerButton.textContent = "Jouer";
 
-                // Utiliser une fonction anonyme pour passer l'index de la carte à la fonction jouer_carte
-                jouerButton.onclick = (function(joueur, index) {
-                    return function() {
-                        jouer_carte(joueur, index);
-                    };
-                })(joueur, j);
+                    // Utiliser une fonction anonyme pour passer l'index de la carte à la fonction jouer_carte
+                    jouerButton.onclick = (function(joueur, index) {
+                        return function() {
+                            jouer_carte(joueur, index);
+                        };
+                    })(joueur, j);
 
-                carteItem.appendChild(jouerButton);
+                    carteItem.appendChild(jouerButton);
+                }
                 cartesListe.appendChild(carteItem);
             }
             joueurDiv.appendChild(cartesListe);
@@ -231,8 +260,9 @@ function afficherJoueursEtCartesHTML() {
 // ---------------------------------------------------------------------
 
 // Fonction pour jouer une carte !!!!! 
-function avancer(carteJouee, nomUtilisateur) {
-    // Récupérer les autres valeurs sélectionnées par l'utilisateur
+function avancer(carteJouee) {
+    // Récupérer les valeurs sélectionnées par l'utilisateur
+    const nomUtilisateur = nomsJoueurs[index];
     const cycliste = parseInt(document.getElementById('cycliste').value);
     const rangée = document.getElementById('rangée').value;
 
@@ -241,7 +271,6 @@ function avancer(carteJouee, nomUtilisateur) {
 
     // Vérifier si le nom d'utilisateur est valide et correspond à un joueur existant
     const joueurIndex = nomsJoueurs.indexOf(nomUtilisateur);
-    
     if (joueurIndex === -1) {
         alert("Nom d'utilisateur invalide ou non reconnu !");
         return;
@@ -304,37 +333,43 @@ function avancer(carteJouee, nomUtilisateur) {
         }
     }
     console.log(positionsString);
-}
-///---------------------------------------------------------------------
+    joueurSuivant();
+}   
+
+
+
+// ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-function jouer_carte(nomUtilisateur, carteIndex) {
+function jouer_carte(joueur, carteIndex) {
     // Pour récupérer les cartes du joueur
-    var mainJoueur = window[nomUtilisateur];
-
-    alert("C'est au tour de " + nomUtilisateur);
-
-    if (joueurCourant !== nomsJoueurs.indexOf(nomUtilisateur) + 1) {
-        alert("Ce n'est pas votre tour de jouer, c'est à Joueur " + joueurCourant + " de jouer !");
-        return;
-    }
-
+    var mainJoueur = window[joueur];
+    
     // Vérifie si l'index de la carte est valide
     if (carteIndex >= 0 && carteIndex < mainJoueur.length) {
-        var carteJouee = mainJoueur.splice(carteIndex, 1)[0]; 
-        console.log("Carte jouée par " + nomUtilisateur + " :", carteJouee);
+        var carteJouee = mainJoueur[carteIndex]; // Obtenir la carte à jouer
+        console.log("Carte jouée par " + joueur + " :", carteJouee);
 
-        // Remet la carte jouée au bon endroit dans le tableau de cartes
-        tableau.push(carteJouee);
-        console.log("Carte remise dans le tableau :", carteJouee);
-        console.log("Cartes restantes dans le tableau :", tableau.length);
+        
+
+        // Appeler la fonction avancer avec la carte jouée et le joueur
+        try {
+            avancer(carteJouee, joueur);
+        } catch (error) {
+            console.log("Une alerte est survenue lors de l'avancement du cycliste :", error);
+            // Ne pas retirer la carte du deck ici, car le déplacement a échoué
+            return; // Sortir de la fonction pour annuler le coup
+        }
+
+        // Si le déplacement est réussi, retirer la carte du deck du joueur
+        mainJoueur.splice(carteIndex, 1);
 
         // Vérifie si le deck du joueur est vide
         if (mainJoueur.length === 0) {
             // Si le deck est vide, piocher 5 nouvelles cartes
             for (var i = 0; i < 5; i++) {
-                RandomCarte(nomsJoueurs.indexOf(nomUtilisateur));
+                RandomCarte(joueurs.indexOf(joueur));
             }
         }
 
@@ -343,5 +378,29 @@ function jouer_carte(nomUtilisateur, carteIndex) {
     } else {
         console.log("Index de carte invalide !");
     }
-    joueurSuivant(); 
+}
+
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+
+// Tableau d'exemple
+
+
+function montrerElementSuivant() {
+    // Récupérer l'indice de l'élément actuel
+    var indice = index + 1;
+
+    // Afficher l'élément avec son indice
+    console.log(nomsJoueurs[index] + ' est en indice ' + indice);
+
+    // Passage à l'élément suivant
+    index++;
+
+    // Si on a dépassé la fin du tableau, revenir au début
+    if (index >= nomsJoueurs.length) {
+        index = 0;
+    }
 }
