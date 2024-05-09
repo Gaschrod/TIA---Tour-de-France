@@ -50,10 +50,10 @@ function openWebSocket() {
 }
 
 // When DOM is loaded, add event listeners
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", (e) => {
   const inputField = document.getElementById("input-message");
   const connection = openWebSocket();
-  inputField.addEventListener("keyup", function (event) {
+  inputField.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
       const command = inputField.value.trim();
       if (command !== "") {

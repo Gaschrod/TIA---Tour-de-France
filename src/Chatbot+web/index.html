@@ -3,37 +3,28 @@
 <head>
   <meta charset="utf-8">
   <title>SWI-Prolog echo websockets example</title>
-  <link rel="stylesheet" href="server.css" type="text/css" media="screen" charset="utf-8">
-  <!--Bootstrap-->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="server.css" charset="utf-8">
   <script charset="utf-8" src="server.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div class="terminal">
     <!--En utilisant bootstrap fais une interface de discussion avec un bot cela doit ressembler à une invite de commande-->
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Chat</h3>
+          <div class="title-bar">
+            <span class="title">ChatBot</span>
           </div>
-          <div class="panel-body" id="chat">
+          <div class="terminal-body">
                 <div id="messages">
                     <div class="message">
                         <span class="message-content">Bonjour, je suis le bot du Tour, BDT, pour les intimes. En quoi puis-je vous aider ?</span>
                     </div>
                     <br>
                 </div>
-                <div id="message-panel" class="input-group">
-                  <input type="text" class="form-control" id="input-message" placeholder="Type your message here...">
-                  <span class="input-group-btn">
-                    <button id="message-submit"class="btn btn-primary" type="submit">Submit</button>
-                  </span>
-                </div>
           </div>
-        </div>
-      </div>
-    </div>
+          <div class="input-line">
+            <span class="prompt">></span>
+            <input type="text" class="input-field" id="input-message">
+            </span>
+          </div>
   </div>
 </body>
 </html>
