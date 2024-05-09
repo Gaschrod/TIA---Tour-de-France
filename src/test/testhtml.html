@@ -22,9 +22,32 @@
     <button id="myButton" onclick="Start_the_game()">Start</button>
 
     <h2>Autre info :</h2>
-
+    
     <button id="myButton2" onclick="RandomCarte()">Piocher une carte</button>
     <button id="myButton4" onclick="Change_de_joueur()">passe au joueur suivant</button>
+
+    <br><br>
+    <div id="game">
+     <label for="nomUtilisateur">Nom de l'utilisateur :</label>
+    <input type="text" id="nomUtilisateur" name="nomUtilisateur"> 
+    <br><br>
+        <label for="cycliste">Choisir le coureur :</label>
+        <select id="cycliste">
+            <option value="1">Cycliste 1</option>
+            <option value="2">Cycliste 2</option>
+            <option value="3">Cycliste 3</option>
+        </select>
+    
+        <br><br>
+        <label for="rangée">Choisir la rangée :</label>
+        <select id="rangée">
+            <option value="interieur">Rangée intérieur</option>
+            <option value="milieu">Rangée milieu</option>
+            <option value="exterieur">Rangée éxterieur</option>
+        </select>
+        <br>
+        
+    </div>
 
     <div id="joueursEtCartesContainer"></div>
 
