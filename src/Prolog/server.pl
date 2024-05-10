@@ -26,7 +26,7 @@
 %   request (not strictly necessary, but otherwise we can only handle one
 %   client at a time since echo will block the thread)
 :- http_handler(root(.),
-                http_reply_from_files('.', []),
+                http_reply_from_files('../../src/', []),
                 [prefix]).
 % * root(echo) indicates we're matching the echo path on the URL e.g.
 %   localhost:3000/echo of the server
