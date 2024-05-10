@@ -6,6 +6,7 @@ var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
 
+
 var Joueur1Piont = {};
 var Joueur2Piont = {};
 var Joueur3Piont = {};
@@ -142,6 +143,13 @@ function demarrerTour() {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
+
+
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
 // Fonction pour piocher une carte aléatoire
 function RandomCarte(playerIndex) {
   // Vérifie si le tableau de cartes est vide
@@ -167,40 +175,41 @@ function RandomCarte(playerIndex) {
 function joueurSuivant() {
   // Incrémente le compteur de cyclistes joués dans ce tour
   cyclistesJouesDansTour++;
+    if(tourActuel === 1){
+    // Vérifie si tous les cyclistes ont joué dans ce tour
+    if (cyclistesJouesDansTour === nomsJoueurs.length * 3) {
+        // Réinitialise le compteur de cyclistes joués dans ce tour
+        cyclistesJouesDansTour = 0;
 
-  // Vérifie si tous les cyclistes ont joué dans ce tour
-  if (cyclistesJouesDansTour === nomsJoueurs.length * 3) {
-    // Réinitialise le compteur de cyclistes joués dans ce tour
-    cyclistesJouesDansTour = 0;
+        // Passe au tour suivant
+        index++;
 
-    // Passe au tour suivant
-    index++;
-
-    // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
-    if (index >= nomsJoueurs.length) {
-      index = 0;
-      tourActuel++;
-      alert(
-        "Fin du tour " +
-          (tourActuel - 1) +
-          ", Début du tour " +
-          tourActuel +
-          " !"
-      );
-      alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
+        if (index >= nomsJoueurs.length) {
+        index = 0;
+        tourActuel++;
+        alert(
+            "Fin du tour " +
+            (tourActuel - 1) +
+            ", Début du tour " +
+            tourActuel +
+            " !"
+        );
+        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        } else {
+        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        }
     } else {
-      alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
-    }
-  } else {
-    // Passe au joueur suivant
-    index++;
+        // Passe au joueur suivant
+        index++;
 
-    // Si on a dépassé la fin du tableau, revenir au début
-    if (index >= nomsJoueurs.length) {
-      index = 0;
+        // Si on a dépassé la fin du tableau, revenir au début
+        if (index >= nomsJoueurs.length) {
+        index = 0;
+        }
+        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+        }
     }
-    alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
-  }
 }
 
 // ---------------------------------------------------------------------
@@ -289,6 +298,7 @@ function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
   const cycliste = parseInt(document.getElementById("cycliste").value);
+  console.log("voici l'info sur la const  :", cycliste);
   const rangée = document.getElementById("rangée").value;
   var casesAAvancer = null;
 
@@ -457,6 +467,7 @@ function jouer_carte(joueur, carteIndex) {
 // ---------------------------------------------------------------------
 
 // Tableau d'exemple
+var idpourcycliste = [1, 2, 3]; // Tableau des identifiants des cyclistes
 
 function montrerElementSuivant() {
   // Récupérer l'indice de l'élément actuel
@@ -465,6 +476,23 @@ function montrerElementSuivant() {
   // Afficher l'élément avec son indice
   console.log(nomsJoueurs[index] + " est en indice " + indice);
 
+  // Boucle à travers chaque joueur
+  for (var i = 0; i < nomsJoueurs.length; i++) {
+    var joueur = nomsJoueurs[i];
+    // Afficher le joueur
+    var message = joueur + " possède ";
+
+    // Afficher chaque cycliste pour ce joueur
+    for (var j = 0; j < idpourcycliste.length; j++) {
+      message += "cycliste " + idpourcycliste[j];
+      // Si ce n'est pas le dernier cycliste, ajouter "et"
+      if (j < idpourcycliste.length - 1) {
+        message += " et ";
+      }
+    }
+    console.log(message);
+    
+  }
   // Passage à l'élément suivant
   index++;
 
@@ -472,6 +500,7 @@ function montrerElementSuivant() {
   if (index >= nomsJoueurs.length) {
     index = 0;
   }
+  
 }
 
 // ---------------------------------------------------------------------
@@ -512,3 +541,10 @@ function mettreAJourPositionsJoueur(
   };
   console.log("Positions mises à jour de", nomJoueur, ":", joueurPiont); // Ajout du nom du joueur ici
 }
+
+
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
