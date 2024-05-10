@@ -6,6 +6,11 @@ var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0; 
 
+var Joueur1Piont = {};
+var Joueur2Piont = {};
+var Joueur3Piont = {};
+var Joueur4Piont = {};
+
 
 // Initialisation des positions des cyclistes
 const positions = {
@@ -333,6 +338,9 @@ function avancer(carteJouee) {
         }
     }
     console.log(positionsString);
+    // Mise à jour des positions des cyclistes dans l'objet correspondant
+    mettreAJourPositionsJoueur(nomUtilisateur, cycliste, positions[nomUtilisateur + "_cycliste_" + cycliste].section, positions[nomUtilisateur + "_cycliste_" + cycliste].rangée, positions[nomUtilisateur + "_cycliste_" + cycliste].case);
+
     joueurSuivant();
 }   
 
@@ -403,4 +411,34 @@ function montrerElementSuivant() {
     if (index >= nomsJoueurs.length) {
         index = 0;
     }
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+function mettreAJourPositionsJoueur(nomJoueur, cycliste, section, rangee, casePosition) {
+   
+    var joueurPiont;
+    switch (nomJoueur) {
+        case nomsJoueurs[0]:
+            joueurPiont = Joueur1Piont;
+            break;
+        case nomsJoueurs[1]:
+            joueurPiont = Joueur2Piont;
+            break;
+        case nomsJoueurs[2]:
+            joueurPiont = Joueur3Piont;
+            break;
+        case nomsJoueurs[3]:
+            joueurPiont = Joueur4Piont;
+            break;
+        default:
+            console.log("Nom de joueur non reconnu :", nomJoueur);
+            return;
+    }
+   /* console.log("Objet joueurPiont de", nomJoueur, ":", joueurPiont); // Ajout du nom du joueur ici*/
+
+    joueurPiont["cycliste " + cycliste] = { section: section, rangée: rangee, case: casePosition };
+    console.log("Positions mises à jour de", nomJoueur, ":", joueurPiont); // Ajout du nom du joueur ici
 }
