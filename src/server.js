@@ -16,22 +16,31 @@ function wsMessageHandler(event) {
   message.className = "message";
 
   const space = document.createElement("br");
+  const space2 = document.createElement("br");
   const contentElement = document.createElement("span");
   contentElement.className = "message-content";
   contentElement.appendChild(document.createTextNode(payload.message));
   message.appendChild(contentElement);
+  message.appendChild(space);
+  message.appendChild(space2);
   let child = messages.appendChild(message);
-  messages.appendChild(space);
   /**
    * Result <div id="messages">
    *              <div class="message">
-   *                 <div class="timestamp">Timestamp</div>
-   *                <div class="content">Message</div>
+   *                 <span class="message-content">Hello</span>
    *             </div>
    *        </div>
    */
 
   child.scrollIntoView();
+
+  var tests = document.getElementsByClassName("message");
+  console.log(tests);
+  if (tests.length > 3) {
+    tests[0].remove();
+    tests[0].remove();
+    tests[0].remove();
+  }
 }
 
 //Sends message to connection
