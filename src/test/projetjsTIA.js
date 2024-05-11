@@ -5,13 +5,16 @@ var tableau = [];
 var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
+var ordre = [];
 // Tableau pour stocker les identifiants de case
 var Tableau_id_case = [];
 
-var Joueur1Piont = {};
-var Joueur2Piont = {};
-var Joueur3Piont = {};
-var Joueur4Piont = {};
+var Joueur1Pion = {};
+var Joueur2Pion = {};
+var Joueur3Pion = {};
+var Joueur4Pion = {};
+
+var dico_cyclistes = [Joueur1Pion, Joueur2Pion, Joueur3Pion, Joueur4Pion];
 
 // Initialisation des positions des cyclistes
 const positions = {
@@ -28,7 +31,7 @@ const sectionsRangées = {
   5: ["interieur", "milieu"],
   6: ["interieur"],
   7: ["interieur", "milieu"],
-  8: ["interieur","milieu", "exterieur"],//devant la ligne d'arrivée
+  8: ["interieur", "milieu", "exterieur"], //devant la ligne d'arrivée
   9: ["interieur", "milieu", "exterieur"],
 };
 
@@ -95,32 +98,33 @@ function Start_the_game() {
     }
   }
 
-
-
   // Boucle pour chaque case dans la rangée intérieur
   for (let i = 0; i < 105; i++) {
-      Tableau_id_case.push("C" + (i + 1) + "_0");
+    Tableau_id_case.push("C" + (i + 1) + "_0");
   }
 
   // Boucle pour chaque case dans la rangée du milieu
   for (let i = 0; i < 105; i++) {
-      if (i < 72 || i > 74) {
-          Tableau_id_case.push("C" + (i + 1) + "_1");
-      }
+    if (i < 72 || i > 74) {
+      Tableau_id_case.push("C" + (i + 1) + "_1");
+    }
   }
 
   // Boucle pour chaque case dans la rangée extérieur
   for (let i = 0; i < 105; i++) {
-    if ((i >= 0 && i < 8) ||  // Section 1
-        (i >= 18 && i < 21) || // Section 3
-        (i >= 21 && i < 35) || // Section 4
-        (i >= 94 && i < 95) || // Section 8
-        (i >= 95 && i < 105)) { // Section 9
-        Tableau_id_case.push("C" + (i + 1) + "_2");
+    if (
+      (i >= 0 && i < 8) || // Section 1
+      (i >= 18 && i < 21) || // Section 3
+      (i >= 21 && i < 35) || // Section 4
+      (i >= 94 && i < 95) || // Section 8
+      (i >= 95 && i < 105)
+    ) {
+      // Section 9
+      Tableau_id_case.push("C" + (i + 1) + "_2");
     }
   }
 
-// Affichage du tableau contenant les identifiants de case
+  // Affichage du tableau contenant les identifiants de case
   console.log(Tableau_id_case);
   console.log("Le jeu a démarré gg!");
   console.log("Jeu de cartes des secondes généré :", tableau);
@@ -171,9 +175,6 @@ function demarrerTour() {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-
-
-
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -203,41 +204,47 @@ function RandomCarte(playerIndex) {
 function joueurSuivant() {
   // Incrémente le compteur de cyclistes joués dans ce tour
   cyclistesJouesDansTour++;
-    if(tourActuel === 1){
+  if (tourActuel === 1) {
     // Vérifie si tous les cyclistes ont joué dans ce tour
     if (cyclistesJouesDansTour === nomsJoueurs.length * 3) {
-        // Réinitialise le compteur de cyclistes joués dans ce tour
-        cyclistesJouesDansTour = 0;
+      // Réinitialise le compteur de cyclistes joués dans ce tour
+      cyclistesJouesDansTour = 0;
 
-        // Passe au tour suivant
-        index++;
+      // Passe au tour suivant
+      index++;
 
-        // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
-        if (index >= nomsJoueurs.length) {
+      // Si on a dépassé la fin du tableau, revenir au début et incrémenter le tour
+      if (index >= nomsJoueurs.length) {
         index = 0;
         tourActuel++;
         alert(
-            "Fin du tour " +
+          "Fin du tour " +
             (tourActuel - 1) +
             ", Début du tour " +
             tourActuel +
             " !"
         );
         alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
-        } else {
+      } else {
         alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
-        }
+      }
     } else {
-        // Passe au joueur suivant
-        index++;
+      index++;
 
-        // Si on a dépassé la fin du tableau, revenir au début
-        if (index >= nomsJoueurs.length) {
+      // Si on a dépassé la fin du tableau, revenir au début
+      if (index >= nomsJoueurs.length) {
         index = 0;
-        }
-        alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
-        }
+      }
+
+      alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
     }
+  } else {
+    // on récupère l'index du premier cycliste ce qui correspond à la position du nom du joueur à qui appartient ce cylcliste dans la liste des noms
+    premierCycliste = ordre.shift();
+    index = premierCycliste[1];
+
+    alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
+  }
 }
 
 // ---------------------------------------------------------------------
@@ -316,6 +323,99 @@ function piocherCarteChance() {
   }
   afficherJoueursEtCartesHTML();
 }
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// --------------------------------------------------------------------
+
+function choisirCycliste() {
+  if (cyclistesJouesDansTour < 1 * nomsJoueurs.length) {
+    cycliste = 1;
+  } else if (
+    cyclistesJouesDansTour < 2 * nomsJoueurs.length &&
+    cyclistesJouesDansTour >= 1 * nomsJoueurs.length
+  ) {
+    cycliste = 2;
+  } else if (
+    cyclistesJouesDansTour < 3 * nomsJoueurs.length &&
+    cyclistesJouesDansTour >= 2 * nomsJoueurs.length
+  ) {
+    cycliste = 3;
+  }
+  return cycliste;
+}
+
+function ordreCyclistes(listeCyclistes) {
+  const ordre = [];
+
+  // Création d'un tableau pour stocker temporairement les cyclistes avec leur position
+  const temp = [];
+
+  // Boucle à travers tous les cyclistes pour stocker temporairement leur position
+  listeCyclistes.forEach((cyclistes, index) => {
+    for (const cycliste in cyclistes) {
+      const { section, rangée, case: position } = cyclistes[cycliste];
+      temp.push({ nom: cycliste, index, section, rangée, position });
+    }
+  });
+
+  // Trier temp par ordre décroissant de section, position et rangée
+  temp.sort((a, b) => {
+    if (a.section !== b.section) {
+      return b.section - a.section;
+    } else if (a.position !== b.position) {
+      return b.position - a.position;
+    } else {
+      return rangéePrioritaire(b.rangée) - rangéePrioritaire(a.rangée);
+    }
+  });
+
+  // Récupérer l'ordre final en ne gardant que les noms et les index
+  temp.forEach((cycliste) => {
+    ordre.push([cycliste.nom, cycliste.index]);
+  });
+
+  return ordre;
+}
+
+// Fonction pour attribuer une priorité aux rangées
+function rangéePrioritaire(rangée) {
+  switch (rangée) {
+    case "intérieur":
+      return 3;
+    case "milieu":
+      return 2;
+    case "extérieur":
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+function verifierCyclistes(listeCyclistes) {
+  const positions = {};
+
+  for (const cyclistes of listeCyclistes) {
+    for (const cycliste in cyclistes) {
+      const { section, rangée, case: position } = cyclistes[cycliste];
+      const key = `${section}-${rangée}-${position}`;
+
+      if (positions[key]) {
+        return true; // Deux cyclistes sont à la même place
+      } else {
+        positions[key] = true;
+      }
+    }
+  }
+
+  return false; // Aucun cycliste n'est à la même place
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -325,10 +425,21 @@ function piocherCarteChance() {
 function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
-  const cycliste = parseInt(document.getElementById("cycliste").value);
-  console.log("voici l'info sur la const  :", cycliste);
   const rangée = document.getElementById("rangée").value;
   var casesAAvancer = null;
+
+  if (tourActuel === 1) {
+    cycliste = choisirCycliste();
+  } else {
+    if (!ordre.length) {
+      ordre = ordreCyclistes(dico_cyclistes);
+    }
+    nomCycliste = ordre[0][0];
+    cycliste = parseInt(nomCycliste.split(" ")[1]);
+  }
+  console.log(ordre);
+
+  console.log("voici l'info sur le cycliste  :", cycliste);
 
   // Utiliser la valeur de la carte jouée comme nombre de cases à avancer
   if (Array.isArray(carteJouee)) {
@@ -362,24 +473,6 @@ function avancer(carteJouee) {
     return;
   }
 
-  // Vérifier si la case d'arrivée est déjà occupée par un autre cycliste
-  for (let joueur in positions) {
-    if (
-      joueur !== nomUtilisateur &&
-      positions[joueur].section === anciennePosition.section &&
-      positions[joueur].rangée === rangée &&
-      positions[joueur].case === anciennePosition.case + casesAAvancer
-    ) {
-      alert(
-        "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste."
-      );
-      // Annuler le déplacement en ramenant le joueur à sa position précédente
-      positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = anciennePosition.rangée;
-      positions[nomUtilisateur + "_cycliste_" + cycliste].case = anciennePosition.case;
-      return false;
-    }
-  }
-
   // Mettre à jour la position du cycliste en ajoutant le nombre de cases à avancer
   positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangée;
   positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer;
@@ -397,23 +490,26 @@ function avancer(carteJouee) {
       sectionsLimites[i]
     ) {
       let sectionSuivante = i + 2;
-      if (!sectionsRangées[sectionSuivante] || !sectionsRangées[sectionSuivante].includes(rangée) ) {
-
+      if (
+        !sectionsRangées[sectionSuivante] ||
+        !sectionsRangées[sectionSuivante].includes(rangée)
+      ) {
         alert(
           "Sortie du plateau de jeu. Votre cycliste a été mis sur la rangé la plus proche dans la section suivante."
         );
-        if( sectionSuivante !== 6) {
+        if (sectionSuivante !== 6) {
           let rangéeLaPlusProche = "milieu";
-          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
-        }
-        else if( sectionSuivante === 6) {
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
+            rangéeLaPlusProche;
+        } else if (sectionSuivante === 6) {
           // Si la rangée du milieu n'existe pas, choisir au hasard entre rangée intérieure et extérieure
           let rangéeLaPlusProche = "interieur";
-          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
+            rangéeLaPlusProche;
         }
-      } 
-      else {
-        positions[nomUtilisateur + "_cycliste_" + cycliste].section = sectionSuivante;
+      } else {
+        positions[nomUtilisateur + "_cycliste_" + cycliste].section =
+          sectionSuivante;
       }
     }
   }
@@ -446,6 +542,28 @@ function avancer(carteJouee) {
     positions[nomUtilisateur + "_cycliste_" + cycliste].case
   );
 
+  // Vérifier si la case d'arrivée est déjà occupée par un autre cycliste
+  if (verifierCyclistes(dico_cyclistes) == true) {
+    alert(
+      "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste."
+    );
+    // Annuler le déplacement en ramenant le joueur à sa position précédente
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
+      anciennePosition.rangée;
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case =
+      anciennePosition.case;
+
+    //On met à jour les données
+    mettreAJourPositionsJoueur(
+      nomUtilisateur,
+      cycliste,
+      positions[nomUtilisateur + "_cycliste_" + cycliste].section,
+      positions[nomUtilisateur + "_cycliste_" + cycliste].rangée,
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case
+    );
+    return false;
+  }
+
   joueurSuivant();
 }
 
@@ -462,24 +580,23 @@ function jouer_carte(joueur, carteIndex) {
     var carteJouee = mainJoueur[carteIndex]; // Obtenir la carte à jouer
     console.log("Carte jouée par " + joueur + " :", carteJouee);
 
-    if(avancer(carteJouee) === false){
+    if (avancer(carteJouee) === false) {
       return;
-    }
-    else{
-    // Si le déplacement est réussi, retirer la carte du deck du joueur
-    mainJoueur.splice(carteIndex, 1);
+    } else {
+      // Si le déplacement est réussi, retirer la carte du deck du joueur
+      mainJoueur.splice(carteIndex, 1);
 
-    // Vérifie si le deck du joueur est vide
-    if (mainJoueur.length === 0) {
-      // Si le deck est vide, piocher 5 nouvelles cartes
-      for (var i = 0; i < 5; i++) {
-        RandomCarte(joueurs.indexOf(joueur));
+      // Vérifie si le deck du joueur est vide
+      if (mainJoueur.length === 0) {
+        // Si le deck est vide, piocher 5 nouvelles cartes
+        for (var i = 0; i < 5; i++) {
+          RandomCarte(joueurs.indexOf(joueur));
+        }
       }
-    }
 
-    // Mettre à jour l'interface
-    afficherJoueursEtCartesHTML();
-  } 
+      // Mettre à jour l'interface
+      afficherJoueursEtCartesHTML();
+    }
   } else {
     console.log("Index de carte invalide !");
   }
@@ -489,13 +606,7 @@ function jouer_carte(joueur, carteIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-
-function montrerElementSuivant() {
-
-
-
-  
-}
+function montrerElementSuivant() {}
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -507,37 +618,34 @@ function mettreAJourPositionsJoueur(
   rangee,
   casePosition
 ) {
-  var joueurPiont;
+  var joueurPion;
   switch (nomJoueur) {
     case nomsJoueurs[0]:
-      joueurPiont = Joueur1Piont;
+      joueurPion = Joueur1Pion;
       break;
     case nomsJoueurs[1]:
-      joueurPiont = Joueur2Piont;
+      joueurPion = Joueur2Pion;
       break;
     case nomsJoueurs[2]:
-      joueurPiont = Joueur3Piont;
+      joueurPion = Joueur3Pion;
       break;
     case nomsJoueurs[3]:
-      joueurPiont = Joueur4Piont;
+      joueurPion = Joueur4Pion;
       break;
     default:
       console.log("Nom de joueur non reconnu :", nomJoueur);
       return;
   }
-  /* console.log("Objet joueurPiont de", nomJoueur, ":", joueurPiont); // Ajout du nom du joueur ici*/
+  /* console.log("Objet joueurPion de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici*/
 
-  joueurPiont["cycliste " + cycliste] = {
+  joueurPion["cycliste " + cycliste] = {
     section: section,
     rangée: rangee,
     case: casePosition,
   };
-  console.log("Positions mises à jour de", nomJoueur, ":", joueurPiont); // Ajout du nom du joueur ici
+  console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici
 }
 
-
-
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
-

@@ -3,7 +3,6 @@
     <head>
         <title>My Game</title>
         <link rel="stylesheet" href="static/server.css" charset="utf-8">
-        <script charset="utf-8" src="static/server.js"></script>
         <!-- <script charset="utf-8" src="js/projetjsTIA.js"></script> -->
     </head>
 
@@ -18,26 +17,41 @@
         </div>
 
         <div class="div3">
-        <button id="myButton2" onclick="RandomCarte()">Piocher une carte</button>
-        <button id="myButton3" onclick="init_deck(tableau)">initialiser le deck</button>
-        <button id="myButton5" onclick="jouer_carte()">Jouer la carte au choix</button>
+            <h2>Choisissez le nombre de joueurs humains :</h2>
+            <select id="selectHumanPlayers">
+                <option value="1">1 joueur humain</option>
+                <option value="2">2 joueurs humains</option>
+            </select>
+            <select id="selectBots">
+                <option value="0">0 bot</option>
+                <option value="1">1 bot</option>
+                <option value="2">2 bots</option>
+            </select>
+            <button id="myButton" onclick="Start_the_game()">Start</button>
+            <br><br>
+            <label for="cycliste">Choisir le coureur :</label>
+            <select id="cycliste">
+                <option value="1">Cycliste 1</option>
+                <option value="2">Cycliste 2</option>
+                <option value="3">Cycliste 3</option>
+            </select>
+
+            
+
 
         </div>
 
         <div class="div4">
-        <p id="joueur">Joueur actuel : </p>
-        <p>Position des joueurs : <br>
-            Equipe d'Italie : 1 - 2 - 4 - 8 - 12 <br>
-            Equipe de Hollande : 5 - 7 - 10 - 11 - 12 <br>
-            Equipe de Belgique : 3 - 5 - 7 - 9 - 12 <br>
-            Equipe d'Allemagne : 1 - 6 - 7 - 8 - 10 <br>
-        </p>
+            <label for="rangée">Choisir la rangée :</label>
+            <select id="rangée">
+                <option value="interieur">Rangée intérieur</option>
+                <option value="milieu">Rangée milieu</option>
+                <option value="exterieur">Rangée éxterieur</option>
+            </select>
+
+            <div id="joueursEtCartesContainer"></div>
         </div>
         <!--<button id="myButton3" onclick="jouer_carte()">Jouer la carte au choix</button>-->
-
-        <div class="div5">
-        <button id="myButton4" onclick="Change_de_joueur()">passe au joueur suivant</button>
-        </div>
 
         <div class="div6">
             <div class="terminal">
@@ -60,5 +74,7 @@
                       </div>
               </div>
         </div>
+        <script charset="utf-8" src="static/server.js"></script>
+        <script charset="utf-8" src="test/projetjsTIA.js"></script>
     </body>
 </html>
