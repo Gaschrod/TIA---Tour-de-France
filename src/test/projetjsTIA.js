@@ -18,9 +18,9 @@ var dico_cyclistes = [Joueur1Pion, Joueur2Pion, Joueur3Pion, Joueur4Pion];
 
 // Initialisation des positions des cyclistes
 const positions = {
-  1: { section: 1, rangée: "milieu", case: 0 },
-  2: { section: 1, rangée: "milieu", case: 0 },
-  3: { section: 1, rangée: "milieu", case: 0 },
+  1: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
+  2: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
+  3: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
 };
 
 const sectionsRangées = {
@@ -83,9 +83,12 @@ function Start_the_game() {
         section: 1,
         rangée: "milieu",
         case: 0,
+        id: "case_départ",
       };
       positionsString +=
-        " cycliste " + j + " : section 1, rangée milieu, case 0 ||";
+        " cycliste " +
+        j +
+        " : section 1, rangée milieu, case 0, id case_départ ||";
     }
   }
   console.log(positionsString.substring(0, positionsString.length - 2)); //enlever les deux derniers caractères
@@ -461,6 +464,7 @@ function avancer(carteJouee) {
     section: positions[nomUtilisateur + "_cycliste_" + cycliste].section,
     rangée: positions[nomUtilisateur + "_cycliste_" + cycliste].rangée,
     case: positions[nomUtilisateur + "_cycliste_" + cycliste].case,
+    id: positions[nomUtilisateur + "_cycliste_" + cycliste].id,
   };
 
   // Vérifier si le déplacement du cycliste est valide en fonction de la rangée
@@ -514,6 +518,17 @@ function avancer(carteJouee) {
       }
     }
   }
+  //On met à jour l'id de la case
+  var ext = "_0";
+  if (positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "milieu") {
+    ext = "_1";
+  } else if (
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "exterieur"
+  ) {
+    ext = "_2";
+  }
+  positions[nomUtilisateur + "_cycliste_" + cycliste].id =
+    "c" + positions[nomUtilisateur + "_cycliste_" + cycliste].case + ext;
 
   // Affichage des positions des cyclistes
   let positionsString = "Positions des cyclistes : ";
@@ -530,17 +545,20 @@ function avancer(carteJouee) {
         positions[joueur + "_cycliste_" + j].rangée +
         ", case " +
         positions[joueur + "_cycliste_" + j].case +
-        " || ";
+        ", id " +
+        positions[joueur + "_cycliste_" + j].id +
+        " ||";
     }
   }
-  console.log(positionsString);
+  console.log(positionsString.substring(0, positionsString.length - 2));
   // Mise à jour des positions des cyclistes dans l'objet correspondant
   mettreAJourPositionsJoueur(
     nomUtilisateur,
     cycliste,
     positions[nomUtilisateur + "_cycliste_" + cycliste].section,
     positions[nomUtilisateur + "_cycliste_" + cycliste].rangée,
-    positions[nomUtilisateur + "_cycliste_" + cycliste].case
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case,
+    positions[nomUtilisateur + "_cycliste_" + cycliste].id
   );
 
   // Vérifier si la case d'arrivée est déjà occupée par un autre cycliste
@@ -560,7 +578,8 @@ function avancer(carteJouee) {
       cycliste,
       positions[nomUtilisateur + "_cycliste_" + cycliste].section,
       positions[nomUtilisateur + "_cycliste_" + cycliste].rangée,
-      positions[nomUtilisateur + "_cycliste_" + cycliste].case
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case,
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id
     );
     return false;
   }
@@ -617,7 +636,8 @@ function mettreAJourPositionsJoueur(
   cycliste,
   section,
   rangee,
-  casePosition
+  casePosition,
+  idCase
 ) {
   var joueurPion;
   switch (nomJoueur) {
@@ -643,6 +663,7 @@ function mettreAJourPositionsJoueur(
     section: section,
     rangée: rangee,
     case: casePosition,
+    id: idCase,
   };
   console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici
 }
