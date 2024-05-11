@@ -374,7 +374,7 @@ function avancer(carteJouee) {
         alert(
           "Sortie du plateau de jeu. Votre cycliste a été mis sur la rangé la plus proche dans la section suivante."
         );
-        if( sectionSuivante !== 7) {
+        if( sectionSuivante !== 6) {
           let rangéeLaPlusProche = "milieu";
           positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
         }
@@ -383,13 +383,12 @@ function avancer(carteJouee) {
           let rangéeLaPlusProche = "interieur";
           positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
         }
-        }
       } 
       else {
         positions[nomUtilisateur + "_cycliste_" + cycliste].section = sectionSuivante;
       }
     }
-  
+  }
 
   // Affichage des positions des cyclistes
   let positionsString = "Positions des cyclistes : ";
