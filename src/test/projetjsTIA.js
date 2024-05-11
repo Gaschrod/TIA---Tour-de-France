@@ -5,7 +5,7 @@ var tableau = [];
 var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
-var ordre = [];
+
 // Tableau pour stocker les identifiants de case
 var Tableau_id_case = [];
 
@@ -27,12 +27,10 @@ const sectionsRangées = {
   1: ["interieur", "milieu", "exterieur"],
   2: ["interieur", "milieu"],
   3: ["interieur", "milieu", "exterieur"],
-  4: ["interieur", "milieu", "exterieur"],
-  5: ["interieur", "milieu"],
-  6: ["interieur"],
-  7: ["interieur", "milieu"],
-  8: ["interieur", "milieu", "exterieur"], //devant la ligne d'arrivée
-  9: ["interieur", "milieu", "exterieur"],
+  4: ["interieur", "milieu"],
+  5: ["interieur"],
+  6: ["interieur", "milieu"],
+  7: ["interieur", "milieu", "exterieur"],
 };
 
 // Fonction pour démarrer le jeu
@@ -59,9 +57,13 @@ function Start_the_game() {
     nomsJoueurs.push(nom);
   }
 
-  // Génère les noms des bots
   for (var i = 1; i <= selectedBots; i++) {
-    nomsJoueurs.push("Bot " + i);
+    if (i === 1) {
+      nomsJoueurs.push("Hollande");
+    }
+    if (i === 2) {
+      nomsJoueurs.push("Allemagne");
+    }
   }
 
   // Affiche les noms des joueurs
@@ -119,7 +121,7 @@ function Start_the_game() {
       (i >= 0 && i < 10) || // Section 1 case supp virage
       (i >= 18 && i < 21) || // Section 3
       (i >= 21 && i < 35) || // Section 4
-      (i >= 61 && i < 63) || // Section 5 2 cases supp virage
+      (i >= 62 && i < 64) || // Section 5 2 cases supp virage
       (i >= 94 && i < 95) || // Section 8
       (i >= 95 && i < 105)
     ) {
@@ -244,8 +246,11 @@ function joueurSuivant() {
     }
   } else {
     // on récupère l'index du premier cycliste ce qui correspond à la position du nom du joueur à qui appartient ce cylcliste dans la liste des noms
-    premierCycliste = ordre.shift();
-    index = premierCycliste[1];
+    index++;
+    // Si on a dépassé la fin du tableau, revenir au début
+    if (index >= nomsJoueurs.length) {
+      index = 0;
+    }
 
     alert("C'est au tour de " + nomsJoueurs[index] + " de jouer !");
   }
@@ -261,7 +266,7 @@ function afficherJoueursEtCartesHTML() {
   var container = document.getElementById("joueursEtCartesContainer");
   container.innerHTML = ""; // Efface le contenu précédent
 
-  for (var i = 0; i < joueurs.length; i++) {
+  for (var i = 0; i < nomsJoueurs.length; i++) {
     var joueur = joueurs[i];
     var nomJoueur = nomsJoueurs[i];
     var joueurDiv = document.createElement("div");
@@ -348,78 +353,28 @@ function choisirCycliste() {
   return cycliste;
 }
 
-function ordreCyclistes(listeCyclistes) {
-  const ordre = [];
-
-  // Création d'un tableau pour stocker temporairement les cyclistes avec leur position
-  const temp = [];
-
-  // Boucle à travers tous les cyclistes pour stocker temporairement leur position
-  listeCyclistes.forEach((cyclistes, index) => {
-    for (const cycliste in cyclistes) {
-      const { section, rangée, case: position } = cyclistes[cycliste];
-      temp.push({ nom: cycliste, index, section, rangée, position });
-    }
-  });
-
-  // Trier temp par ordre décroissant de section, position et rangée
-  temp.sort((a, b) => {
-    if (a.section !== b.section) {
-      return b.section - a.section;
-    } else if (a.position !== b.position) {
-      return b.position - a.position;
-    } else {
-      return rangéePrioritaire(b.rangée) - rangéePrioritaire(a.rangée);
-    }
-  });
-
-  // Récupérer l'ordre final en ne gardant que les noms et les index
-  temp.forEach((cycliste) => {
-    ordre.push([cycliste.nom, cycliste.index]);
-  });
-
-  return ordre;
-}
-
-// Fonction pour attribuer une priorité aux rangées
-function rangéePrioritaire(rangée) {
-  switch (rangée) {
-    case "intérieur":
-      return 3;
-    case "milieu":
-      return 2;
-    case "extérieur":
-      return 1;
-    default:
-      return 0;
-  }
-}
-
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
+
+//Fonction pour vérifier si deux cyclistes ont le même ID parmis tous les cyclistes
 function verifierCyclistes(listeCyclistes) {
-  const positions = {};
+  const ids = new Set();
 
-  for (const cyclistes of listeCyclistes) {
-    for (const cycliste in cyclistes) {
-      const { section, rangée, case: position } = cyclistes[cycliste];
-      const key = `${section}-${rangée}-${position}`;
-
-      if (positions[key]) {
-        return true; // Deux cyclistes sont à la même place
-      } else {
-        positions[key] = true;
+  for (const groupeCyclistes of listeCyclistes) {
+    for (const key in groupeCyclistes) {
+      const cycliste = groupeCyclistes[key];
+      if (ids.has(cycliste.id)) {
+        return true; // Deux cyclistes ont le même ID
+      }
+      if (cycliste.id !== "case_départ") {
+        ids.add(cycliste.id);
       }
     }
   }
 
-  return false; // Aucun cycliste n'est à la même place
+  return false; // Aucun cycliste n'a le même ID
 }
-
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -435,14 +390,8 @@ function avancer(carteJouee) {
   if (tourActuel === 1) {
     cycliste = choisirCycliste();
   } else {
-    if (!ordre.length) {
-      ordre = ordreCyclistes(dico_cyclistes);
-    }
-    nomCycliste = ordre[0][0];
-    cycliste = parseInt(nomCycliste.split(" ")[1]);
+    var cycliste = document.getElementById("cycliste").value;
   }
-  console.log(ordre);
-
   console.log("voici l'info sur le cycliste  :", cycliste);
 
   // Utiliser la valeur de la carte jouée comme nombre de cases à avancer
@@ -467,15 +416,20 @@ function avancer(carteJouee) {
     id: positions[nomUtilisateur + "_cycliste_" + cycliste].id,
   };
 
-  // Vérifier si le déplacement du cycliste est valide en fonction de la rangée
+  // Vérifier si le déplacement du cycliste est valide en fonction de la rangée et de la section
+  // Pas besoin de vérifier dans le cas où la section contient moins de 2 bandes de circulation
   if (
-    (anciennePosition.rangée === "interieur" && rangée === "exterieur") ||
-    (anciennePosition.rangée === "exterieur" && rangée === "interieur")
+    (anciennePosition.section === 1 ||
+      anciennePosition.section === 3 ||
+      anciennePosition.section === 7) &&
+    ((anciennePosition.rangée === "interieur" && rangée === "exterieur") ||
+      (anciennePosition.rangée === "exterieur" && rangée === "interieur")) &&
+    anciennePosition.case !== 0
   ) {
     alert(
       "Déplacement impossible. Veuillez d'abord passer par la rangée du milieu."
     );
-    return;
+    return false;
   }
 
   // Mettre à jour la position du cycliste en ajoutant le nombre de cases à avancer
@@ -487,13 +441,16 @@ function avancer(carteJouee) {
     positions[nomUtilisateur + "_cycliste_" + cycliste].case = 105;
   }
 
-  // Vérifier si le cycliste atteint les limites d'une section et le déplacer dans la section suivante si nécessaire
-  const sectionsLimites = [8, 18, 21, 35, 72, 75, 94, 95, 105];
+  /*-------------------------------------------------------------- */
+
+  // Mise à jour de la section en fonction de la case
+  const sectionsLimites = [8, 18, 35, 72, 75, 95];
   for (let i = 0; i < sectionsLimites.length; i++) {
     if (
       positions[nomUtilisateur + "_cycliste_" + cycliste].case >
       sectionsLimites[i]
     ) {
+      //+2 car dans sectionsRangées on commence à 1 et non à 0or as de base: index = 0
       let sectionSuivante = i + 2;
       if (
         !sectionsRangées[sectionSuivante] ||
@@ -502,15 +459,14 @@ function avancer(carteJouee) {
         alert(
           "Sortie du plateau de jeu. Votre cycliste a été mis sur la rangé la plus proche dans la section suivante."
         );
-        if (sectionSuivante !== 6) {
-          let rangéeLaPlusProche = "milieu";
+        // On met le cycliste sur la rangée la plus proche dans le cas où il sort du plateau
+        //Dans la section 5 la seule section est interieur
+        if (positions[nomUtilisateur + "_cycliste_" + cycliste].section === 5) {
           positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
-            rangéeLaPlusProche;
-        } else if (sectionSuivante === 6) {
-          // Si la rangée du milieu n'existe pas, choisir au hasard entre rangée intérieure et extérieure
-          let rangéeLaPlusProche = "interieur";
-          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
-            rangéeLaPlusProche;
+            "interieur";
+          //sinon la section la plus proche est toujours la rangée du milieu
+        } else {
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = "milieu";
         }
       } else {
         positions[nomUtilisateur + "_cycliste_" + cycliste].section =
@@ -518,17 +474,79 @@ function avancer(carteJouee) {
       }
     }
   }
-  //On met à jour l'id de la case
-  var ext = "_0";
-  if (positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "milieu") {
-    ext = "_1";
-  } else if (
-    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "exterieur"
+
+  /*---------------------------------------*/
+
+  //Mise à jour de l'id de la case en fonction de la rangée
+  //possibilités si rangee = intérieur -> toujours 0
+  if (
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "interieur"
   ) {
-    ext = "_2";
+    var ext = "_0";
+  } else if (
+    /*Si range = milieu -> 1 de base mais attention aux virages
+  si virage et que ancienne position est sur un virage, alors on passe à 2*/
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "milieu"
+  ) {
+    var ext = "_1";
+    var backtrack = 0;
+    //Dans le cas où on se trouve avant une case_virage d'indice 2
+    if (positions[nomUtilisateur + "_cycliste_" + cycliste].case === 9) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c9_2";
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 10
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c9_1";
+      backtrack = 1;
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 11
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c10_2";
+      backtrack = 1;
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 12
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c10_1";
+      backtrack = 2;
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 63
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c63_2";
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 64
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "c63_1";
+      backtrack = 1;
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 65
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "64_2";
+      backtrack = 1;
+    } else if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case === 66
+    ) {
+      positions[nomUtilisateur + "_cycliste_" + cycliste].id = "64_1";
+      backtrack = 2;
+    }
   }
-  positions[nomUtilisateur + "_cycliste_" + cycliste].id =
-    "c" + positions[nomUtilisateur + "_cycliste_" + cycliste].case + ext;
+  //Si rangée = extérieur -> 2
+  else {
+    var ext = "_2";
+  }
+
+  //On effectue le backtracking sur la case si besoin pour le pas décaler le compteur
+  if (backtrack > 0) {
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case -= backtrack;
+  }
+  /*-------------------------------------------------------------- */
+  // Mise à jour l'identifiant de la case seulement si il n'a pas déjà été changé par la précédente condition
+  if (
+    positions[nomUtilisateur + "_cycliste_" + cycliste].id ===
+    anciennePosition.id
+  ) {
+    positions[nomUtilisateur + "_cycliste_" + cycliste].id =
+      "c" + positions[nomUtilisateur + "_cycliste_" + cycliste].case + ext;
+  }
 
   // Affichage des positions des cyclistes
   let positionsString = "Positions des cyclistes : ";
@@ -562,6 +580,7 @@ function avancer(carteJouee) {
   );
 
   // Vérifier si la case d'arrivée est déjà occupée par un autre cycliste
+  console.log("Dictionnaire des cyclistes :", dico_cyclistes);
   if (verifierCyclistes(dico_cyclistes) == true) {
     alert(
       "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste."
@@ -571,6 +590,10 @@ function avancer(carteJouee) {
       anciennePosition.rangée;
     positions[nomUtilisateur + "_cycliste_" + cycliste].case =
       anciennePosition.case;
+    positions[nomUtilisateur + "_cycliste_" + cycliste].id =
+      anciennePosition.id;
+    positions[nomUtilisateur + "_cycliste_" + cycliste].section =
+      anciennePosition.section;
 
     //On met à jour les données
     mettreAJourPositionsJoueur(
@@ -583,7 +606,8 @@ function avancer(carteJouee) {
     );
     return false;
   }
-
+  const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
+  bouger_jeton(id, cycliste, nomUtilisateur);
   joueurSuivant();
 }
 
@@ -665,14 +689,17 @@ function mettreAJourPositionsJoueur(
     case: casePosition,
     id: idCase,
   };
+}
 
+function bouger_jeton(id, cycliste, nomJoueur) {
   var a = document.getElementById("SVGMap");
+  cycliste = parseInt(cycliste);
 
   // get the inner DOM of alpha.svg
   var svgDoc = a.contentDocument;
 
   // Identifiez la balise g correspondant à la case où se trouve le joueur
-  const g = svgDoc.getElementById("" + idCase);
+  const g = svgDoc.getElementById("" + id);
   const matrix = g.transform.baseVal.consolidate()?.matrix;
   if (matrix == null) return;
   const bbox = g.getBBox();
@@ -712,10 +739,10 @@ function mettreAJourPositionsJoueur(
   jeton.setAttribute("cx", x);
   jeton.setAttribute("cy", y);
   jeton.setAttribute("r", 10);
-
-  console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici
-  // Récupérez l'objet SVG
 }
+
+console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici
+// Récupérez l'objet SVG
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
