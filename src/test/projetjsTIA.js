@@ -100,27 +100,28 @@ function Start_the_game() {
 
   // Boucle pour chaque case dans la rangée intérieur
   for (let i = 0; i < 105; i++) {
-    Tableau_id_case.push("C" + (i + 1) + "_0");
+    Tableau_id_case.push("c" + (i + 1) + "_0");
   }
 
   // Boucle pour chaque case dans la rangée du milieu
   for (let i = 0; i < 105; i++) {
     if (i < 72 || i > 74) {
-      Tableau_id_case.push("C" + (i + 1) + "_1");
+      Tableau_id_case.push("c" + (i + 1) + "_1");
     }
   }
 
   // Boucle pour chaque case dans la rangée extérieur
   for (let i = 0; i < 105; i++) {
     if (
-      (i >= 0 && i < 8) || // Section 1
+      (i >= 0 && i < 10) || // Section 1 case supp virage
       (i >= 18 && i < 21) || // Section 3
       (i >= 21 && i < 35) || // Section 4
+      (i >= 61 && i < 63) || // Section 5 2 cases supp virage
       (i >= 94 && i < 95) || // Section 8
       (i >= 95 && i < 105)
     ) {
       // Section 9
-      Tableau_id_case.push("C" + (i + 1) + "_2");
+      Tableau_id_case.push("c" + (i + 1) + "_2");
     }
   }
 
