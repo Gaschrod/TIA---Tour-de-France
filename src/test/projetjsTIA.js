@@ -5,7 +5,8 @@ var tableau = [];
 var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
-
+// Tableau pour stocker les identifiants de case
+var Tableau_id_case = [];
 
 var Joueur1Piont = {};
 var Joueur2Piont = {};
@@ -27,7 +28,7 @@ const sectionsRangées = {
   5: ["interieur", "milieu"],
   6: ["interieur"],
   7: ["interieur", "milieu"],
-  8: ["interieur","milieu"],
+  8: ["interieur","milieu", "exterieur"],//devant la ligne d'arrivée
   9: ["interieur", "milieu", "exterieur"],
 };
 
@@ -94,6 +95,33 @@ function Start_the_game() {
     }
   }
 
+
+
+  // Boucle pour chaque case dans la rangée intérieur
+  for (let i = 0; i < 105; i++) {
+      Tableau_id_case.push("C" + (i + 1) + "_0");
+  }
+
+  // Boucle pour chaque case dans la rangée du milieu
+  for (let i = 0; i < 105; i++) {
+      if (i < 72 || i > 74) {
+          Tableau_id_case.push("C" + (i + 1) + "_1");
+      }
+  }
+
+  // Boucle pour chaque case dans la rangée extérieur
+  for (let i = 0; i < 105; i++) {
+    if ((i >= 0 && i < 8) ||  // Section 1
+        (i >= 18 && i < 21) || // Section 3
+        (i >= 21 && i < 35) || // Section 4
+        (i >= 94 && i < 95) || // Section 8
+        (i >= 95 && i < 105)) { // Section 9
+        Tableau_id_case.push("C" + (i + 1) + "_2");
+    }
+  }
+
+// Affichage du tableau contenant les identifiants de case
+  console.log(Tableau_id_case);
   console.log("Le jeu a démarré gg!");
   console.log("Jeu de cartes des secondes généré :", tableau);
 
@@ -461,40 +489,11 @@ function jouer_carte(joueur, carteIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-// Tableau d'exemple
-var idpourcycliste = [1, 2, 3]; // Tableau des identifiants des cyclistes
 
 function montrerElementSuivant() {
-  // Récupérer l'indice de l'élément actuel
-  var indice = index + 1;
 
-  // Afficher l'élément avec son indice
-  console.log(nomsJoueurs[index] + " est en indice " + indice);
 
-  // Boucle à travers chaque joueur
-  for (var i = 0; i < nomsJoueurs.length; i++) {
-    var joueur = nomsJoueurs[i];
-    // Afficher le joueur
-    var message = joueur + " possède ";
 
-    // Afficher chaque cycliste pour ce joueur
-    for (var j = 0; j < idpourcycliste.length; j++) {
-      message += "cycliste " + idpourcycliste[j];
-      // Si ce n'est pas le dernier cycliste, ajouter "et"
-      if (j < idpourcycliste.length - 1) {
-        message += " et ";
-      }
-    }
-    console.log(message);
-    
-  }
-  // Passage à l'élément suivant
-  index++;
-
-  // Si on a dépassé la fin du tableau, revenir au début
-  if (index >= nomsJoueurs.length) {
-    index = 0;
-  }
   
 }
 // ---------------------------------------------------------------------
