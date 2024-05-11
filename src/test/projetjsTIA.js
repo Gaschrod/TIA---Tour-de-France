@@ -24,10 +24,10 @@ const sectionsRangées = {
   2: ["interieur", "milieu"],
   3: ["interieur", "milieu", "exterieur"],
   4: ["interieur", "milieu", "exterieur"],
-  5: ["milieu", "exterieur"],
-  6: ["milieu"],
-  7: ["milieu", "exterieur"],
-  8: ["interieur","exterieur"],
+  5: ["interieur", "milieu"],
+  6: ["interieur"],
+  7: ["interieur", "milieu"],
+  8: ["interieur","milieu"],
   9: ["interieur", "milieu", "exterieur"],
 };
 
@@ -378,17 +378,18 @@ function avancer(carteJouee) {
           let rangéeLaPlusProche = "milieu";
           positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
         }
-        else if( sectionSuivante === 7) {
+        else if( sectionSuivante === 6) {
           // Si la rangée du milieu n'existe pas, choisir au hasard entre rangée intérieure et extérieure
-          rangéeLaPlusProche = Math.random() < 0.5 ? "interieur" : "exterieur";
+          let rangéeLaPlusProche = "interieur";
           positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
+        }
         }
       } 
       else {
         positions[nomUtilisateur + "_cycliste_" + cycliste].section = sectionSuivante;
       }
     }
-  }
+  
 
   // Affichage des positions des cyclistes
   let positionsString = "Positions des cyclistes : ";
