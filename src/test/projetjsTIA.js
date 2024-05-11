@@ -348,7 +348,7 @@ function avancer(carteJouee) {
       // Annuler le déplacement en ramenant le joueur à sa position précédente
       positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = anciennePosition.rangée;
       positions[nomUtilisateur + "_cycliste_" + cycliste].case = anciennePosition.case;
-      return;
+      return false;
     }
   }
 
@@ -434,18 +434,10 @@ function jouer_carte(joueur, carteIndex) {
     var carteJouee = mainJoueur[carteIndex]; // Obtenir la carte à jouer
     console.log("Carte jouée par " + joueur + " :", carteJouee);
 
-    // Appeler la fonction avancer avec la carte jouée et le joueur
-    try {
-      avancer(carteJouee, joueur);
-    } catch (error) {
-      console.log(
-        "Une alerte est survenue lors de l'avancement du cycliste :",
-        error
-      );
-      // Ne pas retirer la carte du deck ici, car le déplacement a échoué
-      return; // Sortir de la fonction pour annuler le coup
+    if(avancer(carteJouee) === false){
+      return;
     }
-
+    else{
     // Si le déplacement est réussi, retirer la carte du deck du joueur
     mainJoueur.splice(carteIndex, 1);
 
@@ -459,6 +451,7 @@ function jouer_carte(joueur, carteIndex) {
 
     // Mettre à jour l'interface
     afficherJoueursEtCartesHTML();
+  } 
   } else {
     console.log("Index de carte invalide !");
   }
