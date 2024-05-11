@@ -27,7 +27,7 @@ const sectionsRangées = {
   5: ["milieu", "exterieur"],
   6: ["milieu"],
   7: ["milieu", "exterieur"],
-  8: ["interieur", "milieu", "exterieur"],
+  8: ["interieur","exterieur"],
   9: ["interieur", "milieu", "exterieur"],
 };
 
@@ -345,6 +345,9 @@ function avancer(carteJouee) {
       alert(
         "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste."
       );
+      // Annuler le déplacement en ramenant le joueur à sa position précédente
+      positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = anciennePosition.rangée;
+      positions[nomUtilisateur + "_cycliste_" + cycliste].case = anciennePosition.case;
       return;
     }
   }
@@ -366,24 +369,23 @@ function avancer(carteJouee) {
       sectionsLimites[i]
     ) {
       let sectionSuivante = i + 2;
-      if (
-        !sectionsRangées[sectionSuivante] ||
-        !sectionsRangées[sectionSuivante].includes(rangée)
-      ) {
+      if (!sectionsRangées[sectionSuivante] || !sectionsRangées[sectionSuivante].includes(rangée) ) {
+
         alert(
-          "La rangée sélectionnée n'existe pas dans la section suivante. Veuillez choisir une rangée valide."
+          "Sortie du plateau de jeu. Votre cycliste a été mis sur la rangé la plus proche dans la section suivante."
         );
-        // Rétablir la position précédente du cycliste
-        positions[nomUtilisateur + "_cycliste_" + cycliste].section =
-          anciennePosition.section;
-        positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
-          anciennePosition.rangée;
-        positions[nomUtilisateur + "_cycliste_" + cycliste].case =
-          anciennePosition.case;
-        return;
-      } else {
-        positions[nomUtilisateur + "_cycliste_" + cycliste].section =
-          sectionSuivante;
+        if( sectionSuivante !== 7) {
+          let rangéeLaPlusProche = "milieu";
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
+        }
+        else if( sectionSuivante === 7) {
+          // Si la rangée du milieu n'existe pas, choisir au hasard entre rangée intérieure et extérieure
+          rangéeLaPlusProche = Math.random() < 0.5 ? "interieur" : "exterieur";
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangéeLaPlusProche;
+        }
+      } 
+      else {
+        positions[nomUtilisateur + "_cycliste_" + cycliste].section = sectionSuivante;
       }
     }
   }
