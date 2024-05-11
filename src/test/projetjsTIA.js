@@ -429,7 +429,7 @@ function verifierCyclistes(listeCyclistes) {
 function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
-  const rangée = document.getElementById("rangée").value;
+  const rangée = document.getElementById("rangee").value;
   var casesAAvancer = null;
 
   if (tourActuel === 1) {
@@ -665,7 +665,56 @@ function mettreAJourPositionsJoueur(
     case: casePosition,
     id: idCase,
   };
+
+  var a = document.getElementById("SVGMap");
+
+  // get the inner DOM of alpha.svg
+  var svgDoc = a.contentDocument;
+
+  // Identifiez la balise g correspondant à la case où se trouve le joueur
+  const g = svgDoc.getElementById("" + idCase);
+  const matrix = g.transform.baseVal.consolidate()?.matrix;
+  if (matrix == null) return;
+  const bbox = g.getBBox();
+
+  //On place le jeton du joueur au centre de la case
+  const midX = bbox.x + bbox.width / 2;
+  const midY = bbox.y + bbox.height / 2;
+  const x = matrix?.a * midX + matrix?.c * midY + matrix.e;
+  const y = matrix?.b * midX + matrix?.d * midY + matrix.f;
+
+  // Créez un élément image pour le jeton du joueur et le configurer
+  if (cycliste === 1 && nomJoueur === "Belgique") {
+    var jeton = svgDoc.getElementById("flagBE0");
+  } else if (cycliste === 2 && nomJoueur === "Belgique") {
+    var jeton = svgDoc.getElementById("flagBE1");
+  } else if (cycliste === 3 && nomJoueur === "Belgique") {
+    var jeton = svgDoc.getElementById("flagBE2");
+  } else if (cycliste === 1 && nomJoueur === "Italie") {
+    var jeton = svgDoc.getElementById("flagIT0");
+  } else if (cycliste === 2 && nomJoueur === "Italie") {
+    var jeton = svgDoc.getElementById("flagIT1");
+  } else if (cycliste === 3 && nomJoueur === "Italie") {
+    var jeton = svgDoc.getElementById("flagIT2");
+  } else if (cycliste === 1 && nomJoueur === "Hollande") {
+    var jeton = svgDoc.getElementById("flagNL0");
+  } else if (cycliste === 2 && nomJoueur === "Hollande") {
+    var jeton = svgDoc.getElementById("flagNL1");
+  } else if (cycliste === 3 && nomJoueur === "Hollande") {
+    var jeton = svgDoc.getElementById("flagNL2");
+  } else if (cycliste === 1 && nomJoueur === "Allemagne") {
+    var jeton = svgDoc.getElementById("flagGE0");
+  } else if (cycliste === 2 && nomJoueur === "Allemagne") {
+    var jeton = svgDoc.getElementById("flagGE1");
+  } else if (cycliste === 3 && nomJoueur === "Allemagne") {
+    var jeton = svgDoc.getElementById("flagGE2");
+  }
+  jeton.setAttribute("cx", x);
+  jeton.setAttribute("cy", y);
+  jeton.setAttribute("r", 10);
+
   console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici
+  // Récupérez l'objet SVG
 }
 
 // ---------------------------------------------------------------------
