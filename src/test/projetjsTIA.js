@@ -70,7 +70,7 @@ function Start_the_game() {
 
   // Initialiser le score de chaque joueur à 0
   for (var i = 0; i < nomsJoueurs.length; i++) {
-    dico_score[nomsJoueurs[i]] = 0;
+    dico_score[nomsJoueurs[i]] = { score: 0, ranking: 0 };
   }
 
   // Affiche les noms des joueurs
@@ -756,3 +756,94 @@ console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
+
+// Fonction pour vérifier si un cycliste se trouve sur une case adjacente ou la case suivante
+function checkAdjacentOrNext(playerPosition) {
+  // Obtenez la liste des positions de tous les cyclistes
+  let allPlayerPositions = dico_cyclistes.map((cycliste) => cycliste.case);
+
+  // Vérifie si un cycliste se trouve sur la case suivante
+  if (allPlayerPositions.includes(playerPosition + 1)) {
+    return true;
+  }
+
+  // Vérifie si un cycliste se trouve sur une rangée adjacente
+  if (
+    allPlayerPositions.includes(playerPosition - 1) ||
+    allPlayerPositions.includes(playerPosition + 1)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Fonction pour profiter de l'aspiration
+function aspiration(playerPosition) {
+  // Vérifie si un cycliste se trouve sur une case adjacente ou la case suivante
+  if (
+    checkAdjacentOrNext(playerPosition) &&
+    !verifierCyclistes(dico_cyclistes)
+  ) {
+    alert(
+      "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire."
+    );
+  }
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Fonction pour le sprint intermédiaire
+let bonusClaimed = {
+  section1: false,
+  section2: false,
+  section22: false,
+  section3: false,
+};
+// Initialisation des statistiques des joueurs
+
+function sprintIntermediaire(playerPosition, section, player) {
+  // 1er sprint intermédiaire, premier joueur à passer la ligne
+  if (playerPosition === 22 && !bonusClaimed["section1"]) {
+    alert(
+      "Sprint intermédiaire ! Vous pouvez profiter d'une seconde de bonification et 1 point de bonification."
+    );
+    bonusClaimed["section1"] = true;
+    dico_score[player].seconds -= 1;
+    dico_score[player].ranking += 1;
+  }
+
+  // 2ème sprint intermédiaire, premier joueur à passer la ligne
+  if (playerPosition === 36 && !bonusClaimed["section2"]) {
+    alert(
+      "Sprint intermédiaire ! Vous pouvez profiter de 3 secondes de bonifications et 4 points de bonifications."
+    );
+    bonusClaimed["section2"] = true;
+    dico_score[player].seconds -= 3;
+    dico_score[player].ranking += 4;
+  }
+
+  // 2ème sprint intermédiaire, deuxième joueur à passer la ligne
+  if (playerPosition === 36 && !bonusClaimed["section22"]) {
+    alert(
+      "Sprint intermédiaire ! Vous pouvez profiter d'une seconde de bonification et 1 point de bonification."
+    );
+    bonusClaimed["section22"] = true;
+    dico_score[player].seconds -= 1;
+    dico_score[player].ranking += 1;
+  }
+
+  // 3ème sprint intermédiaire, premier joueur à passer la ligne
+  if (playerPosition === 76 && !bonusClaimed["section3"]) {
+    alert(
+      "Sprint intermédiaire ! Vous pouvez profiter de 2 secondes de bonifications et 4 points de bonifications."
+    );
+    bonusClaimed["section3"] = true;
+    dico_score[player].seconds -= 2;
+    dico_score[player].ranking += 4;
+  }
+}
