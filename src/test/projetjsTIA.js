@@ -6,6 +6,28 @@ var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
 dico_score = {};
+const cases_chances = [
+  "c9_0",
+  "c10_0",
+  "c11_0",
+  "c12_0",
+  "c15_1",
+  "c16_1",
+  "c19_2",
+  "c21_2",
+  "c24_0",
+  "c26_0",
+  "c28_0",
+  "c30_0",
+  "c32_0",
+  "c34_0",
+  "c48_0",
+  "c57_1",
+  "c66_0",
+  "c66_1",
+  "c74_0",
+  "c90_2",
+];
 
 // Tableau pour stocker les identifiants de case
 var Tableau_id_case = [];
@@ -71,6 +93,7 @@ function Start_the_game() {
   // Initialiser le score de chaque joueur à 0
   for (var i = 0; i < nomsJoueurs.length; i++) {
     dico_score[nomsJoueurs[i]] = { score: 0, ranking: 0 };
+    console.log("Dictionnaire des scores :", dico_score);
   }
 
   // Affiche les noms des joueurs
@@ -332,12 +355,7 @@ function afficherJoueursEtCartesHTML() {
 function piocherCarteChance() {
   var nombre = Math.floor(Math.random() * 7) - 3;
   alert("Carte chance piochée :" + nombre);
-  if (nombre === 0) {
-    joueurSuivant();
-  } else {
-    avancer(nombre);
-  }
-  afficherJoueursEtCartesHTML();
+  return nombre;
 }
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -615,8 +633,21 @@ function avancer(carteJouee) {
   }
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
   bouger_jeton(id, cycliste, nomUtilisateur);
-  dico_score[nomUtilisateur] += casesAAvancer;
+  //Si toutes les conditions sont passées on met à jour le score
+  dico_score[nomUtilisateur]["score"] += casesAAvancer;
   console.log(dico_score);
+  // On vérifie si le cycliste est sur une case chance si oui on piocherCarteChance
+  if (cases_chances.includes(id)) {
+    afficherJoueursEtCartesHTML();
+    const nombreChance = piocherCarteChance();
+    // on avant de nombreChance cases: il faut repasser par la foncton avancer car on peut changer de section
+    if (nombreChance !== 0) {
+      return avancer(nombreChance);
+    } else {
+      joueurSuivant();
+      return afficherJoueursEtCartesHTML();
+    }
+  }
   joueurSuivant();
 }
 
