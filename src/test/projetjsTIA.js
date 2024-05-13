@@ -5,6 +5,7 @@ var tableau = [];
 var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
+dico_score = {};
 
 // Tableau pour stocker les identifiants de case
 var Tableau_id_case = [];
@@ -55,6 +56,7 @@ function Start_the_game() {
       return;
     }
     nomsJoueurs.push(nom);
+    //On initialise le score de chaque joueur à 0
   }
 
   for (var i = 1; i <= selectedBots; i++) {
@@ -64,6 +66,11 @@ function Start_the_game() {
     if (i === 2) {
       nomsJoueurs.push("Allemagne");
     }
+  }
+
+  // Initialiser le score de chaque joueur à 0
+  for (var i = 0; i < nomsJoueurs.length; i++) {
+    dico_score[nomsJoueurs[i]] = 0;
   }
 
   // Affiche les noms des joueurs
@@ -608,6 +615,8 @@ function avancer(carteJouee) {
   }
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
   bouger_jeton(id, cycliste, nomUtilisateur);
+  dico_score[nomUtilisateur] += casesAAvancer;
+  console.log(dico_score);
   joueurSuivant();
 }
 
