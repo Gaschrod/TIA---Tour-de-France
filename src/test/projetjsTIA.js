@@ -452,7 +452,7 @@ function verifierCyclistes(listeCyclistes) {
 function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
-  const rangée = document.getElementById("rangee").value;
+  var rangée = document.getElementById("rangee").value;
   var casesAAvancer = null;
 
   if (tourActuel === 1) {
@@ -501,6 +501,23 @@ function avancer(carteJouee) {
   }
 
   // Mettre à jour la position du cycliste en ajoutant le nombre de cases à avancer
+
+  positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangée;
+  //On vérifie si le joueur a le droit ou non au bonus d'aspiration
+  if (aspiration(nomUtilisateur, cycliste, casesAAvancer) === true) {
+    casesAAvancer += 1;
+  } else if (aspiration(nomUtilisateur, cycliste, casesAAvancer) === "diago") {
+    console.log("aspiration diagonale");
+    if (
+      positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "interieur"
+    ) {
+      rangée = "milieu";
+    } else {
+      rangée = "interieur";
+    }
+    casesAAvancer += 1;
+  }
+
   positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangée;
   positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer;
 
@@ -674,8 +691,9 @@ function avancer(carteJouee) {
     );
     return false;
   }
+
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
-  setTimeout(bouger_jeton(id, cycliste, nomUtilisateur), 0);
+  bouger_jeton(id, cycliste, nomUtilisateur);
   //Si toutes les conditions sont passées on met à jour le score
   dico_score[nomUtilisateur]["score"] += casesAAvancer;
   console.log(dico_score);
@@ -722,6 +740,15 @@ function jouer_carte(joueur, carteIndex) {
 
       // Mettre à jour l'interface
       afficherJoueursEtCartesHTML();
+      if (
+        nomsJoueurs.includes("Hollande") === false &&
+        nomsJoueurs.includes("Allemagne") === false
+      ) {
+        var sound = new Howl({
+          src: ["/static/sound.mp4"], // Spécifiez le chemin vers votre fichier audio
+        });
+        sound.play();
+      }
     }
   } else {
     console.log("Index de carte invalide !");
@@ -829,41 +856,96 @@ console.log("Positions mises à jour de", nomJoueur, ":", joueurPion); // Ajout 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
+function verifierDiago(cyclistePrincipal, casePrincipal) {
+  for (let i = 0; i < dico_cyclistes.length; i++) {
+    let cyclistesDansDico = dico_cyclistes[i];
+    for (const key in cyclistesDansDico) {
+      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
+        const autreCycliste = cyclistesDansDico[key];
+
+        // Vérifier si les cyclistes sont différents
+        if (cyclistePrincipal !== autreCycliste) {
+          // Vérifier si la case suivante et la rangée à coté de l'autre cycliste est libre
+          if (
+            Math.abs(casePrincipal - autreCycliste.case) === 1 &&
+            ((cyclistePrincipal.rangée === "intérieur" &&
+              autreCycliste.rangée === "milieu") ||
+              (cyclistePrincipal.rangée === "milieu" &&
+                (autreCycliste.rangée === "extérieur" ||
+                  autreCycliste.rangée === "intérieur") &&
+                cyclistePrincipal.rangée === "extérieur" &&
+                autreCycliste.rangée === "milieu"))
+          ) {
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return true; // La case suivante et la rangée à coté de l'autre cycliste est libre
+}
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 // Fonction pour vérifier si un cycliste se trouve sur une case adjacente ou la case suivante
-function checkAdjacentOrNext(playerPosition) {
-  // Obtenez la liste des positions de tous les cyclistes
-  let allPlayerPositions = dico_cyclistes.map((cycliste) => cycliste.case);
-
-  // Vérifie si un cycliste se trouve sur la case suivante
-  if (allPlayerPositions.includes(playerPosition + 1)) {
-    return true;
+function checkAspiration(cyclistePrincipal, casesAAvancer) {
+  for (let i = 0; i < dico_cyclistes.length; i++) {
+    let cyclistesDansDico = dico_cyclistes[i];
+    for (const key in cyclistesDansDico) {
+      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
+        const autreCycliste = cyclistesDansDico[key];
+        // Vérifier si les cyclistes sont différents
+        if (cyclistePrincipal !== autreCycliste) {
+          casePrincipal = cyclistePrincipal.case + casesAAvancer;
+          // Vérifier la distance entre les cyclistes est de 2 cases
+          if (
+            Math.abs(casePrincipal - autreCycliste.case) === 1 &&
+            cyclistePrincipal.rangée === autreCycliste.rangée &&
+            verifierDiago(cyclistePrincipal, casePrincipal) === true
+          ) {
+            return "diago"; // Les cyclistes sont à une distance de 1 case l'un de l'autre et la case suivante est libre
+          } else if (
+            Math.abs(casePrincipal - autreCycliste.case) === 2 &&
+            cyclistePrincipal.rangée === autreCycliste.rangée
+          ) {
+            return true; // Les cyclistes sont à une distance de 2 cases l'un de l'autre
+          }
+          // On vérifie également si le cycliste est à une case de distance et que la case suivante et la rangée à coté de l'autre cycliste est libre
+        }
+      }
+    }
   }
-
-  // Vérifie si un cycliste se trouve sur une rangée adjacente
-  if (
-    allPlayerPositions.includes(playerPosition - 1) ||
-    allPlayerPositions.includes(playerPosition + 1)
-  ) {
-    return true;
-  }
-
-  return false;
+  return false; // Aucun cycliste n'est à une distance de 2 cases l'un de l'autre ou la case suivante est libre
 }
 
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // Fonction pour profiter de l'aspiration
-function aspiration(playerPosition) {
+function aspiration(nomJoueur, cycliste, casesAAvancer) {
   // Vérifie si un cycliste se trouve sur une case adjacente ou la case suivante
   if (
-    checkAdjacentOrNext(playerPosition) &&
-    !verifierCyclistes(dico_cyclistes)
+    checkAspiration(
+      positions[nomJoueur + "_cycliste_" + cycliste],
+      casesAAvancer
+    ) === true
   ) {
     alert(
       "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire."
     );
+    return true;
+  } else if (
+    checkAspiration(
+      positions[nomJoueur + "_cycliste_" + cycliste],
+      casesAAvancer
+    ) === "diago"
+  ) {
+    alert(
+      "Profitez de l'aspiration diagonale ! Vous pouvez avancer de 1 case supplémentaire."
+    );
+    return "diago";
   }
 }
 

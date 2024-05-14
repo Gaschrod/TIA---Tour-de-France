@@ -1,39 +1,58 @@
-function checkWhoStarts(liste) {
-  let indexMax = null;
-  let maxValeur = Number.NEGATIVE_INFINITY;
+dico = [
+  {
+    "cycliste 1": {
+      section: 2,
+      rangée: "interieur",
+      case: 6,
+      id: "c6_0",
+    },
+    "cycliste 2": {
+      section: 2,
+      rangée: "interieur",
+      case: 7,
+      id: "c6_0",
+    },
+  },
+  {
+    "cycliste 1": {
+      section: 1,
+      rangée: "interieur",
+      case: 3,
+      id: "c3_0",
+    },
+  },
+  {},
+  {},
+];
 
-  for (let i = 0; i < liste.length; i++) {
-    for (let j = 0; j < liste[i].length; j++) {
-      let premierElementSousSousListe = liste[i][j][0]; // Accéder au premier élément de chaque sous-sous-liste
-
-      if (premierElementSousSousListe > maxValeur) {
-        maxValeur = premierElementSousSousListe;
-        indexMax = i;
+function verifierDistanceCyclistes(cyclistePrincipal, listeCyclistes) {
+  for (let i = 0; i < listeCyclistes.length; i++) {
+    let cyclistesDansDico = listeCyclistes[i];
+    for (const key in cyclistesDansDico) {
+      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
+        const autreCycliste = cyclistesDansDico[key];
+        console.log(autreCycliste);
+        // Vérifier si les cyclistes sont différents
+        if (cyclistePrincipal !== autreCycliste) {
+          // Vérifier la distance entre les cyclistes
+          if (
+            Math.abs(cyclistePrincipal.case - autreCycliste.case) <= 2 &&
+            cyclistePrincipal.section === autreCycliste.section &&
+            cyclistePrincipal.rangée === autreCycliste.rangée
+          ) {
+            return true; // Les cyclistes sont à une distance de 2 cases l'un de l'autre
+          }
+        }
       }
     }
   }
-
-  return indexMax;
+  return false; // Aucun cycliste n'est à une distance de 2 cases l'un de l'autre
 }
+let cyclistePrincipal = {
+  case: 10,
+  section: 1,
+  rangée: "interieur",
+  id: "c3_0",
+};
 
-// Exemple d'utilisation
-let liste = [
-  [
-    [3, 7, 9],
-    [50, 5, 8],
-    [1, 6, 10],
-  ],
-  [
-    [13, 17, 19],
-    [12, 15, 18],
-    [45, 16, 45],
-  ],
-  [
-    [23, 27, 29],
-    [22, 25, 28],
-    [21, 26, 30],
-  ],
-];
-
-let indexDepart = checkWhoStarts(liste);
-console.log("L'index de départ est :", indexDepart); // Renvoie l'index de la sous-liste principale ayant la plus grande valeur de premier élément dans la sous-sous-liste.
+console.log(verifierDistanceCyclistes(cyclistePrincipal, dico));
