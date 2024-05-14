@@ -72,9 +72,13 @@ function Start_the_game() {
 
   // Génère les noms des joueurs humains
   for (var i = 1; i <= selectedHumanPlayers; i++) {
-    var nom = prompt("Nom du Joueur " + i + " :");
+    var nom = prompt("Nom du Joueur " + i + " (Belgique ou Italie):");
     if (nom === null || nom === "") {
       alert("Veuillez entrer un nom pour tous les utilisateurs.");
+      return;
+    }
+    if (["Belgique", "Italie"].includes(nom) === false) {
+      alert("Nom de joueur invalide !");
       return;
     }
     nomsJoueurs.push(nom);
@@ -127,7 +131,9 @@ function Start_the_game() {
 
   // Création du jeu de carte des secondes (12 cartes de 1 à 12, chacune répétée 8 fois)
   for (var i = 1; i <= 12; i++) {
+    //12 itérations
     for (var j = 1; j <= 8; j++) {
+      //8 itérations
       var carte = [i, j];
       tableau.push(carte);
     }
@@ -172,10 +178,31 @@ function Start_the_game() {
     }
   }
 
+  var joueursListe = [];
   // Affiche les decks de chaque joueur une seule fois après la distribution des cartes
   for (var i = 0; i < joueurs.length; i++) {
     console.log("Le deck de " + nomsJoueurs[i] + " est :", window[joueurs[i]]);
+    joueursListe.push(window[joueurs[i]]);
   }
+
+  console.log(joueursListe);
+  const verif = checkWhoStarts(joueursListe);
+  console.log("Le joueur qui commence en premier est à l'index :", verif);
+
+  // Et on met le nom du joueur qui commence en premier dans la liste des noms
+  if (nomsJoueurs[0] !== nomsJoueurs[verif]) {
+    nomsJoueurs.unshift(nomsJoueurs[verif]);
+    nomsJoueurs.splice(verif + 1, 1);
+
+    //il faut aussi faire de même pour les cartes
+    joueursListe.unshift(joueursListe[verif]);
+    joueursListe.splice(verif + 1, 1);
+
+    for (var j = 0; j < nomsJoueurs.length; j++) {
+      window[joueurs[j]] = joueursListe[j];
+    }
+  }
+  console.log(nomsJoueurs);
 
   afficherJoueursEtCartesHTML(nomsJoueurs);
 
@@ -211,6 +238,24 @@ function demarrerTour() {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
+function checkWhoStarts(liste) {
+  let indexMax = null;
+  let maxValeur = Number.NEGATIVE_INFINITY;
+
+  for (let i = 0; i < liste.length; i++) {
+    for (let j = 0; j < liste[i].length; j++) {
+      let premierElementSousSousListe = liste[i][j][0]; // Accéder au premier élément de chaque sous-sous-liste
+
+      if (premierElementSousSousListe > maxValeur) {
+        maxValeur = premierElementSousSousListe;
+        indexMax = i;
+      }
+    }
+  }
+
+  return indexMax;
+}
+
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -229,8 +274,6 @@ function RandomCarte(playerIndex) {
 
   // Distribue la carte au joueur correspondant
   window[joueurs[playerIndex]].push(cartePiochee);
-
-  afficherJoueursEtCartesHTML();
 }
 
 // ---------------------------------------------------------------------
@@ -632,13 +675,12 @@ function avancer(carteJouee) {
     return false;
   }
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
-  bouger_jeton(id, cycliste, nomUtilisateur);
+  setTimeout(bouger_jeton(id, cycliste, nomUtilisateur), 0);
   //Si toutes les conditions sont passées on met à jour le score
   dico_score[nomUtilisateur]["score"] += casesAAvancer;
   console.log(dico_score);
   // On vérifie si le cycliste est sur une case chance si oui on piocherCarteChance
   if (cases_chances.includes(id)) {
-    afficherJoueursEtCartesHTML();
     const nombreChance = piocherCarteChance();
     // on avant de nombreChance cases: il faut repasser par la foncton avancer car on peut changer de section
     if (nombreChance !== 0) {

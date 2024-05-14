@@ -43,7 +43,7 @@ q_type(2, 'combien de coureurs par equipe ?').
 q_type(3, 'Puis-je deplacer un coureur sur une case occupee par unautre coureur ?').
 q_type(4, 'peut-on doubler par le bas-cote ?').
 q_type(5, 'A quel moment tire-t-on les cartes ?').
-q_type(6, 'Dans quel ordre les jouent les équipes ?').
+q_type(6, 'Dans quel ordre jouent les équipes ?').
 q_type(7, 'Que se passe-t-il si un coureur veut doubler et que la case est occupee ?').
 q_type(8, 'Que font les cartes chances ?').
 
@@ -53,7 +53,7 @@ rep_type(3, 'Non').
 rep_type(4, 'Oui, il est permis de depasser par le bas-cote de la route pour autant que le coureur arrive sur une case non occupee. Si ce n\'est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu\'il voulait depasser.').
 rep_type(5, 'Au debut du jeu, les joueurs tirent 5 cartes, selon un tirage aleatoire.').
 rep_type(6, 'L\'ordre suivant : equipe d\'Italie, equipe de Hollande, equipe de Belgique, equipe d\'Allemagne.').
-rep_type(7, 'Tirez un nouveau lot de 5 cartes').
+rep_type(7, 'Vous ne pouvez pas avancer sur une case occupee').
 rep_type(8, 'Les cartes chances peuvent soit faire reculer jusqu\'a 3 cases ou au contraire faire avancer.').
 
 % ----------------------------------------------------------------%
@@ -89,7 +89,7 @@ regle_rep(String, Rep):-
     %Trouver le plus haut degré de similarité
     max_list([D1, D2, D3, D4, D5, D6, D7, D8], Max),
     nth1(Index, [D1, D2, D3, D4, D5, D6, D7, D8], Max), % Trouver l'indice de la valeur maximale
-    (Max >= 0.6 -> % Vérifier si le degré de similarité est supérieur à 0.7
+    (Max >= 0.55 -> % Vérifier si le degré de similarité est supérieur à 0.7
         nth1(Index, [R1, R2, R3, R4, R5, R6, R7, R8], Rep) % Récupérer la réponse associée à cet indice
     ; % Sinon
         Rep = 0 % Unifier Rep avec 0

@@ -54,12 +54,13 @@
         <!--<button id="myButton3" onclick="jouer_carte()">Jouer la carte au choix</button>-->
 
         <div class="div6">
-            <div class="terminal">
+            <div id="chatbox">
                 <!--En utilisant bootstrap fais une interface de discussion avec un bot cela doit ressembler à une invite de commande-->
-                      <div class="title-bar">
-                        <span class="title">ChatBot</span>
+                      <div>
+                        <span>ChatBot</span>
                       </div>
-                      <div class="terminal-body">
+                      <br><br>
+                      <div>
                             <div id="messages">
                                 <div class="message_base">
                                     <span class="message-content">Bonjour, je suis le bot du Tour, BDT, pour les intimes. En quoi puis-je vous aider ?</span>
@@ -67,9 +68,8 @@
                                 </div>
                             </div>
                       </div>
-                      <div class="input-line">
-                        <span class="prompt">></span>
-                        <input type="text" class="input-field" id="input-message">
+                      <div >
+                        <input type="text" id="userInput">
                         </span>
                       </div>
               </div>
