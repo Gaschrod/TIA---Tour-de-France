@@ -668,8 +668,10 @@ function avancer(carteJouee) {
   // Vérifier si la case d'arrivée est déjà occupée par un autre cycliste
   console.log("Dictionnaire des cyclistes :", dico_cyclistes);
   if (verifierCyclistes(dico_cyclistes) == true) {
+    if(positions[nomUtilisateur + "_cycliste_" + cycliste].section === 5 || (positions[nomUtilisateur + "_cycliste_" + cycliste].case >= 84 && positions[nomUtilisateur + "_cycliste_" + cycliste].case < 95)||
+    (positions[nomUtilisateur + "_cycliste_" + cycliste].rangee === 2 && (positions[nomUtilisateur + "_cycliste_" + cycliste].case >=23 && positions[nomUtilisateur + "_cycliste_" + cycliste].case < 36))){
     alert(
-      "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste."
+      "Déplacement impossible. La case d'arrivée est déjà occupée par un autre cycliste et on ne peut pas dépasser."
     );
     // Annuler le déplacement en ramenant le joueur à sa position précédente
     positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
@@ -691,8 +693,8 @@ function avancer(carteJouee) {
       positions[nomUtilisateur + "_cycliste_" + cycliste].id
     );
     return false;
+    }
   }
-
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
   bouger_jeton(id, cycliste, nomUtilisateur);
   //Si toutes les conditions sont passées on met à jour le score
