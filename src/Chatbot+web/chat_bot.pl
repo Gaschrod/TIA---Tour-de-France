@@ -40,7 +40,7 @@ produire_reponse_autre(_,S1) :-
 
 q_type(1, 'qui commence ?').
 q_type(2, 'combien de coureurs par equipe ?').
-q_type(3, 'Puis-je deplacer un coureur sur une case occupee par unautre coureur ?').
+q_type(3, 'Puis-je deplacer un coureur sur une case occupee par un autre coureur ?').
 q_type(4, 'peut-on doubler par le bas-cote ?').
 q_type(5, 'A quel moment tire-t-on les cartes ?').
 q_type(6, 'Dans quel ordre les jouent les équipes ?').
