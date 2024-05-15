@@ -10,9 +10,9 @@
 
 ## Présentation du jeu
 
-Le jeu de société du Tour de France se joue avec des cares secondes. En jouant une carte Seconde vous pouvez faire avancer votre courreur sur le plateau de jeu. Faites preuve de tactique pour laisser vos adversaires faire le travail en tête de peloton et prenez de la vitesse grâce au phénomène d'aspiration. Gardez vos meilleures cartes pour lancer un sprint lorsque vous estimez que vos adversaires n'en sont pas capables.
+Le jeu de société du Tour de France se joue avec des cartes Secondes. En jouant une carte Seconde vous pouvez faire avancer votre courreur sur le plateau de jeu. Faites preuve de tactique pour laisser vos adversaires faire le travail en tête de peloton et prenez de la vitesse grâce au phénomène d'aspiration. Gardez vos meilleures cartes pour lancer un sprint lorsque vous estimez que vos adversaires n'en sont pas capables.
 
-Ce projet est une version virtuelle du jeu Tour de France expliquée ci-dessus développée dans le cadre du cours d'intelligence artificielle et programmation symbolique de l'université de Namur.
+Ce projet est une version virtuelle du jeu Tour de France expliqué ci-dessus et développée dans le cadre du cours d'intelligence artificielle et programmation symbolique de l'université de Namur.
 
 ## Utilisation
 
