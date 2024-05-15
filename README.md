@@ -6,13 +6,13 @@ Tout d'abord il faut démarrer l'application, pour ce faire procéder comme suit
 
 - Naviguer jusqu'au dossier Prolog
 - Ouvrir une invite de commande
-- Taper cette commande:
+- Tapez cette commande:
 
 ```
 $ swipl server.pl
 ```
 
-- Puis taper cette commande:
+- Puis tapez cette commande:
 
 ```
 $ start_server."
