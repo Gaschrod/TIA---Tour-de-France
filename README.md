@@ -14,12 +14,17 @@ Le jeu de société du Tour de France se joue avec des cartes Secondes. En jouan
 
 Ce projet est une version virtuelle du jeu Tour de France expliqué ci-dessus et développée dans le cadre du cours d'intelligence artificielle et programmation symbolique de l'université de Namur.
 
+## Pré-requis
+
+Afin de lancer le serveur il vous faudra SWIProlog d'installé sur votre machine voici un tutoriel Youtube pour y arriver:
+[Install SWIPL](https://youtu.be/ujzjNFpsWfQ)
+
 ## Utilisation
 
 Tout d'abord il faut démarrer l'application, pour ce faire procéder comme suit:
 
-- Naviguer jusqu'au dossier Prolog
-- Ouvrir une invite de commande
+- Naviguez jusqu'au dossier [src/Prolog](https://github.com/Gaschrod/TIA---Tour-de-France/tree/main/src/Prolog)
+- Ouvrez une invite de commande
 - Tapez cette commande:
 
 ```
@@ -33,6 +38,7 @@ $ start_server.
 ```
 
 - Control+click gauche sur le lien qui s'affiche
+- Une fois que vous voyez l'arborescence de fichiers cliquez sur "game.html"
 
 ## Commande pratique
 
