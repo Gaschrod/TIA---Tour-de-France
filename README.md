@@ -17,14 +17,18 @@ Ce projet est une version virtuelle du jeu Tour de France expliqué ci-dessus et
 ## Pré-requis
 
 Afin de lancer le serveur il vous faudra SWIProlog d'installé sur votre machine voici un tutoriel Youtube pour y arriver:
-[Install SWIPL](https://youtu.be/ujzjNFpsWfQ)
+[Installer SWIPL](https://youtu.be/ujzjNFpsWfQ)
 
 ## Utilisation
 
 Tout d'abord il faut démarrer l'application, pour ce faire procéder comme suit:
 
 - Naviguez jusqu'au dossier [src/Prolog](https://github.com/Gaschrod/TIA---Tour-de-France/tree/main/src/Prolog)
-- Ouvrez une invite de commande
+- Ouvrez une invite de commande (click-droit dans l'explorateur de fichier et "Ouvrir dans le terminal")
+- Si vous navez pas de terminal suivez ce tutoriel:
+
+  - [Installer un cmd](https://learn.microsoft.com/en-us/windows/terminal/install)
+
 - Tapez cette commande:
 
 ```
