@@ -452,7 +452,7 @@ function verifierCyclistes(listeCyclistes) {
 function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
-  var rangée = document.getElementById("rangee").value;
+  var rangée = "intérieur";
   var casesAAvancer = null;
 
   if (tourActuel === 1) {
@@ -504,9 +504,10 @@ function avancer(carteJouee) {
 
   positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangée;
   //On vérifie si le joueur a le droit ou non au bonus d'aspiration
-  if (aspiration(nomUtilisateur, cycliste, casesAAvancer) === true) {
+  const verif = aspiration(nomUtilisateur, cycliste, casesAAvancer);
+  if (verif === true) {
     casesAAvancer += 1;
-  } else if (aspiration(nomUtilisateur, cycliste, casesAAvancer) === "diago") {
+  } else if (verif === "diago") {
     console.log("aspiration diagonale");
     if (
       positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "interieur"
