@@ -694,6 +694,12 @@ function avancer(carteJouee) {
     );
     return false;
     }
+    else{
+      rangée = "milieu";
+      positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangée;
+      // sinon vérifie si quelqu'un est sur la case du à coté du milieu 
+      
+    }
   }
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
   bouger_jeton(id, cycliste, nomUtilisateur);
