@@ -18,7 +18,7 @@ $ swipl server.pl
 $ start_server."
 ```
 
--control+click gauche sur le lien qui s'affiche
+- Control+click gauche sur le lien qui s'affiche
 
 ## Commande pratique
 
