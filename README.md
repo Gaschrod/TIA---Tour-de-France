@@ -15,7 +15,7 @@ $ swipl server.pl
 - Puis tapez cette commande:
 
 ```
-$ start_server."
+$ start_server.
 ```
 
 - Control+click gauche sur le lien qui s'affiche
