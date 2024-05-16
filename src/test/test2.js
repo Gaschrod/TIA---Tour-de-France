@@ -3,75 +3,87 @@ var dico_cyclistes = [
     "cycliste 1": {
       section: 1,
       rangée: "interieur",
-      case: 10,
-      id: "c10_0",
+      case: 8,
+      id: "c8_0",
+    },
+    "cycliste 2": {
+      section: 1,
+      rangée: "interieur",
+      case: 7,
+      id: "c7_0",
+    },
+  },
+  {
+    "cycliste 1": {
+      section: 1,
+      rangée: "milieu",
+      case: 8,
+      id: "c8_1",
+    },
+    "cycliste 2": {
+      section: 0,
+      rangée: "interieur",
+      case: 7,
+      id: "c7_0",
     },
   },
   {},
   {},
-  {},
 ];
 
-function verifierDiago(cyclistePrincipal, casePrincipal) {
-  const rangéesAdjacentes = {
-    interieur: ["milieu"],
-    milieu: ["interieur", "exterieur"],
-    exterieur: ["milieu"],
-  };
+var dico_score = [
+  { Belgique: { score: 0, points: 0 } },
+  { Hollande: { score: 0, points: 0 } },
+];
+
+function updateSprintResults(dico_cyclistes) {
+  let premierCyclisteSprint1 = null;
+  let premierCyclisteSprint2 = null;
 
   for (let i = 0; i < dico_cyclistes.length; i++) {
     let cyclistesDansDico = dico_cyclistes[i];
     for (const key in cyclistesDansDico) {
       if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
-        const autreCycliste = cyclistesDansDico[key];
+        const cycliste = cyclistesDansDico[key];
 
-        // Vérifier si les cyclistes sont différents
-        if (cyclistePrincipal.id !== autreCycliste.id) {
-          // Vérifier si la case et la rangée de l'autre cycliste sont en diagonale par rapport au cycliste principal
+        // Vérifier le premier cycliste à terminer le premier sprint
+        if (cycliste.case >= 22 && cycliste.case <= 35) {
           if (
-            Math.abs(casePrincipal - autreCycliste.case) === 1 &&
-            rangéesAdjacentes[cyclistePrincipal.rangée].includes(
-              autreCycliste.rangée
-            )
+            !premierCyclisteSprint1 ||
+            cycliste.case < premierCyclisteSprint1.case
           ) {
-            return false;
+            premierCyclisteSprint1 = cycliste;
+          }
+        }
+
+        // Vérifier le premier cycliste à terminer le deuxième sprint
+        if (cycliste.case >= 76 && cycliste.case <= 95) {
+          if (
+            !premierCyclisteSprint2 ||
+            cycliste.case < premierCyclisteSprint2.case
+          ) {
+            premierCyclisteSprint2 = cycliste;
           }
         }
       }
     }
   }
-  return true; // Aucun cycliste n'est dans la diagonale du cycliste principal
-}
 
-function checkAspiration(cyclistePrincipal) {
-  for (let i = 0; i < dico_cyclistes.length; i++) {
-    let cyclistesDansDico = dico_cyclistes[i];
-    for (const key in cyclistesDansDico) {
-      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
-        const autreCycliste = cyclistesDansDico[key];
-        // Vérifier si les cyclistes sont différents
-        if (cyclistePrincipal !== autreCycliste) {
-          casePrincipal = cyclistePrincipal.case;
-          // Vérifier la distance entre les cyclistes est de 2 cases
-          if (
-            autreCycliste.case - casePrincipal === 1 &&
-            cyclistePrincipal.rangée === autreCycliste.rangée &&
-            verifierDiago(cyclistePrincipal, casePrincipal) === true
-          ) {
-            return "diago"; // Les cyclistes sont à une distance de 1 case l'un de l'autre et la case suivante est libre
-          } else if (
-            autreCycliste.case - casePrincipal === 2 &&
-            cyclistePrincipal.rangée === autreCycliste.rangée
-          ) {
-            return "ligne"; // Les cyclistes sont à une distance de 2 cases l'un de l'autre
-          }
-          // On vérifie également si le cycliste est à une case de distance et que la case suivante et la rangée à coté de l'autre cycliste est libre
-        }
-      }
-    }
+  // Mise à jour du premier cycliste qui termine le premier sprint
+  if (premierCyclisteSprint1) {
+    dico_score[0].Belgique.score += 1;
+    dico_score[0].Belgique.points += 1;
   }
-  return false; // Aucun cycliste n'est à une distance de 2 cases l'un de l'autre ou la case suivante est libre
+
+  // Mise à jour du premier cycliste qui termine le deuxième sprint
+  if (premierCyclisteSprint2) {
+    dico_score[1].Hollande.score += 2;
+    dico_score[1].Hollande.points += 4;
+  }
 }
 
-verif = checkAspiration(dico_cyclistes[0]["cycliste 1"]);
-console.log(verif); // devrait afficher "true"
+// Appel de la fonction pour mettre à jour les résultats des sprints
+updateSprintResults(dico_cyclistes, dico_score);
+
+// Affichage des résultats pour vérifier
+console.log(dico_score);

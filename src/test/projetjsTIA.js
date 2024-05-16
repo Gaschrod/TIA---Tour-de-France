@@ -97,7 +97,11 @@ function Start_the_game() {
 
   // Initialiser le score de chaque joueur à 0
   for (var i = 0; i < nomsJoueurs.length; i++) {
-    dico_score[nomsJoueurs[i]] = { score: 0, ranking: 0 };
+    dico_score[nomsJoueurs[i]] = {
+      points: 0,
+      secondes: 0,
+      sprintTermine: { sprint1: false, sprint2: false },
+    };
     console.log("Dictionnaire des scores :", dico_score);
   }
 
@@ -771,6 +775,7 @@ function avancer(carteJouee) {
   const nomUtilisateur = nomsJoueurs[index];
   var rangee = "interieur";
   var casesAAvancer = 0;
+  casesAAvancer2 = 0;
   var cycliste = 0;
   var sousCase = false;
 
@@ -838,12 +843,12 @@ function avancer(carteJouee) {
   //On vérifie si le joueur a le droit ou non au bonus d'aspiration
   const verif = aspiration(nomUtilisateur, cycliste);
   if (verif === "ligne") {
-    casesAAvancer = 1;
-    positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer;
+    casesAAvancer2 = 1;
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer2;
   } else if (verif === "diago") {
     console.log("aspiration diagonale");
-    casesAAvancer = 1;
-    positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer;
+    casesAAvancer2 = 1;
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer2;
     if (
       positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "interieur"
     ) {
@@ -1126,7 +1131,7 @@ function avancer(carteJouee) {
   const id = positions[nomUtilisateur + "_cycliste_" + cycliste].id;
   bouger_jeton(id, cycliste, nomUtilisateur);
   //Si toutes les conditions sont passées on met à jour le score
-  dico_score[nomUtilisateur]["score"] += casesAAvancer;
+  dico_score[nomUtilisateur].secondes += casesAAvancer + casesAAvancer2;
   console.log(dico_score);
   // On vérifie si le cycliste est sur une case chance si oui on piocherCarteChance
   if (cases_chances.includes(id)) {
@@ -1139,6 +1144,14 @@ function avancer(carteJouee) {
       return afficherJoueursEtCartesHTML();
     }
   }
+  // A chaque tour on vérifie si un joueur à terminé un sprint intermédiaire
+  if (
+    dico_score[nomUtilisateur].sprintTermine.sprint1 === false ||
+    dico_score[nomUtilisateur].sprintTermine.sprint2 === false
+  ) {
+    sprintsIntermediaires(nomUtilisateur);
+  }
+  // On passe au joueur suivant
   joueurSuivant();
 }
 
@@ -1202,46 +1215,74 @@ let bonusClaimed = {
   section22: false,
   section3: false,
 };
+
+function sprintTerminee1() {
+  let sprintTerminee = false;
+  for (let i = 0; i < nomsJoueurs.length; i++) {
+    const nomUtilisateur = nomsJoueurs[i];
+    if (dico_score[nomUtilisateur].sprintTermine.sprint1 === true) {
+      sprintTerminee = true;
+    }
+  }
+  return sprintTerminee;
+}
+
+function sprintTerminee2() {
+  let sprintTerminee = false;
+  for (let i = 0; i < nomsJoueurs.length; i++) {
+    const nomUtilisateur = nomsJoueurs[i];
+    if (dico_score[nomUtilisateur].sprintTermine.sprint2 === true) {
+      sprintTerminee = true;
+    }
+  }
+  return sprintTerminee;
+}
+
 // Initialisation des statistiques des joueurs
+function sprintsIntermediaires(nomUtilisateur) {
+  let premierCyclisteSprint1 = null;
+  let premierCyclisteSprint2 = null;
 
-function sprintIntermediaire(playerPosition, section, player) {
-  // 1er sprint intermédiaire, premier joueur à passer la ligne
-  if (playerPosition === 22 && !bonusClaimed["section1"]) {
-    alert(
-      "Sprint intermédiaire ! Vous pouvez profiter d'une seconde de bonification et 1 point de bonification."
-    );
-    bonusClaimed["section1"] = true;
-    dico_score[player].seconds -= 1;
-    dico_score[player].ranking += 1;
+  for (let i = 0; i < dico_cyclistes.length; i++) {
+    let cyclistesDansDico = dico_cyclistes[i];
+    for (const key in cyclistesDansDico) {
+      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
+        const cycliste = cyclistesDansDico[key];
+
+        // Vérifier si le cycliste a terminé le premier sprint
+        if (cycliste.case > 35 && sprintTerminee1() === false) {
+          if (
+            !premierCyclisteSprint1 ||
+            cycliste.case > premierCyclisteSprint1.case
+          ) {
+            premierCyclisteSprint1 = cycliste;
+          }
+        }
+
+        // Vérifier si le cycliste a terminé le deuxième sprint
+        if (cycliste.case > 95 && sprintTerminee2() === false) {
+          if (
+            !premierCyclisteSprint2 ||
+            cycliste.case > premierCyclisteSprint2.case
+          ) {
+            premierCyclisteSprint2 = cycliste;
+          }
+        }
+      }
+    }
   }
 
-  // 2ème sprint intermédiaire, premier joueur à passer la ligne
-  if (playerPosition === 36 && !bonusClaimed["section2"]) {
-    alert(
-      "Sprint intermédiaire ! Vous pouvez profiter de 3 secondes de bonifications et 4 points de bonifications."
-    );
-    bonusClaimed["section2"] = true;
-    dico_score[player].seconds -= 3;
-    dico_score[player].ranking += 4;
+  // Mise à jour du premier cycliste qui termine le premier sprint
+  if (premierCyclisteSprint1) {
+    dico_score[nomUtilisateur].secondes += 1;
+    dico_score[nomUtilisateur].points += 1;
+    dico_score[nomUtilisateur].sprintTermine.sprint1 = true;
   }
 
-  // 2ème sprint intermédiaire, deuxième joueur à passer la ligne
-  if (playerPosition === 36 && !bonusClaimed["section22"]) {
-    alert(
-      "Sprint intermédiaire ! Vous pouvez profiter d'une seconde de bonification et 1 point de bonification."
-    );
-    bonusClaimed["section22"] = true;
-    dico_score[player].seconds -= 1;
-    dico_score[player].ranking += 1;
-  }
-
-  // 3ème sprint intermédiaire, premier joueur à passer la ligne
-  if (playerPosition === 76 && !bonusClaimed["section3"]) {
-    alert(
-      "Sprint intermédiaire ! Vous pouvez profiter de 2 secondes de bonifications et 4 points de bonifications."
-    );
-    bonusClaimed["section3"] = true;
-    dico_score[player].seconds -= 2;
-    dico_score[player].ranking += 4;
+  // Mise à jour du premier cycliste qui termine le deuxième sprint
+  if (premierCyclisteSprint2) {
+    dico_score[nomUtilisateur].secondes += 2;
+    dico_score[nomUtilisateur].points += 4;
+    dico_score[nomUtilisateur].sprintTermine.sprint2 = true;
   }
 }
