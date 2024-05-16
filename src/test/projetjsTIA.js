@@ -353,6 +353,23 @@ function afficherJoueursEtCartesHTML() {
     var nomAffiche = "Joueur " + (i + 1) + " : " + nomJoueur;
     joueurDiv.innerHTML = "<h3>" + nomAffiche + "</h3>";
 
+    if (nomJoueur === "Belgique") {
+      joueurDiv.innerHTML +=
+        "<img src='img/belgique.png' alt='Belgique' width='20' height='20'>";
+    }
+    if (nomJoueur === "Italie") {
+      joueurDiv.innerHTML +=
+        "<img src='img/italie.png' alt='Italie' width='16' height='16'>";
+    }
+    if (nomJoueur === "Hollande") {
+      joueurDiv.innerHTML +=
+        "<img src='img/hollande.png' alt='Hollande' width='15' height='15'>";
+    }
+    if (nomJoueur === "Allemagne") {
+      joueurDiv.innerHTML +=
+        "<img src='img/allemagne.png' alt='Allemagne' width='20' height='20'>";
+    }
+
     // Ajoute le texte "Cartes seconde" sous le nom du joueur
     var cartesSecondeTexte = document.createElement("p");
     cartesSecondeTexte.textContent = "Cartes seconde:";
@@ -765,6 +782,76 @@ function verifierID(cyclisteID) {
   return true; // Aucun cycliste avec l'ID fourni n'a été trouvé
 }
 
+function sprintTerminee1() {
+  let sprintTerminee = false;
+  for (let i = 0; i < nomsJoueurs.length; i++) {
+    const nomUtilisateur = nomsJoueurs[i];
+    if (dico_score[nomUtilisateur].sprintTermine.sprint1 === true) {
+      sprintTerminee = true;
+    }
+  }
+  return sprintTerminee;
+}
+
+function sprintTerminee2() {
+  let sprintTerminee = false;
+  for (let i = 0; i < nomsJoueurs.length; i++) {
+    const nomUtilisateur = nomsJoueurs[i];
+    if (dico_score[nomUtilisateur].sprintTermine.sprint2 === true) {
+      sprintTerminee = true;
+    }
+  }
+  return sprintTerminee;
+}
+
+// Initialisation des statistiques des joueurs
+function sprintsIntermediaires(nomUtilisateur) {
+  let premierCyclisteSprint1 = null;
+  let premierCyclisteSprint2 = null;
+
+  for (let i = 0; i < dico_cyclistes.length; i++) {
+    let cyclistesDansDico = dico_cyclistes[i];
+    for (const key in cyclistesDansDico) {
+      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
+        const cycliste = cyclistesDansDico[key];
+
+        // Vérifier si le cycliste a terminé le premier sprint
+        if (cycliste.case > 35 && sprintTerminee1() === false) {
+          if (
+            !premierCyclisteSprint1 ||
+            cycliste.case > premierCyclisteSprint1.case
+          ) {
+            premierCyclisteSprint1 = cycliste;
+          }
+        }
+
+        // Vérifier si le cycliste a terminé le deuxième sprint
+        if (cycliste.case > 95 && sprintTerminee2() === false) {
+          if (
+            !premierCyclisteSprint2 ||
+            cycliste.case > premierCyclisteSprint2.case
+          ) {
+            premierCyclisteSprint2 = cycliste;
+          }
+        }
+      }
+    }
+  }
+
+  // Mise à jour du premier cycliste qui termine le premier sprint
+  if (premierCyclisteSprint1) {
+    dico_score[nomUtilisateur].secondes += 1;
+    dico_score[nomUtilisateur].points += 1;
+    dico_score[nomUtilisateur].sprintTermine.sprint1 = true;
+  }
+
+  // Mise à jour du premier cycliste qui termine le deuxième sprint
+  if (premierCyclisteSprint2) {
+    dico_score[nomUtilisateur].secondes += 2;
+    dico_score[nomUtilisateur].points += 4;
+    dico_score[nomUtilisateur].sprintTermine.sprint2 = true;
+  }
+}
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
@@ -1209,80 +1296,3 @@ function jouer_carte(joueur, carteIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // Fonction pour le sprint intermédiaire
-let bonusClaimed = {
-  section1: false,
-  section2: false,
-  section22: false,
-  section3: false,
-};
-
-function sprintTerminee1() {
-  let sprintTerminee = false;
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    const nomUtilisateur = nomsJoueurs[i];
-    if (dico_score[nomUtilisateur].sprintTermine.sprint1 === true) {
-      sprintTerminee = true;
-    }
-  }
-  return sprintTerminee;
-}
-
-function sprintTerminee2() {
-  let sprintTerminee = false;
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    const nomUtilisateur = nomsJoueurs[i];
-    if (dico_score[nomUtilisateur].sprintTermine.sprint2 === true) {
-      sprintTerminee = true;
-    }
-  }
-  return sprintTerminee;
-}
-
-// Initialisation des statistiques des joueurs
-function sprintsIntermediaires(nomUtilisateur) {
-  let premierCyclisteSprint1 = null;
-  let premierCyclisteSprint2 = null;
-
-  for (let i = 0; i < dico_cyclistes.length; i++) {
-    let cyclistesDansDico = dico_cyclistes[i];
-    for (const key in cyclistesDansDico) {
-      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
-        const cycliste = cyclistesDansDico[key];
-
-        // Vérifier si le cycliste a terminé le premier sprint
-        if (cycliste.case > 35 && sprintTerminee1() === false) {
-          if (
-            !premierCyclisteSprint1 ||
-            cycliste.case > premierCyclisteSprint1.case
-          ) {
-            premierCyclisteSprint1 = cycliste;
-          }
-        }
-
-        // Vérifier si le cycliste a terminé le deuxième sprint
-        if (cycliste.case > 95 && sprintTerminee2() === false) {
-          if (
-            !premierCyclisteSprint2 ||
-            cycliste.case > premierCyclisteSprint2.case
-          ) {
-            premierCyclisteSprint2 = cycliste;
-          }
-        }
-      }
-    }
-  }
-
-  // Mise à jour du premier cycliste qui termine le premier sprint
-  if (premierCyclisteSprint1) {
-    dico_score[nomUtilisateur].secondes += 1;
-    dico_score[nomUtilisateur].points += 1;
-    dico_score[nomUtilisateur].sprintTermine.sprint1 = true;
-  }
-
-  // Mise à jour du premier cycliste qui termine le deuxième sprint
-  if (premierCyclisteSprint2) {
-    dico_score[nomUtilisateur].secondes += 2;
-    dico_score[nomUtilisateur].points += 4;
-    dico_score[nomUtilisateur].sprintTermine.sprint2 = true;
-  }
-}
