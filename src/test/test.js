@@ -1,58 +1,46 @@
-dico = [
-  {
-    "cycliste 1": {
-      section: 2,
-      rangée: "interieur",
-      case: 6,
-      id: "c6_0",
-    },
-    "cycliste 2": {
-      section: 2,
-      rangée: "interieur",
-      case: 7,
-      id: "c6_0",
-    },
-  },
+var dico_cyclistes = [
   {
     "cycliste 1": {
       section: 1,
       rangée: "interieur",
-      case: 3,
-      id: "c3_0",
+      case: 8,
+      id: "c8_0",
+    },
+    "cycliste 2": {
+      section: 1,
+      rangée: "interieur",
+      case: 7,
+      id: "c7_0",
+    },
+  },
+  {
+    "cycliste 2": {
+      section: 0,
+      rangée: "interieur",
+      case: 7,
+      id: "c7_0",
     },
   },
   {},
   {},
 ];
 
-function verifierDistanceCyclistes(cyclistePrincipal, listeCyclistes) {
-  for (let i = 0; i < listeCyclistes.length; i++) {
-    let cyclistesDansDico = listeCyclistes[i];
+function verifierID(cyclisteID) {
+  for (let i = 0; i < dico_cyclistes.length; i++) {
+    let cyclistesDansDico = dico_cyclistes[i];
     for (const key in cyclistesDansDico) {
       if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
-        const autreCycliste = cyclistesDansDico[key];
-        console.log(autreCycliste);
-        // Vérifier si les cyclistes sont différents
-        if (cyclistePrincipal !== autreCycliste) {
-          // Vérifier la distance entre les cyclistes
-          if (
-            Math.abs(cyclistePrincipal.case - autreCycliste.case) <= 2 &&
-            cyclistePrincipal.section === autreCycliste.section &&
-            cyclistePrincipal.rangée === autreCycliste.rangée
-          ) {
-            return true; // Les cyclistes sont à une distance de 2 cases l'un de l'autre
-          }
+        const cycliste = cyclistesDansDico[key];
+
+        // Vérifier si l'ID du cycliste correspond à l'ID fourni
+        if (cycliste.id === cyclisteID) {
+          return false;
         }
       }
     }
   }
-  return false; // Aucun cycliste n'est à une distance de 2 cases l'un de l'autre
+  return true; // Aucun cycliste avec l'ID fourni n'a été trouvé
 }
-let cyclistePrincipal = {
-  case: 10,
-  section: 1,
-  rangée: "interieur",
-  id: "c3_0",
-};
 
-console.log(verifierDistanceCyclistes(cyclistePrincipal, dico));
+verif = verifierID("c8_0");
+console.log(verif);

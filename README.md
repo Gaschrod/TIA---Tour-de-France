@@ -42,7 +42,6 @@ $ start_server.
 ```
 
 - Control+click gauche sur le lien qui s'affiche
-- Une fois que vous voyez l'arborescence de fichiers cliquez sur "game.html"
 
 ## Commande pratique
 
