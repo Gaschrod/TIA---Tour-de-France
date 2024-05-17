@@ -575,8 +575,7 @@ initialize_game :-
     pack_cards(italie),
     pack_cards(belgique),
     pack_cards(hollande),
-    pack_cards(allemagne),
-    display_cards.
+    pack_cards(allemagne).
 
 start_game :- 
     initialize_game,
