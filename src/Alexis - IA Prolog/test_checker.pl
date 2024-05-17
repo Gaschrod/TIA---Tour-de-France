@@ -808,3 +808,129 @@ make_play(black,Board) :-
     write('White (computer) wins the game.'),nl.
 make_play(black,_):-
     write('Draw.'), nl.
+
+
+    assertz(board(15, [case(a,empty),case(b,empty)])),
+    assertz(board(16, [case(a,empty),case(b,empty)])),
+    assertz(board(17, [case(a,empty),case(b,empty)])),
+    assertz(board(18, [case(a,empty),case(b,empty)])),
+    assertz(board(19, [case(a,empty),case(b,empty)])),
+    assertz(board(20, [case(a,empty),case(b,empty)])),
+
+    %%% Back to 3 cases
+    assertz(board(21, [case(a,empty), case(b, empty), case(c, empty)])),
+    assertz(board(22, [case(a,empty), case(b, empty), case(c, empty)])),
+    assertz(board(23, [case(a,empty), case(b, empty), case(c, empty)])),
+
+    %%% 2 cases, begin of 'sprint'
+    assertz(board(24, [case(a,empty), case(b, empty)])),
+    assertz(board(25, [case(a,empty), case(b, empty)])),
+    assertz(board(26, [case(a,empty), case(b, empty)])),
+    assertz(board(27, [case(a,empty), case(b, empty)])),
+    assertz(board(28, [case(a,empty), case(b, empty)])),
+    assertz(board(29, [case(a,empty), case(b, empty)])),
+    assertz(board(30, [case(a,empty), case(b, empty)])),
+    assertz(board(31, [case(a,empty), case(b, empty)])),
+    assertz(board(32, [case(a,empty), case(b, empty)])),    
+    assertz(board(33, [case(a,empty), case(b, empty)])),
+    assertz(board(34, [case(a,empty), case(b, empty)])),
+    assertz(board(35, [case(a,empty), case(b, empty)])),
+    assertz(board(36, [case(a,empty), case(b, empty)])),
+    assertz(board(37, [case(a,empty), case(b, empty)])),
+
+    %%% End of the 'sprint'
+    assertz(board(38, [case(a,empty), case(b, empty)])),
+    assertz(board(39, [case(a,empty), case(b, empty)])),
+    assertz(board(40, [case(a,empty), case(b, empty)])),
+    assertz(board(41, [case(a,empty), case(b, empty)])),
+    assertz(board(42, [case(a,empty), case(b, empty)])),
+    assertz(board(43, [case(a,empty), case(b, empty)])),
+    assertz(board(44, [case(a,empty), case(b, empty)])),
+    assertz(board(45, [case(a,empty), case(b, empty)])),
+    assertz(board(46, [case(a,empty), case(b, empty)])),
+    assertz(board(47, [case(a,empty), case(b, empty)])),
+    assertz(board(48, [case(a,empty), case(b, empty)])),
+    assertz(board(49, [case(a,empty), case(b, empty)])),
+    assertz(board(50, [case(a,empty), case(b, empty)])),
+    assertz(board(51, [case(a,empty), case(b, empty)])),
+    assertz(board(52, [case(a,empty), case(b, empty)])),
+    assertz(board(53, [case(a,empty), case(b, empty)])),
+    assertz(board(54, [case(a,empty), case(b, empty)])),
+    assertz(board(55, [case(a,empty), case(b, empty)])),
+    assertz(board(56, [case(a,empty), case(b, empty)])),
+    assertz(board(57, [case(a,empty), case(b, empty)])),
+    assertz(board(58, [case(a,empty), case(b, empty)])),
+    assertz(board(59, [case(a,empty), case(b, empty)])),
+    assertz(board(60, [case(a,empty), case(b, empty)])),
+    assertz(board(61, [case(a,empty), case(b, empty)])),
+    assertz(board(62, [case(a,empty), case(b, empty)])),
+    assertz(board(63, [case(a,empty), case(b, empty)])),
+    assertz(board(64, [case(a,empty), case(b, empty)])),
+
+    %%% Begin of the 'shift'
+    
+    assertz(board(65, [case(a,empty), case(b, empty)])), % 65 and 66 have the same 'a' case -> 63A
+    assertz(board(66, [case(a,empty), case(b, empty)])),
+
+    assertz(board(67, [case(a,empty), case(b, empty)])), %% 67 and 68 have the same 'a' case -> 64A
+    assertz(board(68, [case(a,empty), case(b, empty)])),
+
+    %%% End of the 'shift'
+    assertz(board(69, [case(a,empty), case(b, empty)])),
+    assertz(board(70, [case(a,empty), case(b, empty)])),
+    assertz(board(71, [case(a,empty), case(b, empty)])),
+    assertz(board(72, [case(a,empty), case(b, empty)])),
+    assertz(board(73, [case(a,empty), case(b, empty)])),
+    assertz(board(74, [case(a,empty), case(b, empty)])),
+    assertz(board(75, [case(a,empty), case(b, empty)])),
+    assertz(board(76, [case(a,empty), case(b, empty)])),
+
+    %%% Road reduced to 1 case
+    assertz(board(77, [case(a,empty), case(b, empty)])),
+    assertz(board(78, [case(a,empty), case(b, empty)])),
+    assertz(board(79, [case(a,empty), case(b, empty)])),
+
+    %%% Back to 2 cases
+    assertz(board(80, [case(a,empty), case(b, empty)])),
+    assertz(board(81, [case(a,empty), case(b, empty)])),
+    assertz(board(82, [case(a,empty), case(b, empty)])),
+    assertz(board(83, [case(a,empty), case(b, empty)])),
+    assertz(board(84, [case(a,empty), case(b, empty)])),
+    assertz(board(85, [case(a,empty), case(b, empty)])),
+    assertz(board(86, [case(a,empty), case(b, empty)])),
+    assertz(board(87, [case(a,empty), case(b, empty)])),
+
+    %%% Still to 2 cases, but they are on separate 'road' -> for now, only implemented as on line on the left
+    assertz(board(88, [case(a,empty)])),
+    assertz(board(89, [case(a,empty)])),
+    assertz(board(90, [case(a,empty)])),
+    assertz(board(91, [case(a,empty)])),
+    assertz(board(92, [case(a,empty)])),
+
+    %%% Begin of the 'shift' -> for now, only implemented as 'normal' lines
+    assertz(board(93, [case(a,empty), case(b, empty)])), % 93 and 94 have the same 'a' case -> 89A
+    assertz(board(94, [case(a,empty), case(b, empty)])),    
+
+    assertz(board(95, [case(a,empty), case(b, empty)])), % 95 and 96 have the same 'a' case -> 90A
+    assertz(board(96, [case(a,empty), case(b, empty)])),
+
+    %%%%% End of the 'shift'
+    assertz(board(97, [case(a,empty)])),
+    assertz(board(98, [case(a,empty)])),
+    assertz(board(99, [case(a,empty)])),
+    assertz(board(100, [case(a,empty)])),
+    
+    %%%%% Back to 3 cases
+    assertz(board(101, [case(a,empty), case(b, empty), case(c, empty)])),
+
+    %%%%% Arrival
+    assertz(board(102, [case(a,empty), case(b, empty), case(c, empty)])), % 0
+    assertz(board(103, [case(a,empty), case(b, empty), case(c, empty)])), % -1
+    assertz(board(104, [case(a,empty), case(b, empty), case(c, empty)])), % -2
+    assertz(board(105, [case(a,empty), case(b, empty), case(c, empty)])), % -3 
+    assertz(board(106, [case(a,empty), case(b, empty), case(c, empty)])), % -4
+    assertz(board(107, [case(a,empty), case(b, empty), case(c, empty)])), % -5
+    assertz(board(108, [case(a,empty), case(b, empty), case(c, empty)])), % -6
+    assertz(board(109, [case(a,empty), case(b, empty), case(c, empty)])), % -7
+    assertz(board(110, [case(a,empty), case(b, empty), case(c, empty)])), % -8
+    assertz(board(111, [case(a,empty), case(b, empty), case(c, empty)])). % -9
