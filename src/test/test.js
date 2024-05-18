@@ -1,10 +1,12 @@
-// Supposons que dico_cyclistes soit un tableau de noms de cyclistes
-let dico_cyclistes = ["Alice", "Bob", "Charlie", "Dave"];
+function test1() {
+  test2();
+  console.log("test passé !");
+}
 
-// Le nom de l'utilisateur que vous souhaitez supprimer
-let nomUtilisateur = "Charlie";
+function test2() {
+  return test3();
+}
 
-// Utilisation de filter pour créer un nouveau tableau sans l'utilisateur spécifié
-dico_cyclistes = dico_cyclistes.filter((joueur) => joueur !== nomUtilisateur);
-
-console.log(dico_cyclistes); // Résultat : ["Alice", "Bob", "Dave"]
+function test3() {
+  var a = 1;
+}

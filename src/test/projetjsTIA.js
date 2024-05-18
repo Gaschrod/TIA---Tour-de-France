@@ -136,9 +136,9 @@ function Start_the_game() {
   console.log(positionsString.substring(0, positionsString.length - 2)); //enlever les deux derniers caractères
 
   // Création du jeu de carte des secondes (12 cartes de 1 à 12, chacune répétée 8 fois)
-  for (var i = 1; i <= 12; i++) {
+  for (var i = 8; i <= 12; i++) {
     //12 itérations
-    for (var j = 1; j <= 8; j++) {
+    for (var j = 1; j <= 100; j++) {
       //8 itérations
       var carte = [i, j];
       tableau.push(carte);
@@ -701,18 +701,25 @@ function bouger_jeton(id, cycliste, nomJoueur) {
 
   // get the inner DOM of alpha.svg
   var svgDoc = a.contentDocument;
+  var x = 0;
+  var y = 0;
 
   // Identifiez la balise g correspondant à la case où se trouve le joueur
-  const g = svgDoc.getElementById("" + id);
-  const matrix = g.transform.baseVal.consolidate()?.matrix;
-  if (matrix == null) return;
-  const bbox = g.getBBox();
+  if (id === "case_départ") {
+    x = 342;
+    y = 342;
+  } else {
+    const g = svgDoc.getElementById("" + id);
+    const matrix = g.transform.baseVal.consolidate()?.matrix;
+    if (matrix == null) return;
+    const bbox = g.getBBox();
 
-  //On place le jeton du joueur au centre de la case
-  const midX = bbox.x + bbox.width / 2;
-  const midY = bbox.y + bbox.height / 2;
-  const x = matrix?.a * midX + matrix?.c * midY + matrix.e;
-  const y = matrix?.b * midX + matrix?.d * midY + matrix.f;
+    //On place le jeton du joueur au centre de la case
+    const midX = bbox.x + bbox.width / 2;
+    const midY = bbox.y + bbox.height / 2;
+    x = matrix?.a * midX + matrix?.c * midY + matrix.e;
+    y = matrix?.b * midX + matrix?.d * midY + matrix.f;
+  }
 
   // Créez un élément image pour le jeton du joueur et le configurer
   if (cycliste === 1 && nomJoueur === "Belgique") {
@@ -896,10 +903,13 @@ function majClassementSecondes(nomUtilisateur, cycliste) {
         if (nomJ !== nomUtilisateur) {
           //On vérifie pour les 3 coureurs de chaque joueur
           for (let j = 1; j <= 3; j++) {
-            //Si le cycliste n'a pas terminé on ajoute 10 secondes
-            if (cyclisteATermine(nomJ, j) === false) {
-              dico_score[nomJ].secondes += 10;
-              console.log("10 secondes ajoutées à", nomJ);
+            //Si ce n'est pas le cycliste actuel
+            if (j !== cycliste) {
+              //Si le cycliste n'a pas terminé on ajoute 10 secondes
+              if (cyclisteATermine(nomJ, j) === false) {
+                dico_score[nomJ].secondes += 10;
+                console.log("10 secondes ajoutées à", nomJ);
+              }
             }
           }
           //On ajoute 10 secondes de pénalité pour chaque courreur encore en course
@@ -928,33 +938,36 @@ function majClassementAprèsArrivee(nomUtilisateur, cycliste, anciennePosition) 
   console.log("test passed");
 }
 
-function nettoyerArrivee() {
+function nettoyerArrivee(cycliste, nomUtilisateur) {
   //Pour chaque courreur dont la case excède 95 et seulement si ces courreurs sont au nombre de 3 on les supprime du dictionnaire et on les supprime visuelement de l'affichage sur la carte
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    for (let j = 1; j <= 3; j++) {
-      const cycliste = dico_cyclistes[i]["cycliste " + j];
-      if (cycliste.case > 95) {
-        cyclistesArrives.push(cycliste);
-        console.log(cyclistesArrives);
-      }
-    }
+
+  if (
+    cyclisteATermine(nomUtilisateur, cycliste) === true &&
+    cyclistesArrives.includes((nomUtilisateur, cycliste)) == false
+  ) {
+    cyclistesArrives.push([nomUtilisateur, cycliste]);
+    console.log(cyclistesArrives);
   }
+
   if (
     cyclistesArrives.length === 3 ||
     cyclistesArrives.length === 6 ||
     cyclistesArrives.length === 9 ||
     cyclistesArrives.length === 12
   ) {
-    var a = document.getElementById("SVGMap");
-
-    // get the inner DOM of alpha.svg
-    var svgDoc = a.contentDocument;
-
-    // Identifiez la balise g correspondant à la case où se trouve le joueur
-    for (cycliste of cyclistesArrives) {
-      const g = svgDoc.getElementById("" + cycliste.id);
-      let jeton = g.getElementByTagName("circle");
-      jeton.remove();
+    console.log("test tp");
+    for (tuples of cyclistesArrives) {
+      //On met à jour les données pour que le cycliste soit tp au départ
+      mettreAJourPositionsJoueur(
+        tuples[0],
+        tuples[1],
+        1,
+        "interieur",
+        0,
+        "case_départ"
+      );
+      bouger_jeton("case_départ", tuples[1], tuples[0]);
+      console.log("test tp passé");
     }
   }
 }
@@ -974,9 +987,11 @@ function finDuJeu() {
     txtAAfficher += classement[i][0] + ": " + classement[i][1] + "s\n";
   }
   alert(txtAAfficher);
+  alert("Fin du jeu ! \nPour relancer la partie veuillez recharger la page.");
   console.log(txtAAfficher);
 }
-// Fonction pour jouer une carte !!!!!
+
+// Fonction pour avancer
 function avancer(carteJouee) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
@@ -992,9 +1007,22 @@ function avancer(carteJouee) {
     cycliste = document.getElementById("cycliste").value;
   }
 
-  if (
-    cyclistesArrives.includes(dico_cyclistes[index]["cycliste " + cycliste])
-  ) {
+  var verifPeutJouer = false;
+  // On vérifie si un joueur peut encore jouer avec un de ses courreurs sinon on passe le tour
+  for (let i = 1; i <= 3; i++) {
+    if (cyclisteATermine(nomUtilisateur, i) === false) {
+      verifPeutJouer = true;
+    }
+  }
+  if (verifPeutJouer === false) {
+    alert(
+      "Vous avez déjà terminé la course avec tous vos cyclistes. Veuillez passer au joueur suivant."
+    );
+    joueurSuivant();
+    afficherJoueursEtCartesHTML();
+  }
+
+  if (cyclisteATermine(nomUtilisateur, cycliste) === true) {
     alert(
       "Ce cycliste a déjà terminé la course ! Veuillez en choisir un autre"
     );
@@ -1282,8 +1310,8 @@ function avancer(carteJouee) {
           (positions[nomUtilisateur + "_cycliste_" + cycliste].section === 3 &&
             positions[nomUtilisateur + "_cycliste_" + cycliste].case >= 23 &&
             positions[nomUtilisateur + "_cycliste_" + cycliste].case < 36) ||
-          (positions[nomUtilisateur + "_cyliste_" + cycliste].case >= 36 &&
-            positions[nomUtilisateur + "_cyliste_" + cycliste].case < 73) ||
+          (positions[nomUtilisateur + "_cycliste_" + cycliste].case >= 36 &&
+            positions[nomUtilisateur + "_cycliste_" + cycliste].case < 73) ||
           (positions[nomUtilisateur + "_cycliste_" + cycliste].case >= 76 &&
             positions[nomUtilisateur + "_cycliste_" + cycliste].case < 84)
         ) {
@@ -1379,20 +1407,14 @@ function avancer(carteJouee) {
     majClassementAprèsArrivee(nomUtilisateur, cycliste, anciennePosition);
 
     //Pour chaque joueur ayant terminé la course on met à jour le classsement
-    nettoyerArrivee();
+    nettoyerArrivee(cycliste, nomUtilisateur);
     //on vérifie si tous les courreurs du joueur ont terminé la course
-    var fin = true;
-    for (joueurs of dico_cyclistes) {
-      if (cyclistesArrives.includes(joueurs) === false) {
-        fin = false;
-      }
-    }
-    if (fin === true) {
+    //On vérifie si tous les joueurs ont terminé la course si oui alors fin du jeu et affichage du classement
+    if (cyclistesArrives.length === nomsJoueurs.length * 3) {
       return finDuJeu();
     }
+    console.log("Dico score", dico_score);
   }
-  console.log("Dico score", dico_score);
-
   joueurSuivant();
 }
 
