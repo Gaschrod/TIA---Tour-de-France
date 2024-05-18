@@ -1,46 +1,10 @@
-var dico_cyclistes = [
-  {
-    "cycliste 1": {
-      section: 1,
-      rangée: "interieur",
-      case: 8,
-      id: "c8_0",
-    },
-    "cycliste 2": {
-      section: 1,
-      rangée: "interieur",
-      case: 7,
-      id: "c7_0",
-    },
-  },
-  {
-    "cycliste 2": {
-      section: 0,
-      rangée: "interieur",
-      case: 7,
-      id: "c7_0",
-    },
-  },
-  {},
-  {},
-];
+// Supposons que dico_cyclistes soit un tableau de noms de cyclistes
+let dico_cyclistes = ["Alice", "Bob", "Charlie", "Dave"];
 
-function verifierID(cyclisteID) {
-  for (let i = 0; i < dico_cyclistes.length; i++) {
-    let cyclistesDansDico = dico_cyclistes[i];
-    for (const key in cyclistesDansDico) {
-      if (Object.hasOwnProperty.call(cyclistesDansDico, key)) {
-        const cycliste = cyclistesDansDico[key];
+// Le nom de l'utilisateur que vous souhaitez supprimer
+let nomUtilisateur = "Charlie";
 
-        // Vérifier si l'ID du cycliste correspond à l'ID fourni
-        if (cycliste.id === cyclisteID) {
-          return false;
-        }
-      }
-    }
-  }
-  return true; // Aucun cycliste avec l'ID fourni n'a été trouvé
-}
+// Utilisation de filter pour créer un nouveau tableau sans l'utilisateur spécifié
+dico_cyclistes = dico_cyclistes.filter((joueur) => joueur !== nomUtilisateur);
 
-verif = verifierID("c8_0");
-console.log(verif);
+console.log(dico_cyclistes); // Résultat : ["Alice", "Bob", "Dave"]
