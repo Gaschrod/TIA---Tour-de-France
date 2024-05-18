@@ -89,136 +89,9 @@ initialize_board :-
     assertz(board(17, [case(a,empty),case(b,empty)])),
     assertz(board(18, [case(a,empty),case(b,empty)])),
     assertz(board(19, [case(a,empty),case(b,empty)])),
-    assertz(board(20, [case(a,empty),case(b,empty)])),
+    assertz(board(20, [case(a,empty),case(b,empty)])).
 
-    %%% Back to 3 cases
-    assertz(board(21, [case(a,empty), case(b, empty), case(c, empty)])),
-    assertz(board(22, [case(a,empty), case(b, empty), case(c, empty)])),
-    assertz(board(23, [case(a,empty), case(b, empty), case(c, empty)])),
-    assertz(board(15, [case(a,empty),case(b,empty)])),
-    assertz(board(16, [case(a,empty),case(b,empty)])),
-    assertz(board(17, [case(a,empty),case(b,empty)])),
-    assertz(board(18, [case(a,empty),case(b,empty)])),
-    assertz(board(19, [case(a,empty),case(b,empty)])),
-    assertz(board(20, [case(a,empty),case(b,empty)])),
-
-    %%% Back to 3 cases
-    assertz(board(21, [case(a,empty), case(b, empty), case(c, empty)])),
-    assertz(board(22, [case(a,empty), case(b, empty), case(c, empty)])),
-    assertz(board(23, [case(a,empty), case(b, empty), case(c, empty)])),
-
-    %%% 2 cases, begin of 'sprint'
-    assertz(board(24, [case(a,empty), case(b, empty)])),
-    assertz(board(25, [case(a,empty), case(b, empty)])),
-    assertz(board(26, [case(a,empty), case(b, empty)])),
-    assertz(board(27, [case(a,empty), case(b, empty)])),
-    assertz(board(28, [case(a,empty), case(b, empty)])),
-    assertz(board(29, [case(a,empty), case(b, empty)])),
-    assertz(board(30, [case(a,empty), case(b, empty)])),
-    assertz(board(31, [case(a,empty), case(b, empty)])),
-    assertz(board(32, [case(a,empty), case(b, empty)])),    
-    assertz(board(33, [case(a,empty), case(b, empty)])),
-    assertz(board(34, [case(a,empty), case(b, empty)])),
-    assertz(board(35, [case(a,empty), case(b, empty)])),
-    assertz(board(36, [case(a,empty), case(b, empty)])),
-    assertz(board(37, [case(a,empty), case(b, empty)])),
-
-    %%% End of the 'sprint'
-    assertz(board(38, [case(a,empty), case(b, empty)])),
-    assertz(board(39, [case(a,empty), case(b, empty)])),
-    assertz(board(40, [case(a,empty), case(b, empty)])),
-    assertz(board(41, [case(a,empty), case(b, empty)])),
-    assertz(board(42, [case(a,empty), case(b, empty)])),
-    assertz(board(43, [case(a,empty), case(b, empty)])),
-    assertz(board(44, [case(a,empty), case(b, empty)])),
-    assertz(board(45, [case(a,empty), case(b, empty)])),
-    assertz(board(46, [case(a,empty), case(b, empty)])),
-    assertz(board(47, [case(a,empty), case(b, empty)])),
-    assertz(board(48, [case(a,empty), case(b, empty)])),
-    assertz(board(49, [case(a,empty), case(b, empty)])),
-    assertz(board(50, [case(a,empty), case(b, empty)])),
-    assertz(board(51, [case(a,empty), case(b, empty)])),
-    assertz(board(52, [case(a,empty), case(b, empty)])),
-    assertz(board(53, [case(a,empty), case(b, empty)])),
-    assertz(board(54, [case(a,empty), case(b, empty)])),
-    assertz(board(55, [case(a,empty), case(b, empty)])),
-    assertz(board(56, [case(a,empty), case(b, empty)])),
-    assertz(board(57, [case(a,empty), case(b, empty)])),
-    assertz(board(58, [case(a,empty), case(b, empty)])),
-    assertz(board(59, [case(a,empty), case(b, empty)])),
-    assertz(board(60, [case(a,empty), case(b, empty)])),
-    assertz(board(61, [case(a,empty), case(b, empty)])),
-    assertz(board(62, [case(a,empty), case(b, empty)])),
-    assertz(board(63, [case(a,empty), case(b, empty)])),
-    assertz(board(64, [case(a,empty), case(b, empty)])),
-
-    %%% Begin of the 'shift'
     
-    assertz(board(65, [case(a,empty), case(b, empty)])), % 65 and 66 have the same 'a' case -> 63A
-    assertz(board(66, [case(a,empty), case(b, empty)])),
-
-    assertz(board(67, [case(a,empty), case(b, empty)])), %% 67 and 68 have the same 'a' case -> 64A
-    assertz(board(68, [case(a,empty), case(b, empty)])),
-
-    %%% End of the 'shift'
-    assertz(board(69, [case(a,empty), case(b, empty)])),
-    assertz(board(70, [case(a,empty), case(b, empty)])),
-    assertz(board(71, [case(a,empty), case(b, empty)])),
-    assertz(board(72, [case(a,empty), case(b, empty)])),
-    assertz(board(73, [case(a,empty), case(b, empty)])),
-    assertz(board(74, [case(a,empty), case(b, empty)])),
-    assertz(board(75, [case(a,empty), case(b, empty)])),
-    assertz(board(76, [case(a,empty), case(b, empty)])),
-
-    %%% Road reduced to 1 case
-    assertz(board(77, [case(a,empty), case(b, empty)])),
-    assertz(board(78, [case(a,empty), case(b, empty)])),
-    assertz(board(79, [case(a,empty), case(b, empty)])),
-
-    %%% Back to 2 cases
-    assertz(board(80, [case(a,empty), case(b, empty)])),
-    assertz(board(81, [case(a,empty), case(b, empty)])),
-    assertz(board(82, [case(a,empty), case(b, empty)])),
-    assertz(board(83, [case(a,empty), case(b, empty)])),
-    assertz(board(84, [case(a,empty), case(b, empty)])),
-    assertz(board(85, [case(a,empty), case(b, empty)])),
-    assertz(board(86, [case(a,empty), case(b, empty)])),
-    assertz(board(87, [case(a,empty), case(b, empty)])),
-
-    %%% Still to 2 cases, but they are on separate 'road' -> for now, only implemented as on line on the left
-    assertz(board(88, [case(a,empty)])),
-    assertz(board(89, [case(a,empty)])),
-    assertz(board(90, [case(a,empty)])),
-    assertz(board(91, [case(a,empty)])),
-    assertz(board(92, [case(a,empty)])),
-
-    %%% Begin of the 'shift' -> for now, only implemented as 'normal' lines
-    assertz(board(93, [case(a,empty), case(b, empty)])), % 93 and 94 have the same 'a' case -> 89A
-    assertz(board(94, [case(a,empty), case(b, empty)])),    
-
-    assertz(board(95, [case(a,empty), case(b, empty)])), % 95 and 96 have the same 'a' case -> 90A
-    assertz(board(96, [case(a,empty), case(b, empty)])),
-
-    %%%%% End of the 'shift'
-    assertz(board(97, [case(a,empty)])),
-    assertz(board(98, [case(a,empty)])),
-    assertz(board(99, [case(a,empty)])),
-    assertz(board(100, [case(a,empty)])),
-    
-    %%%%% Back to 3 cases
-    assertz(board(101, [case(a,empty), case(b, empty), case(c, empty)])),
-
-    %%%%% Arrival
-    assertz(board(102, [case(a,empty), case(b, empty), case(c, empty)])), % 0
-    assertz(board(103, [case(a,empty), case(b, empty), case(c, empty)])), % -1
-    assertz(board(104, [case(a,empty), case(b, empty), case(c, empty)])), % -2
-    assertz(board(105, [case(a,empty), case(b, empty), case(c, empty)])), % -3 
-    assertz(board(106, [case(a,empty), case(b, empty), case(c, empty)])), % -4
-    assertz(board(107, [case(a,empty), case(b, empty), case(c, empty)])), % -5
-    assertz(board(108, [case(a,empty), case(b, empty), case(c, empty)])), % -6
-    assertz(board(109, [case(a,empty), case(b, empty), case(c, empty)])), % -7
-    assertz(board(110, [case(a,empty), case(b, empty), case(c, empty)])), % -8
-    assertz(board(111, [case(a,empty), case(b, empty), case(c, empty)])). % -9
 
 %% Card pick %%
 
@@ -308,15 +181,15 @@ shift_case(Runner, Card, OldLineID, CaseID) :-
     NewLineID is OldLineID + Card,
     OldLineID1 is OldLineID + 1, % Used for case_occupation, as the limits will include the case on which the player is if we don't add 1
 
-    (CaseID = a -> % Player lands on the 'a' case of the shift line
+    (CaseID == a -> % Player lands on the 'a' case of the shift line
     % Update NewLineID to the corresponding line with the 'a' case
     ShiftLineID is NewLineID + 1,  % The player is on case 'a', wich is the same for 9 (cf. board) so it's "easier" to put him on the last line
 
     check_cases_empty(Runner, OldLineID1, NewLineID, CaseID),
     check_cases_empty(Runner, OldLineID1, ShiftLineID, CaseID),
 
-    case_occupation(OldLineID, NewLineID, CaseID),
-    case_occupation(OldLineID, ShiftLineID, CaseID),
+    case_occupation(_, NewLineID, CaseID),
+    case_occupation(_, ShiftLineID, CaseID),
 
     retract(board(NewLineID, Cases1)),
     select(case(a, empty), Cases1, case(a, Runner), NewCases1), 
@@ -328,15 +201,19 @@ shift_case(Runner, Card, OldLineID, CaseID) :-
     
     ; % The player goes on 'b' case
     check_cases_empty(Runner, OldLineID1, NewLineID, CaseID),
-    case_occupation(OldLineID, NewLineID, CaseID),
+    case_occupation(_, NewLineID, CaseID),
 
     retract(board(NewLineID, Cases)),
     select(case(b, empty), Cases, case(b, Runner), NewCases),
     assertz(board(NewLineID, NewCases))
     ),
-    retract(board(OldLineID, Cases)),
-    select(case(CaseID, Runner), Cases, case(CaseID, empty), NewCases),
-    assertz(board(OldLineID, NewCases)).
+
+    (OldLineID \== 0 ->
+        retract(board(OldLineID, Cases)),
+        select(case(CaseID, Runner), Cases, case(CaseID, empty), NewCases),
+        assertz(board(OldLineID, NewCases)) 
+        ;
+        true).
     
 
 % LineID is the line where the player is (for example 1, 25, ...) and the CaseID is the case (a, b or c, depending on the line)
@@ -346,53 +223,39 @@ shift_case(Runner, Card, OldLineID, CaseID) :-
 % Used when the player is not on the board yet %
 
 first_move(Runner, Card, CaseID) :-
-    check_cases_empty(Runner, 1, Card, CaseID),
-
-    (CaseID == a ->
-        (% Case 1: Card is in the shift cases
-        member(Card, [9, 11, 65, 67, 93, 95]) -> 
-        shift_case(Runner, Card, 0, CaseID)
-            
-        ; 
-            % Case 2: Card is in the 'next' cases (10, 66, 94)
-            member(Card, [10, 66, 94]) ->
+    ( CaseID == a ->
+        ( Card == 9 ->
+            shift_case(Runner, 9, 0, CaseID)
+        ; Card == 10 ->
             Card1 is Card + 1,
-            Card2 is Card + 2, % We do this because we arrive at the end of a line, so we need to move the runner to the next line (and in this case, we arrive on 'a' so we 
-            % need to change the value for both 'a' case) -> try to visualize with the image of the board, it's easier
+            Card2 is Card + 2,
             case_occupation(_, Card1, CaseID),
             case_occupation(_, Card2, CaseID),
-
+            check_cases_empty(Runner, 1, Card1, CaseID),
+            check_cases_empty(Runner, 1, Card2, CaseID),
             occupy_case(Card1, CaseID, Runner),
             occupy_case(Card2, CaseID, Runner)
-
-            ;
-                % Case 3: The next Card1 is also in the 'next' cases (12, 68, 96)
-                (member(Card, [12, 68, 96]) -> 
-                Card3 is Card + 2,
-                case_occupation(_, Card3, CaseID),
-                occupy_case(Card3, CaseID, Runner)
-            ; 
-                
-            % Default case: Move the runner normally
-            case_occupation(_, Card, CaseID),
-            occupy_case(Card, CaseID, Runner)))
-        
-    ; 
-        % CaseID is 'b'
-        (CaseID == b ->
-            (% Case 4: Card is in the 'next' cases
-            member(Card, [10, 12, 66, 68, 94, 96]) -> 
+        ; member(Card, [11, 12]) ->
+            Card3 is Card + 2,
+            case_occupation(_, Card3, CaseID),
+            check_cases_empty(Runner, 1, Card3, CaseID),
+            occupy_case(Card3, CaseID, Runner)
+        ; case_occupation(_, Card, CaseID),
+            check_cases_empty(Runner, 1, Card, CaseID),
+            occupy_case(Card, CaseID, Runner)
+        )
+    ; CaseID == b ->
+        ( member(Card, [10, 12, 66, 68, 94, 96]) ->
             shift_case(Runner, Card, 0, CaseID)
-            
-        ; 
-            % Default case: Move the runner normally
+        ; check_cases_empty(Runner, 1, Card, CaseID),
             case_occupation(_, Card, CaseID),
-            occupy_case(Card, CaseID, Runner))       
-
-    ; 
-        % Default case: Move the runner normally
+            occupy_case(Card, CaseID, Runner)
+        )
+    ; % Default case for CaseID 'c' or any other CaseID
+        check_cases_empty(Runner, 1, Card, CaseID),
         case_occupation(_, Card, CaseID),
-        occupy_case(Card, CaseID, Runner))).
+        occupy_case(Card, CaseID, Runner)
+    ).
 
 
 % Handle special cases of 'turn' cases %%
@@ -418,44 +281,99 @@ special_turn_cases(Runner, OldLineID, OldCaseID) :-
         true
     ).
 
+% Predicate to check if a specific line on the board has no runner
+line_empty(LineID) :-
+    board(LineID, Cases),
+    \+ (member(case(_, Occupied), Cases), Occupied \= empty).
+
 % Move the runner on the board %%
 
 move_runner(Runner, Card, NewCaseID, OldLineID, OldCaseID) :- 
     NewLineID is OldLineID + Card,
 
-    special_turn_cases(Runner, OldLineID, OldCaseID),
+    special_turn_cases(Runner, OldLineID, OldCaseID), % Check if the runner was on a 'turn' case, and if it's the case, erase both 'a' values (they are supposed to be the same thing)
 
-    % Case 1: NewLineID is in the shift cases
-    (member(NewLineID, [9,11,65,67,93,95]) ->
-        shift_case(Runner, Card, OldLineID, NewCaseID)
-    ;
-    % Case 2: NewLineID is in the 'next' cases and NewCaseID is 'a'
-    (member(NewLineID, [10,12,66,68,94,96]), NewCaseID == a ->
-        Card1 is Card + 1,
-        move_runner(Runner, Card1, NewCaseID, OldLineID, OldCaseID)
+    ( NewCaseID == a ->
+        (member(NewLineID, [9, 65, 93]) -> % Case 1: Shift case
+            shift_case(Runner, Card, OldLineID, NewCaseID)
+            
+            ; 
+            member(NewLineID, [10, 66, 94]) -> % Case 2: Second line of first turn case
+                NewLineID1 is NewLineID + 1,
+                TurnLineID is NewLineID + 2,
+                case_occupation(OldCaseID, NewLineID1, NewCaseID),
+                case_occupation(OldCaseID, TurnLineID, NewCaseID),
+                check_cases_empty(Runner, OldLineID, NewLineID1, NewCaseID),
+                check_cases_empty(Runner, OldLineID, TurnLineID, NewCaseID),
+                occupy_case(NewLineID1, NewCaseID, Runner),
+                occupy_case(TurnLineID, NewCaseID, Runner),
+            
+                (\+ line_empty(OldLineID) ->
+                vacate_case(OldLineID, OldCaseID, Runner) % If the old position of the runner is not empty, vacate it
+                
+                ;
+                true)
+
+                ; 
+                member(NewLineID, [11, 12, 67, 68, 95, 96]) -> % Case 3: Second part of the turn line
+                    vacate_case(OldLineID, OldCaseID, Runner),
+                    NewLineID1 is NewLineID + 2,
+                    case_occupation(OldCaseID, NewLineID1, NewCaseID),
+                    check_cases_empty(Runner, OldLineID, NewLineID1, NewCaseID),
+                    occupy_case(NewLineID1, NewCaseID, Runner)
+        
+                    ; 
+                    member(OldLineID, [9,10,65,66,93,94]) -> % Case 4: Old line is on the first turn line, we need to add 2 to the new line ID
+                        NewLineID1 is NewLineID + 2,
+                        case_occupation(OldCaseID, NewLineID1, NewCaseID),
+                        OldLineIDCheck is OldLineID + 2,
+                        check_cases_empty(Runner, OldLineIDCheck, NewLineID1, NewCaseID),
+                        occupy_case(NewLineID1, NewCaseID, Runner)
+
+                        ;
+                        member(OldLineID, [11,12,67,68,95,96]) -> % Case 5: Old line is on the second turn line, we need to add 1 to the new line ID
+                            NewLineID1 is NewLineID + 1,
+                            case_occupation(OldCaseID, NewLineID1, NewCaseID),
+                            check_cases_empty(Runner, OldLineID, NewLineID1, NewCaseID),
+                            occupy_case(NewLineID1, NewCaseID, Runner)                            
+                            
+                            ;
+                            % Default case for NewCaseID == a: Normal move
+                                case_occupation(OldCaseID, NewLineID, NewCaseID),
+                                check_cases_empty(Runner, OldLineID, NewLineID, NewCaseID),
+                                occupy_case(NewLineID, NewCaseID, Runner)
+                            )
     ; 
-    % Case 3: NewLineID is in the 'next' cases and NewCaseID is 'b'
-    (member(NewLineID, [10,12,66,68,94,96]), NewCaseID == b ->
-        shift_case(Runner, Card, OldLineID, NewCaseID)
-    ; 
+    NewCaseID == b ->
+        ( member(NewLineID, [10, 12, 66, 68, 94, 96]) -> % Case 4: Shift case
+            shift_case(Runner, Card, OldLineID, NewCaseID)
+            
+            ; 
+            member(OldLineID, [9, 11, 65, 67, 93, 95]) -> % Case 5: Old line is on the first part of the turn line
+                TurnLineID1 is NewLineID + 1,
+                case_occupation(OldCaseID, TurnLineID1, NewCaseID),
+                check_cases_empty(Runner, OldLineID, TurnLineID1, NewCaseID),
+                occupy_case(TurnLineID1, NewCaseID, Runner),
+                vacate_case(OldLineID, OldCaseID, Runner)
+                ; 
+                member(OldLineID, [10, 12, 66, 68, 94, 96]) -> % Case 6: Old line is on the second part of the turn line
+                    case_occupation(OldCaseID, NewLineID, NewCaseID),
+                    occupy_case(NewLineID, NewCaseID, Runner)
+                
+                    ; 
+                    % Default case for NewCaseID == b: Normal move
+                        case_occupation(OldCaseID, NewLineID, NewCaseID),
+                        check_cases_empty(Runner, OldLineID, NewLineID, NewCaseID),
+                        occupy_case(NewLineID, NewCaseID, Runner),
+                        vacate_case(OldLineID, OldCaseID, Runner)
+                    )
+    ; % Default case for any other NewCaseID
+        case_occupation(OldCaseID, NewLineID, NewCaseID),
+        check_cases_empty(Runner, OldLineID, NewLineID, NewCaseID),
+        occupy_case(NewLineID, NewCaseID, Runner),
+        vacate_case(OldLineID, OldCaseID, Runner)
+    ).
 
-    (member(OldLineID, [9,11,65,67,93,95]) -> 
-        TurnLineID1 is NewLineID + 1, % Need to directly exectute occupy
-        case_occupation(OldLineID, TurnLineID1, NewCaseID),
-        occupy_case(TurnLineID1,NewCaseID,Runner)
-    ;
-
-    (member(OldLineID, [10,12,66,68,94,96]) -> 
-        case_occupation(OldLineID, NewLineID, NewCaseID),
-        occupy_case(NewLineID,NewCaseID,Runner)
-    ;
-
-    % Default Case: Normal move
-    case_occupation(OldLineID, NewLineID, NewCaseID),
-    check_cases_empty(Runner, NewLineID, NewLineID, NewCaseID),
-    occupy_case(NewLineID, NewCaseID, Runner),
-    vacate_case(OldLineID, OldCaseID, Runner)
-    ))))).
 
     
 
@@ -498,7 +416,21 @@ case_occupation(OldCaseID, LineID, CaseID) :-
 % Main function : pick a card and a runner to move %
 % If the card is the last one, 5 new cards are picked %
 
-play_turn(Player, Runner, Card, CaseID) :-
+play_turn(Runner, Card, CaseID) :-
+    (member(Runner,[i1,i2,i3]) -> Player = italie
+    ;
+
+    (member(Runner,[h1,h2,h3]) -> Player = hollande
+    ;
+        
+    (member(Runner,[b1,b2,b3]) -> Player = belgique
+        
+        ;
+
+        Player = allemagne
+        
+    ))),
+
     player(Player, Pack),
     member(Card, Pack),  
 
@@ -575,7 +507,8 @@ initialize_game :-
     pack_cards(italie),
     pack_cards(belgique),
     pack_cards(hollande),
-    pack_cards(allemagne).
+    pack_cards(allemagne),
+    display_cards. 
 
 start_game :- 
     initialize_game,
@@ -614,3 +547,8 @@ reset_game_state :-
     pack_cards(allemagne),
     display_cards.            % Display the cards for each player
     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% IA part %%
+
+%choose_player(Player) :-
