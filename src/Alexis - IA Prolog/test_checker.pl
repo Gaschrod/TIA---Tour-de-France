@@ -809,5 +809,3 @@ make_play(black,Board) :-
 make_play(black,_):-
     write('Draw.'), nl.
 
-
-

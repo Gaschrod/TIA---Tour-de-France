@@ -246,7 +246,11 @@ initialize_card :-
     assertz(card(9,8)),
     assertz(card(10,8)),
     assertz(card(11,8)),
+<<<<<<< Updated upstream
     assertz(card(12,8)).
+=======
+    assertz(card(12,8)). 
+>>>>>>> Stashed changes
 
 pick_card(Value) :-
     random_between(1, 12, Value),
@@ -262,8 +266,12 @@ pick_card(Value) :-
     (Copies > 0 -> pick_card(Value) 
     ; 
     initialize_card, 
+<<<<<<< Updated upstream
     pick_card(Value),
     display_cards).
+=======
+    pick_card(Value)).
+>>>>>>> Stashed changes
 
 %% Use when a player runs out of cards %%
 %% Technically doesn't respect the rules of the game, but will be adjusted when AI and players are linked %%
@@ -584,6 +592,10 @@ play_turn(Runner, Card, CaseID) :-
     assertz(player(Player, NewPack)),
     (NewPack = [] -> pack_cards(Player) ; true),
     display_runners,
+<<<<<<< Updated upstream
+=======
+    display_cards,
+>>>>>>> Stashed changes
     !.
 
 
@@ -688,10 +700,15 @@ reset_game_state :-
 %% IA part %%
 
 % First heuristic: move the runner which could advance the most
+<<<<<<< Updated upstream
+=======
+% First heuristic: move the runner which could advance the most
+>>>>>>> Stashed changes
 best_move_heuristic1(Player, Runner, Card) :-
     runners(Player, Runners),
     player(Player, Pack),
     findall((R, C), (member(R, Runners), member(C, Pack)), Moves),
+<<<<<<< Updated upstream
     evaluate_moves_heuristic1(Moves, BestMove),
     BestMove = (Runner, Card).
 
@@ -700,6 +717,39 @@ evaluate_moves_heuristic1(Moves, BestMove) :-
     max_member(BestMove, Moves).
 
 % Second heuristic: move the last runner forward the most
+=======
+    evaluate_moves_heuristic1(Player, Moves, BestMove),
+    BestMove = (Runner, Card).
+
+% Evaluate moves and find the best feasible move
+evaluate_moves_heuristic1(Player, Moves, BestMove) :-
+    % Sort moves by card value in descending order
+    sort(2, @>=, Moves, SortedMoves),
+    % Find the best feasible move
+    find_best_feasible_move(Player, SortedMoves, BestMove).
+
+% Find the best feasible move from a sorted list of moves
+find_best_feasible_move(_, [], _) :- fail.
+find_best_feasible_move(Player, [(Runner, Card) | RestMoves], BestMove) :-
+    (   legal_move(Player, Runner, Card)
+    ->  BestMove = (Runner, Card)
+    ;   find_best_feasible_move(Player, RestMoves, BestMove)
+    ).
+
+% Check if a move is legal
+legal_move(_, Runner, Card) :-
+    (   runner_on_board(Runner, LineID, _)
+    ->  NewLineID is LineID + Card,
+        NewLineID =< 102
+    ;   true  % The runner is not on the board, so the move is legal
+    ).
+
+
+%% Second heuristic %%
+
+% Second heuristic: move the last runner forward the most
+
+>>>>>>> Stashed changes
 best_move_heuristic2(Player, Runner, Card) :-
     runners(Player, Runners),
     player(Player, Pack),
@@ -724,9 +774,17 @@ evaluate_moves_heuristic2(Moves, BestMove) :-
     max_member(BestMove, Moves).
 
 % Main loop: pick the best move and play it using the chosen heuristic
+<<<<<<< Updated upstream
 play_best_move(Player, Heuristic) :-
     ( Heuristic == 1 -> best_move_heuristic1(Player, Runner, Card)
     ; Heuristic == 2 -> best_move_heuristic2(Player, Runner, Card)
     ),
+=======
+
+% play_best_move(in,out,out) %
+
+play_best_move(Player, Runner,Card) :-
+    best_move_heuristic1(Player, Runner, Card),
+>>>>>>> Stashed changes
     % Choose the best case ID, assuming 'a' is the desired case to move to
     play_turn(Runner, Card, a).
