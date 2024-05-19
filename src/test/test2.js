@@ -1,118 +1,177 @@
-var dico_cyclistes = [
-  {
-    "cycliste 1": {
-      section: 1,
-      rangée: "interieur",
-      case: 8,
-      id: "c8_0",
-    },
-    "cycliste 2": {
-      section: 1,
-      rangée: "interieur",
-      case: 7,
-      id: "c7_0",
-    },
-  },
-  {
-    "cycliste 1": {
-      section: 1,
-      rangée: "milieu",
-      case: 8,
-      id: "c8_1",
-    },
-    "cycliste 2": {
-      section: 0,
-      rangée: "interieur",
-      case: 7,
-      id: "c7_0",
-    },
-  },
-  {},
-  {},
-];
+function afficherJoueursEtCartesHTML() {
+  var container = document.getElementById("joueursEtCartesContainer");
+  container.innerHTML = ""; // Efface le contenu précédent
 
-var dico_score = {
-  Hollande: { secondes: 65, points: 2 },
-  Belgique: { secondes: 200, points: 1 },
-  France: { secondes: 110, points: 5 },
-};
+  for (var i = 0; i < nomsJoueurs.length; i++) {
+    var joueur = joueurs[i];
+    var nomJoueur = nomsJoueurs[i];
+    var joueurDiv = document.createElement("div");
+    joueurDiv.classList.add("joueur-container");
 
-const nomsJoueurs = ["Hollande", "Belgique", "France"];
+    var nomAffiche = "Joueur " + (i + 1) + " : " + nomJoueur;
+    joueurDiv.innerHTML = "<h3>" + nomAffiche + "</h3>";
 
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
-// fonction pour vérifier si un joueur a terminé la course
-function cyclisteATermine(nomUtilisateur, cycliste) {
-  // Vérifie si tous les cyclistes du joueur ont terminé la course
-  if (positions[nomUtilisateur + "_cycliste_" + cycliste].case > 95) {
-    return true;
-  }
-  return false;
-}
+    if (nomJoueur === "Belgique") {
+      joueurDiv.innerHTML +=
+        "<img src='img/belgique.png' alt='Belgique' width='20' height='20'>";
+    }
+    if (nomJoueur === "Italie") {
+      joueurDiv.innerHTML +=
+        "<img src='img/italie.png' alt='Italie' width='16' height='16'>";
+    }
+    if (nomJoueur === "Hollande") {
+      joueurDiv.innerHTML +=
+        "<img src='img/hollande.png' alt='Hollande' width='15' height='15'>";
+    }
+    if (nomJoueur === "Allemagne") {
+      joueurDiv.innerHTML +=
+        "<img src='img/allemagne.png' alt='Allemagne' width='20' height='20'>";
+    }
 
-function tousJoueursTermines(nomsJoueurs) {
-  // Vérifie pour chaque joueur si tous les cyclistes on terminé la course
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    const nomUtilisateur = nomsJoueurs[i];
-    // il y a 3 cyclistes par joueur
-    for (let j = 1; j <= 3; j++) {
-      const cycliste = dico_cyclistes[i]["cycliste " + j];
-      if (cyclisteATermine(nomUtilisateur, cycliste) === false) {
-        return false;
+    // Ajoute le texte "Cartes seconde" sous le nom du joueur
+    var cartesSecondeTexte = document.createElement("p");
+    cartesSecondeTexte.textContent = "Cartes seconde:";
+    joueurDiv.appendChild(cartesSecondeTexte);
+
+    var cartesDuJoueur = window[joueur];
+    if (cartesDuJoueur.length > 0) {
+      var cartesListe = document.createElement("ul");
+
+      for (var j = 0; j < cartesDuJoueur.length; j++) {
+        var carte = cartesDuJoueur[j];
+        var valeurCarte = carte[0];
+
+        var carteItem = document.createElement("li");
+        carteItem.textContent = "Carte " + (j + 1) + " : " + valeurCarte;
+
+        // Vérifier si c'est le tour du joueur actuel
+        if (i === index) {
+          var jouerButton = document.createElement("button");
+          jouerButton.textContent = "Jouer";
+
+          // Utiliser une fonction anonyme pour passer l'index de la carte à la fonction jouer_carte
+          jouerButton.onclick = (function (joueur, index) {
+            return function () {
+              jouer_carte(joueur, index);
+            };
+          })(joueur, j);
+          if (nomsJoueurs[i] === "Belgique" || nomsJoueurs[i] === "Italie") {
+            carteItem.appendChild(jouerButton);
+          }
+        }
+        cartesListe.appendChild(carteItem);
+      }
+      joueurDiv.appendChild(cartesListe);
+    } else {
+      var pasDeCartes = document.createElement("p");
+      pasDeCartes.textContent = "Pas de cartes";
+      joueurDiv.appendChild(pasDeCartes);
+    }
+    if (nomsJoueurs[i] === "Hollande" || nomsJoueurs[i] === "Allemagne") {
+      var jouerButton = document.createElement("button");
+      jouerButton.textContent = "Jouer";
+
+      jouerButton.onclick = (function (joueur) {
+        return function () {
+          jouer_carte(joueur);
+        };
+      })(joueur);
+      var bot = document.createElement("p");
+      bot.textContent = "Faire jouer le bot:";
+      var br = document.createElement("br");
+      joueurDiv.appendChild(br);
+      joueurDiv.appendChild(bot);
+      if (i == index) {
+        joueurDiv.appendChild(jouerButton);
       }
     }
+    container.appendChild(joueurDiv);
   }
-  return true;
 }
 
-// fonction classement secondes par joueur
-function MajClassementSecondes(nomUtilisateur, cycliste) {
-  //Si le joueur actuel à terminé
-  if (cyclisteATermine(nomUtilisateur, cycliste) === true) {
-    // Et que tous les joueurs n'ont pas terminé
-    if (tousJoueursTermines(nomsJoueurs) === false) {
-      for (let i = 0; i < nomsJoueurs.length; i++) {
-        const nomJ = nomsJoueurs[i];
-        // Si le joueur actuel n'est pas le joueur en cours
-        if (nomJ !== nomUtilisateur) {
-          //On ajoute 10 secondes de pénalité pour chaque courreur encore en course
-          majScoreCourreur(nomJ);
+function envoyerAuServeur(cyclistes, main, nomUtilisateur) {
+  const IA_ROUTE = "/ia";
+  const iaConnection = openWebSocket(IA_ROUTE, "iaWsMessageHandler");
+  const payload = {
+    board: cyclistes,
+    deck: main,
+    player: nomUtilisateur,
+  };
+  sendMessage(iaConnection, JSON.stringify(payload));
+  carteAJouee = iaWsMessageHandler();
+  return carteAJouee;
+}
+
+function envoyerAuServeur(cyclistes, main, nomUtilisateur) {
+  const IA_ROUTE = "/ia";
+  const iaConnection = openWebSocket(IA_ROUTE, "iaWsMessageHandler");
+  const payload = {
+    board: cyclistes,
+    deck: main,
+    player: nomUtilisateur,
+  };
+  sendMessage(iaConnection, JSON.stringify(payload));
+  carteAJouee = iaWsMessageHandler();
+  return carteAJouee;
+}
+
+function jouer_carte(joueur, carteIndex = null) {
+  // Pour récupérer les cartes du joueur
+  var mainJoueur = window[joueur];
+  if (carteIndex === null) {
+    var element = nomsJoueurs[index];
+    element = element.toLowerCase();
+    let singleQuotedString = element.replace(/"/g, "'");
+    envoyerAuServeur(dico_cyclistes, mainJoueurSuivant, singleQuotedString);
+    if (avancer(carteAJouee) === false) {
+      return;
+    }
+  }
+
+  // Vérifie si l'index de la carte est valide
+  if (carteIndex >= 0 && carteIndex < mainJoueur.length) {
+    var carteJouee = mainJoueur[carteIndex]; // Obtenir la carte à jouer
+    console.log("Carte jouée par " + joueur + " :", carteJouee);
+
+    if (avancer(carteJouee) === false) {
+      return;
+    } else {
+      // Si le déplacement est réussi, retirer la carte du deck du joueur
+      mainJoueur.splice(carteIndex, 1);
+
+      // Vérifie si le deck du joueur est vide
+      if (mainJoueur.length === 0) {
+        // Si le deck est vide, piocher 5 nouvelles cartes
+        for (var i = 0; i < 5; i++) {
+          RandomCarte(joueurs.indexOf(joueur));
         }
       }
+
+      var mainJoueurSuivant = window[joueurs[index]];
+      console.log("Main du joueur suivant :", mainJoueurSuivant);
+      var element = null;
+      if (index === 0) {
+        element = nomsJoueurs.at(-1);
+      } else {
+        element = nomsJoueurs[index - 1];
+      }
+      console.log("hey" + element);
+      if (element === "Belgique" || element === "Italie") {
+        var sound = new Howl({
+          src: ["/static/sound.mp4"], // Spécifiez le chemin vers votre fichier audio
+        });
+        sound.play();
+      } else {
+        element = element.toLowerCase();
+        let singleQuotedString = element.replace(/"/g, "'");
+        envoyerAuServeur(dico_cyclistes, mainJoueurSuivant, singleQuotedString);
+        if (avancer(carteAJouee) === false) {
+          return;
+        }
+      }
+      afficherJoueursEtCartesHTML();
     }
+  } else {
+    console.log("Index de carte invalide !");
   }
 }
-
-function classementSecondes(dico_score) {
-  // Si un joueur dépasse la case 95, on soustrait la différence entre la case où il se trouve et 95 à ses secondes
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    const nomUtilisateur = nomsJoueurs[i];
-    if (dico_score[nomUtilisateur].secondes > 0) {
-      dico_score[nomUtilisateur].secondes -=
-        positions[nomUtilisateur + "_cycliste_1"].case - 95;
-      dico_score[nomUtilisateur].secondes -=
-        positions[nomUtilisateur + "_cycliste_2"].case - 95;
-      dico_score[nomUtilisateur].secondes -=
-        positions[nomUtilisateur + "_cycliste_3"].case - 95;
-    }
-  }
-}
-
-// fonction de classement pour les points d'équipe
-function MajClassementPoints(dico_score) {
-  // Trier les joueurs par points
-  nomsJoueurs.sort(function (a, b) {
-    return dico_score[b].points - dico_score[a].points;
-  });
-
-  // Mettre à jour le classement
-  for (let i = 0; i < nomsJoueurs.length; i++) {
-    const nomUtilisateur = nomsJoueurs[i];
-    dico_score[nomUtilisateur].classementPoints = i + 1;
-  }
-}
-
-// Affichage des résultats pour vérifier
-MajClassementPoints(dico_score);
-console.log(dico_score);

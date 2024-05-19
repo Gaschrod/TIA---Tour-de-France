@@ -32,7 +32,7 @@ produire_reponse(L, Rep, Autre_Rep) :-
     ).
 
 produire_reponse_autre(_,S1) :-
-    S1 = 'Je ne sais pas, les etudiants vont m\'aider, vous le verrez'.
+    S1 = 'Je ne sais pas, monsieur Jacquet pourrait vous aider.'.
 
 
 
@@ -46,6 +46,11 @@ q_type(5, 'A quel moment tire-t-on les cartes ?').
 q_type(6, 'Dans quel ordre jouent les équipes ?').
 q_type(7, 'Que se passe-t-il si un coureur veut doubler et que la case est occupee ?').
 q_type(8, 'Que font les cartes chances ?').
+q_type(9, 'Comment gagner le jeu ?').
+q_type(10, 'Quelles sont les règles ?').
+q_type(11, 'Quelle est le but du jeu ?').
+q_type(12, 'Qui es-tu ?').
+q_type(13, 'Qui sont tes créateurs ?').
 
 rep_type(1, 'C\'est au joueur ayant la plus haute carte secondes de commencer.').
 rep_type(2, 'Chaque equipe compte 3 coureurs.').
@@ -55,6 +60,11 @@ rep_type(5, 'Au debut du jeu, les joueurs tirent 5 cartes, selon un tirage aleat
 rep_type(6, 'L\'ordre suivant : equipe d\'Italie, equipe de Hollande, equipe de Belgique, equipe d\'Allemagne.').
 rep_type(7, 'Vous ne pouvez pas avancer sur une case occupee').
 rep_type(8, 'Les cartes chances peuvent soit faire reculer jusqu\'a 3 cases ou au contraire faire avancer.').
+rep_type(9, 'Le jeu se termine lorsque tous les cyclistes ont passé la ligne d\'arrivee. L\'equipe possedant le moins de secondes gagnent le tour').
+rep_type(10, 'Les regles sont simples, chaque equipe doit faire passer ses 3 coureurs la ligne d\'arrivee en le moins de secondes possibles.').
+rep_type(11, 'Les regles sont simples, chaque equipe doit faire passer ses 3 coureurs la ligne d\'arrivee en le moins de secondes possibles.').
+rep_type(12, 'Je suis le BDT, un bot qui vous aide a comprendre les regles du jeu.').
+rep_type(13, 'Je suis le fruit du travail de 4 etudiants de l\'universite de Namur : AmphiLink, Gaschrod, C0ll4b et Cufy').
 
 % ----------------------------------------------------------------%
 % Nous allons utiliser la fonction de Levenshtein pour comparer la phrase rentrée par l'utilisateur avec chacune des questions-types
@@ -69,6 +79,11 @@ regle_rep(String, Rep):-
     q_type(6, Q6),
     q_type(7, Q7),
     q_type(8, Q8),
+    q_type(9, Q9),
+    q_type(10, Q10),
+    q_type(11, Q11),
+    q_type(12, Q12),
+    q_type(13, Q13),
     rep_type(1, R1),
     rep_type(2, R2),
     rep_type(3, R3),
@@ -77,6 +92,11 @@ regle_rep(String, Rep):-
     rep_type(6, R6),
     rep_type(7, R7),
     rep_type(8, R8),
+    rep_type(9, R9),
+    rep_type(10, R10),
+    rep_type(11, R11),
+    rep_type(12, R12),
+    rep_type(13, R13),
     %Calcul de la distance de Levenshtein
     isub(String, Q1, D1, [normalize(true),zero_to_one(true)]),
     isub(String, Q2, D2, [normalize(true),zero_to_one(true)]),
@@ -86,11 +106,16 @@ regle_rep(String, Rep):-
     isub(String, Q6, D6, [normalize(true),zero_to_one(true)]),
     isub(String, Q7, D7, [normalize(true),zero_to_one(true)]),
     isub(String, Q8, D8, [normalize(true),zero_to_one(true)]),
+    isub(String, Q9, D9, [normalize(true),zero_to_one(true)]),
+    isub(String, Q10, D10, [normalize(true),zero_to_one(true)]),
+    isub(String, Q11, D11, [normalize(true),zero_to_one(true)]),
+    isub(String, Q12, D12, [normalize(true),zero_to_one(true)]),
+    isub(String, Q13, D13, [normalize(true),zero_to_one(true)]),
     %Trouver le plus haut degré de similarité
-    max_list([D1, D2, D3, D4, D5, D6, D7, D8], Max),
-    nth1(Index, [D1, D2, D3, D4, D5, D6, D7, D8], Max), % Trouver l'indice de la valeur maximale
+    max_list([D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13], Max),
+    nth1(Index, [D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13], Max), % Trouver l'indice de la valeur maximale
     (Max >= 0.55 -> % Vérifier si le degré de similarité est supérieur à 0.7
-        nth1(Index, [R1, R2, R3, R4, R5, R6, R7, R8], Rep) % Récupérer la réponse associée à cet indice
+        nth1(Index, [R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13], Rep) % Récupérer la réponse associée à cet indice
     ; % Sinon
         Rep = 0 % Unifier Rep avec 0
     ).

@@ -74,14 +74,17 @@ function Start_the_game() {
 
   // Génère les noms des joueurs humains
   for (var i = 1; i <= selectedHumanPlayers; i++) {
-    var nom = prompt("Nom du Joueur " + i + " (Belgique ou Italie):");
+    const nom = prompt("Nom du Joueur " + i + " (Belgique ou Italie):");
     if (nom === null || nom === "") {
       alert("Veuillez entrer un nom pour tous les utilisateurs.");
-      return;
+      return false;
     }
     if (["Belgique", "Italie"].includes(nom) === false) {
       alert("Nom de joueur invalide !");
-      return;
+      if (nomsJoueurs.length > 0) {
+        nomsJoueurs = [];
+        return false;
+      }
     }
     nomsJoueurs.push(nom);
     //On initialise le score de chaque joueur à 0
@@ -615,7 +618,7 @@ function verifierDiago(cyclistePrincipal, casePrincipal) {
 }
 
 // Fonction pour vérifier si un cycliste se trouve sur une case adjacente ou la case suivante
-function checkAspiration(cyclistePrincipal) {
+function checkAspiration(cyclistePrincipal, rangee) {
   for (let i = 0; i < dico_cyclistes.length; i++) {
     let cyclistesDansDico = dico_cyclistes[i];
     for (const key in cyclistesDansDico) {
@@ -624,16 +627,18 @@ function checkAspiration(cyclistePrincipal) {
         // Vérifier si les cyclistes sont différents
         if (cyclistePrincipal !== autreCycliste) {
           casePrincipal = cyclistePrincipal.case;
+          console.log(cyclistePrincipal.case);
+          console.log(autreCycliste.case);
           // Vérifier la distance entre les cyclistes est de 2 cases
           if (
             autreCycliste.case - casePrincipal === 1 &&
-            cyclistePrincipal.rangée === autreCycliste.rangée &&
+            rangee === autreCycliste.rangée &&
             verifierDiago(cyclistePrincipal, casePrincipal) === true
           ) {
             return "diago"; // Les cyclistes sont à une distance de 1 case l'un de l'autre et la case suivante est libre
           } else if (
             autreCycliste.case - casePrincipal === 2 &&
-            cyclistePrincipal.rangée === autreCycliste.rangée
+            rangee === autreCycliste.rangée
           ) {
             return "ligne"; // Les cyclistes sont à une distance de 2 cases l'un de l'autre
           }
@@ -646,17 +651,19 @@ function checkAspiration(cyclistePrincipal) {
 }
 
 // Fonction pour profiter de l'aspiration
-function aspiration(nomJoueur, cycliste, casesAAvancer) {
+function aspiration(nomJoueur, cycliste, rangee) {
   // Vérifie si un cycliste se trouve sur une case adjacente ou la case suivante
   if (
-    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste]) === "ligne"
+    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste], rangee) ===
+    "ligne"
   ) {
     alert(
       "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire."
     );
     return "ligne";
   } else if (
-    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste]) === "diago"
+    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste], rangee) ===
+    "diago"
   ) {
     alert(
       "Profitez de l'aspiration diagonale ! Vous pouvez avancer de 1 case supplémentaire."
@@ -1022,7 +1029,7 @@ function finDuJeu() {
 }
 
 // Fonction pour avancer
-function avancer(carteJouee) {
+function avancer(carteJouee, cyclisteAJouer = null) {
   // Récupérer les valeurs sélectionnées par l'utilisateur
   const nomUtilisateur = nomsJoueurs[index];
   var rangee = "interieur";
@@ -1125,35 +1132,46 @@ function avancer(carteJouee) {
   );
 
   //On vérifie si le joueur a le droit ou non au bonus d'aspiration
+  var profiter = false;
   if (
     anciennePosition.case <= 95 ||
     positions[nomUtilisateur + "_cycliste_" + cycliste].case <= 95
   ) {
-    const verif = aspiration(nomUtilisateur, cycliste);
+    const verif = aspiration(nomUtilisateur, cycliste, rangee);
     if (verif === "ligne") {
-      casesAAvancer2 = 1;
-      positions[nomUtilisateur + "_cycliste_" + cycliste].case +=
-        casesAAvancer2;
+      profiter = confirm(
+        "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire. Voulez-vous en profiter ?"
+      );
+      if (profiter === true) {
+        casesAAvancer2 = 1;
+        positions[nomUtilisateur + "_cycliste_" + cycliste].case +=
+          casesAAvancer2;
+      }
     } else if (verif === "diago") {
-      console.log("aspiration diagonale");
-      casesAAvancer2 = 1;
-      positions[nomUtilisateur + "_cycliste_" + cycliste].case +=
-        casesAAvancer2;
-      if (
-        positions[nomUtilisateur + "_cycliste_" + cycliste].rangée ===
-        "interieur"
-      ) {
-        rangee = "milieu";
+      profiter = confirm(
+        "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire. Voulez-vous en profiter ?"
+      );
+      if (profiter === true) {
+        casesAAvancer2 = 1;
+        positions[nomUtilisateur + "_cycliste_" + cycliste].case +=
+          casesAAvancer2;
         if (
-          positions[nomUtilisateur + "_cycliste_" + cycliste].case === 9 ||
-          positions[nomUtilisateur + "_cycliste_" + cycliste].case === 63
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée ===
+          "interieur"
         ) {
-          rangee = "exterieur";
+          rangee = "milieu";
+          if (
+            positions[nomUtilisateur + "_cycliste_" + cycliste].case === 9 ||
+            positions[nomUtilisateur + "_cycliste_" + cycliste].case === 63
+          ) {
+            rangee = "exterieur";
+          }
+        } else if (
+          positions[nomUtilisateur + "_cycliste_" + cycliste].rangée ===
+          "milieu"
+        ) {
+          rangee = "intérieur";
         }
-      } else if (
-        positions[nomUtilisateur + "_cycliste_" + cycliste].rangée === "milieu"
-      ) {
-        rangee = "intérieur";
       }
     }
     positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangee;
@@ -1506,29 +1524,19 @@ function jouer_carte(joueur, carteIndex = null) {
         }
       }
 
-      var mainJoueurSuivant = window[joueurs[index]];
-      console.log("Main du joueur suivant :", mainJoueurSuivant);
       var element = null;
       if (index === 0) {
         element = nomsJoueurs.at(-1);
       } else {
         element = nomsJoueurs[index - 1];
       }
-      console.log("hey" + element);
+      afficherJoueursEtCartesHTML();
       if (element === "Belgique" || element === "Italie") {
         var sound = new Howl({
           src: ["/static/sound.mp4"], // Spécifiez le chemin vers votre fichier audio
         });
         sound.play();
-      } else {
-        element = element.toLowerCase();
-        let singleQuotedString = element.replace(/"/g, "'");
-        envoyerAuServeur(dico_cyclistes, mainJoueurSuivant, singleQuotedString);
-        if (avancer(carteAJouee) === false) {
-          return;
-        }
       }
-      afficherJoueursEtCartesHTML();
     }
   } else {
     console.log("Index de carte invalide !");
