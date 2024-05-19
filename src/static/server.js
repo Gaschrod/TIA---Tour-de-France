@@ -1,5 +1,6 @@
 const WS_PROTO = "ws://";
 const WS_ROUTE = "/echo";
+const IA_ROUTE = "/ia";
 
 //handles logging - tuning
 function log(topic, message) {
@@ -43,25 +44,31 @@ function wsMessageHandler(event) {
   }
 }
 
+function iaWsMessageHandler(event) {
+  const payload = JSON.parse(event.data);
+  log("WS Response", "Received message: '" + event.data + "'");
+}
+
 //Sends message to connection
 function sendMessage(connection, message) {
   log("Client", 'sending message "' + message + '"');
   connection.send(message);
 }
 
-function openWebSocket() {
-  connection = new WebSocket(WS_PROTO + window.location.host + WS_ROUTE);
+function openWebSocket(route, messageHandler) {
+  connection = new WebSocket(WS_PROTO + window.location.host + route);
   connection.onerror = (error) => {
     log("WS", error);
   };
-  connection.onmessage = wsMessageHandler;
+  connection.onmessage = messageHandler;
   return connection;
 }
 
 // When DOM is loaded, add event listeners
 document.addEventListener("DOMContentLoaded", (e) => {
   const inputField = document.getElementById("userInput");
-  const connection = openWebSocket();
+  const echoConnection = openWebSocket(WS_ROUTE, wsMessageHandler);
+  const iaConnection = openWebSocket(IA_ROUTE, iaWsMessageHandler);
   inputField.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
       const command = inputField.value.trim();
@@ -69,7 +76,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         const payload = {
           message: command,
         };
-        sendMessage(connection, JSON.stringify(payload));
+        sendMessage(echoConnection, JSON.stringify(payload));
         inputField.value = "";
       }
     }
