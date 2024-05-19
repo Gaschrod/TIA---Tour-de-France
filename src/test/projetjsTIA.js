@@ -647,21 +647,22 @@ function checkAspiration(cyclistePrincipal) {
 
 // Fonction pour profiter de l'aspiration
 function aspiration(nomJoueur, cycliste, casesAAvancer) {
-  let positionCycliste = positions[nomJoueur + "_cycliste_" + cycliste];
-  let aspirationType = checkAspiration(positionCycliste);
-
-  if (aspirationType === "ligne") {
-    let profiter = confirm("Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire. Voulez-vous en profiter ?");
-    if (profiter == true) {
-      casesAAvancer += 1; // Le joueur profite de l'aspiration et avance d'une case supplémentaire
-    }
-  } else if (aspirationType === "diago") {
-    let profiter = confirm("Profitez de l'aspiration diagonale ! Vous pouvez avancer de 1 case supplémentaire. Voulez-vous en profiter ?");
-    if (profiter == true) {
-      casesAAvancer += 1; // Le joueur profite de l'aspiration et avance d'une case supplémentaire
-    }
+  // Vérifie si un cycliste se trouve sur une case adjacente ou la case suivante
+  if (
+    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste]) === "ligne"
+  ) {
+    alert(
+      "Profitez de l'aspiration ! Vous pouvez avancer de 1 case supplémentaire."
+    );
+    return "ligne";
+  } else if (
+    checkAspiration(positions[nomJoueur + "_cycliste_" + cycliste]) === "diago"
+  ) {
+    alert(
+      "Profitez de l'aspiration diagonale ! Vous pouvez avancer de 1 case supplémentaire."
+    );
+    return "diago";
   }
-  return casesAAvancer; // Retourner le nombre total de cases à avancer
 }
 
 function logCyclistes() {
