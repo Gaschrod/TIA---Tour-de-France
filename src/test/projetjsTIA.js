@@ -136,9 +136,9 @@ function Start_the_game() {
   console.log(positionsString.substring(0, positionsString.length - 2)); //enlever les deux derniers caractères
 
   // Création du jeu de carte des secondes (12 cartes de 1 à 12, chacune répétée 8 fois)
-  for (var i = 8; i <= 12; i++) {
+  for (var i = 1; i <= 12; i++) {
     //12 itérations
-    for (var j = 1; j <= 100; j++) {
+    for (var j = 1; j <= 8; j++) {
       //8 itérations
       var carte = [i, j];
       tableau.push(carte);
