@@ -1466,10 +1466,15 @@ function jouer_carte(joueur, carteIndex) {
 
       // Mettre à jour l'interface
       afficherJoueursEtCartesHTML();
-      if (
-        nomsJoueurs.includes("Hollande") === false &&
-        nomsJoueurs.includes("Allemagne") === false
-      ) {
+
+      var element = null;
+      if (index === 0) {
+        element = nomsJoueurs.at(-1);
+      } else {
+        element = nomsJoueurs[index - 1];
+      }
+      console.log("hey" + element);
+      if (element === "Belgique" || element === "Italie") {
         var sound = new Howl({
           src: ["/static/sound.mp4"], // Spécifiez le chemin vers votre fichier audio
         });
