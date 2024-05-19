@@ -47,6 +47,9 @@ function wsMessageHandler(event) {
 function iaWsMessageHandler(event) {
   const payload = JSON.parse(event.data);
   log("WS Response", "Received message: '" + event.data + "'");
+  response = "hhh";
+  avancer(response);
+  afficherJoueursEtCartesHTML();
 }
 
 //Sends message to connection
