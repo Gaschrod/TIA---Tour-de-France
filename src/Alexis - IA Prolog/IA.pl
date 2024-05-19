@@ -59,6 +59,12 @@ runners(i1,i2,i3,
         b1,b2,b3,
         a1,a2,a3).
 
+runners(italie, [i1, i2, i3]).
+runners(belgique, [b1, b2, b3]).
+runners(hollande, [h1, h2, h3]).
+runners(allemagne, [a1, a2, a3]).
+    
+
 % Initialize the game %%
 
 initialize_board :-
@@ -89,9 +95,137 @@ initialize_board :-
     assertz(board(17, [case(a,empty),case(b,empty)])),
     assertz(board(18, [case(a,empty),case(b,empty)])),
     assertz(board(19, [case(a,empty),case(b,empty)])),
-    assertz(board(20, [case(a,empty),case(b,empty)])).
+    assertz(board(20, [case(a,empty),case(b,empty)])),
 
-    
+    %%% Back to 3 cases
+assertz(board(21, [case(a,empty), case(b, empty), case(c, empty)])),
+assertz(board(22, [case(a,empty), case(b, empty), case(c, empty)])),
+assertz(board(23, [case(a,empty), case(b, empty), case(c, empty)])),
+assertz(board(15, [case(a,empty),case(b,empty)])),
+assertz(board(16, [case(a,empty),case(b,empty)])),
+assertz(board(17, [case(a,empty),case(b,empty)])),
+assertz(board(18, [case(a,empty),case(b,empty)])),
+assertz(board(19, [case(a,empty),case(b,empty)])),
+assertz(board(20, [case(a,empty),case(b,empty)])),
+
+%%% Back to 3 cases
+assertz(board(21, [case(a,empty), case(b, empty), case(c, empty)])),
+assertz(board(22, [case(a,empty), case(b, empty), case(c, empty)])),
+assertz(board(23, [case(a,empty), case(b, empty), case(c, empty)])),
+
+%%% 2 cases, begin of 'sprint'
+assertz(board(24, [case(a,empty), case(b, empty)])),
+assertz(board(25, [case(a,empty), case(b, empty)])),
+assertz(board(26, [case(a,empty), case(b, empty)])),
+assertz(board(27, [case(a,empty), case(b, empty)])),
+assertz(board(28, [case(a,empty), case(b, empty)])),
+assertz(board(29, [case(a,empty), case(b, empty)])),
+assertz(board(30, [case(a,empty), case(b, empty)])),
+assertz(board(31, [case(a,empty), case(b, empty)])),
+assertz(board(32, [case(a,empty), case(b, empty)])),    
+assertz(board(33, [case(a,empty), case(b, empty)])),
+assertz(board(34, [case(a,empty), case(b, empty)])),
+assertz(board(35, [case(a,empty), case(b, empty)])),
+assertz(board(36, [case(a,empty), case(b, empty)])),
+assertz(board(37, [case(a,empty), case(b, empty)])),
+
+%%% End of the 'sprint'
+assertz(board(38, [case(a,empty), case(b, empty)])),
+assertz(board(39, [case(a,empty), case(b, empty)])),
+assertz(board(40, [case(a,empty), case(b, empty)])),
+assertz(board(41, [case(a,empty), case(b, empty)])),
+assertz(board(42, [case(a,empty), case(b, empty)])),
+assertz(board(43, [case(a,empty), case(b, empty)])),
+assertz(board(44, [case(a,empty), case(b, empty)])),
+assertz(board(45, [case(a,empty), case(b, empty)])),
+assertz(board(46, [case(a,empty), case(b, empty)])),
+assertz(board(47, [case(a,empty), case(b, empty)])),
+assertz(board(48, [case(a,empty), case(b, empty)])),
+assertz(board(49, [case(a,empty), case(b, empty)])),
+assertz(board(50, [case(a,empty), case(b, empty)])),
+assertz(board(51, [case(a,empty), case(b, empty)])),
+assertz(board(52, [case(a,empty), case(b, empty)])),
+assertz(board(53, [case(a,empty), case(b, empty)])),
+assertz(board(54, [case(a,empty), case(b, empty)])),
+assertz(board(55, [case(a,empty), case(b, empty)])),
+assertz(board(56, [case(a,empty), case(b, empty)])),
+assertz(board(57, [case(a,empty), case(b, empty)])),
+assertz(board(58, [case(a,empty), case(b, empty)])),
+assertz(board(59, [case(a,empty), case(b, empty)])),
+assertz(board(60, [case(a,empty), case(b, empty)])),
+assertz(board(61, [case(a,empty), case(b, empty)])),
+assertz(board(62, [case(a,empty), case(b, empty)])),
+assertz(board(63, [case(a,empty), case(b, empty)])),
+assertz(board(64, [case(a,empty), case(b, empty)])),
+
+%%% Begin of the 'shift'
+
+assertz(board(65, [case(a,empty), case(b, empty)])), % 65 and 66 have the same 'a' case -> 63A
+assertz(board(66, [case(a,empty), case(b, empty)])),
+
+assertz(board(67, [case(a,empty), case(b, empty)])), %% 67 and 68 have the same 'a' case -> 64A
+assertz(board(68, [case(a,empty), case(b, empty)])),
+
+%%% End of the 'shift'
+assertz(board(69, [case(a,empty), case(b, empty)])),
+assertz(board(70, [case(a,empty), case(b, empty)])),
+assertz(board(71, [case(a,empty), case(b, empty)])),
+assertz(board(72, [case(a,empty), case(b, empty)])),
+assertz(board(73, [case(a,empty), case(b, empty)])),
+assertz(board(74, [case(a,empty), case(b, empty)])),
+assertz(board(75, [case(a,empty), case(b, empty)])),
+assertz(board(76, [case(a,empty), case(b, empty)])),
+
+%%% Road reduced to 1 case
+assertz(board(77, [case(a,empty), case(b, empty)])),
+assertz(board(78, [case(a,empty), case(b, empty)])),
+assertz(board(79, [case(a,empty), case(b, empty)])),
+
+%%% Back to 2 cases
+assertz(board(80, [case(a,empty), case(b, empty)])),
+assertz(board(81, [case(a,empty), case(b, empty)])),
+assertz(board(82, [case(a,empty), case(b, empty)])),
+assertz(board(83, [case(a,empty), case(b, empty)])),
+assertz(board(84, [case(a,empty), case(b, empty)])),
+assertz(board(85, [case(a,empty), case(b, empty)])),
+assertz(board(86, [case(a,empty), case(b, empty)])),
+assertz(board(87, [case(a,empty), case(b, empty)])),
+
+%%% Still to 2 cases, but they are on separate 'road' -> for now, only implemented as on line on the left
+assertz(board(88, [case(a,empty)])),
+assertz(board(89, [case(a,empty)])),
+assertz(board(90, [case(a,empty)])),
+assertz(board(91, [case(a,empty)])),
+assertz(board(92, [case(a,empty)])),
+
+%%% Begin of the 'shift' -> for now, only implemented as 'normal' lines
+assertz(board(93, [case(a,empty), case(b, empty)])), % 93 and 94 have the same 'a' case -> 89A
+assertz(board(94, [case(a,empty), case(b, empty)])),    
+
+assertz(board(95, [case(a,empty), case(b, empty)])), % 95 and 96 have the same 'a' case -> 90A
+assertz(board(96, [case(a,empty), case(b, empty)])),
+
+%%%%% End of the 'shift'
+assertz(board(97, [case(a,empty)])),
+assertz(board(98, [case(a,empty)])),
+assertz(board(99, [case(a,empty)])),
+assertz(board(100, [case(a,empty)])),
+
+%%%%% Back to 3 cases
+assertz(board(101, [case(a,empty), case(b, empty), case(c, empty)])),
+
+%%%%% Arrival
+assertz(board(102, [case(a,empty), case(b, empty), case(c, empty)])), % 0
+assertz(board(103, [case(a,empty), case(b, empty), case(c, empty)])), % -1
+assertz(board(104, [case(a,empty), case(b, empty), case(c, empty)])), % -2
+assertz(board(105, [case(a,empty), case(b, empty), case(c, empty)])), % -3 
+assertz(board(106, [case(a,empty), case(b, empty), case(c, empty)])), % -4
+assertz(board(107, [case(a,empty), case(b, empty), case(c, empty)])), % -5
+assertz(board(108, [case(a,empty), case(b, empty), case(c, empty)])), % -6
+assertz(board(109, [case(a,empty), case(b, empty), case(c, empty)])), % -7
+assertz(board(110, [case(a,empty), case(b, empty), case(c, empty)])), % -8
+assertz(board(111, [case(a,empty), case(b, empty), case(c, empty)])). % -9
+
 
 %% Card pick %%
 
@@ -125,7 +259,11 @@ pick_card(Value) :-
     
 pick_card(Value) :-
     card(_, Copies),
-    Copies > 0 -> pick_card(Value) ; (initialize_card, pick_card(Value)).
+    (Copies > 0 -> pick_card(Value) 
+    ; 
+    initialize_card, 
+    pick_card(Value),
+    display_cards).
 
 %% Use when a player runs out of cards %%
 %% Technically doesn't respect the rules of the game, but will be adjusted when AI and players are linked %%
@@ -137,11 +275,6 @@ pack_cards(Player) :-
     (pick_card(Value1), pick_card(Value2), pick_card(Value3), pick_card(Value4), pick_card(Value5)), 
     append([Value1, Value2, Value3, Value4, Value5], Pack, NewPack), retract(player(Player, Pack)) , assertz(player(Player, NewPack)) ; true.
 
-% Get value of specific case at specific line
-
-get_case_value(LineID, CaseID, Value) :-
-    board(LineID, Cases),
-    member(case(CaseID, Value), Cases).
 
 % Check that the Player called is on the case
 
@@ -320,7 +453,11 @@ move_runner(Runner, Card, NewCaseID, OldLineID, OldCaseID) :-
                     NewLineID1 is NewLineID + 2,
                     case_occupation(OldCaseID, NewLineID1, NewCaseID),
                     check_cases_empty(Runner, OldLineID, NewLineID1, NewCaseID),
-                    occupy_case(NewLineID1, NewCaseID, Runner)
+                    occupy_case(NewLineID1, NewCaseID, Runner),
+
+                    (\+ member(OldLineID, [9,10,65,66,93,94]) -> vacate_case(OldLineID, OldCaseID, Runner) 
+                    ; 
+                    true) % If the old position of the runner is not empty, vacate it
         
                     ; 
                     member(OldLineID, [9,10,65,66,93,94]) -> % Case 4: Old line is on the first turn line, we need to add 2 to the new line ID
@@ -341,7 +478,8 @@ move_runner(Runner, Card, NewCaseID, OldLineID, OldCaseID) :-
                             % Default case for NewCaseID == a: Normal move
                                 case_occupation(OldCaseID, NewLineID, NewCaseID),
                                 check_cases_empty(Runner, OldLineID, NewLineID, NewCaseID),
-                                occupy_case(NewLineID, NewCaseID, Runner)
+                                occupy_case(NewLineID, NewCaseID, Runner),
+                                vacate_case(OldLineID, OldCaseID, Runner)
                             )
     ; 
     NewCaseID == b ->
@@ -374,8 +512,6 @@ move_runner(Runner, Card, NewCaseID, OldLineID, OldCaseID) :-
         vacate_case(OldLineID, OldCaseID, Runner)
     ).
 
-
-    
 
 % Check if all cases with the same CaseID between OldLineID and NewLineID are empty -> a player can't pass by another player %
 % Check if all cases with the same CaseID between OldLineID and NewLineID are empty -> a player can't pass by another player
@@ -551,4 +687,46 @@ reset_game_state :-
 
 %% IA part %%
 
-%choose_player(Player) :-
+% First heuristic: move the runner which could advance the most
+best_move_heuristic1(Player, Runner, Card) :-
+    runners(Player, Runners),
+    player(Player, Pack),
+    findall((R, C), (member(R, Runners), member(C, Pack)), Moves),
+    evaluate_moves_heuristic1(Moves, BestMove),
+    BestMove = (Runner, Card).
+
+evaluate_moves_heuristic1(Moves, BestMove) :-
+    % Example evaluation criteria: maximize the card value
+    max_member(BestMove, Moves).
+
+% Second heuristic: move the last runner forward the most
+best_move_heuristic2(Player, Runner, Card) :-
+    runners(Player, Runners),
+    player(Player, Pack),
+    find_last_runner_or_unplaced(Runners, LastRunner),
+    findall((LastRunner, C), member(C, Pack), Moves),
+    evaluate_moves_heuristic2(Moves, BestMove),
+    BestMove = (Runner, Card).
+
+% Find the last runner on the board, or if none, find an unplaced runner
+find_last_runner_or_unplaced(Runners, LastRunner) :-
+    findall((R, LineID, CaseID), (member(R, Runners), runner_on_board(R, LineID, CaseID)), RunnerPositions),
+    (   RunnerPositions \= [] 
+    ->  sort(2, @=<, RunnerPositions, SortedRunnerPositions),
+        last(SortedRunnerPositions, (LastRunner, _, _))
+    ;   % No runners on the board, choose the first unplaced runner
+        member(LastRunner, Runners),
+        \+ runner_on_board(LastRunner, _, _)
+    ).
+
+evaluate_moves_heuristic2(Moves, BestMove) :-
+    % Evaluate moves to maximize the advancement of the last runner
+    max_member(BestMove, Moves).
+
+% Main loop: pick the best move and play it using the chosen heuristic
+play_best_move(Player, Heuristic) :-
+    ( Heuristic == 1 -> best_move_heuristic1(Player, Runner, Card)
+    ; Heuristic == 2 -> best_move_heuristic2(Player, Runner, Card)
+    ),
+    % Choose the best case ID, assuming 'a' is the desired case to move to
+    play_turn(Runner, Card, a).
