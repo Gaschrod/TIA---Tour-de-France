@@ -60,7 +60,7 @@ rep_type(5, 'Au debut du jeu, les joueurs tirent 5 cartes, selon un tirage aleat
 rep_type(6, 'L\'ordre suivant : equipe d\'Italie, equipe de Hollande, equipe de Belgique, equipe d\'Allemagne.').
 rep_type(7, 'Vous ne pouvez pas avancer sur une case occupee').
 rep_type(8, 'Les cartes chances peuvent soit faire reculer jusqu\'a 3 cases ou au contraire faire avancer.').
-rep_type(9, 'Le jeu se termine lorsque tous les cyclistes ont passé la ligne d\'arrivee. L\'equipe possedant le moins de secondes gagnent le tour').
+rep_type(9, 'Le jeu se termine lorsque tous les cyclistes ont passe la ligne d\'arrivee. L\'equipe possedant le moins de secondes gagnent le tour').
 rep_type(10, 'Les regles sont simples, chaque equipe doit faire passer ses 3 coureurs la ligne d\'arrivee en le moins de secondes possibles.').
 rep_type(11, 'Les regles sont simples, chaque equipe doit faire passer ses 3 coureurs la ligne d\'arrivee en le moins de secondes possibles.').
 rep_type(12, 'Je suis le BDT, un bot qui vous aide a comprendre les regles du jeu.').

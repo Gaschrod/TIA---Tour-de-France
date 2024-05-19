@@ -1,4 +1,5 @@
 //variable de bases
+
 var joueurs = ["j1_carte", "j2_carte", "j3_carte", "j4_carte"];
 var nomsJoueurs = [];
 var tableau = [];
@@ -58,6 +59,9 @@ const sectionsRangées = {
   8: ["interieur", "milieu", "exterieur"],
 };
 
+// ---------------------------------------------------------------------
+//---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 // Fonction pour démarrer le jeu
 function Start_the_game() {
   var selectedHumanPlayers = parseInt(
@@ -89,7 +93,7 @@ function Start_the_game() {
     nomsJoueurs.push(nom);
     //On initialise le score de chaque joueur à 0
   }
-
+  // Génère les noms des joueurs bots
   for (var i = 1; i <= selectedBots; i++) {
     if (i === 1) {
       nomsJoueurs.push("Hollande");
@@ -214,6 +218,10 @@ function Start_the_game() {
   }
   console.log(nomsJoueurs);
 
+//---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// fonction pour afficher les joueurs et leurs cartes
   afficherJoueursEtCartesHTML(nomsJoueurs);
 
   // Supprime le bouton de démarrage et les deux autres boutons de sélection
@@ -298,7 +306,7 @@ function RandomCarte(playerIndex) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
-
+// Fonction pour passer au joueur suivant
 function joueurSuivant() {
   // Incrémente le compteur de cyclistes joués dans ce tour
   cyclistesJouesDansTour++;
@@ -353,7 +361,6 @@ function joueurSuivant() {
 // ---------------------------------------------------------------------
 
 // Fonction pour afficher les joueurs et leurs cartes
-// Fonction pour afficher les joueurs et leurs cartes en fonction du tour
 function afficherJoueursEtCartesHTML() {
   var container = document.getElementById("joueursEtCartesContainer");
   container.innerHTML = ""; // Efface le contenu précédent
@@ -449,7 +456,6 @@ function afficherJoueursEtCartesHTML() {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 
-//Fonctions utiles à avancer
 
 //Fonction pour jouer une carte chance
 function piocherCarteChance() {
@@ -586,6 +592,10 @@ function majId(nomUtilisateur, cycliste, sousCase) {
     "c" + positions[nomUtilisateur + "_cycliste_" + cycliste].case + ext;
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// fonction pour verifier les diagonales
 function verifierDiago(cyclistePrincipal, casePrincipal) {
   const rangéesAdjacentes = {
     interieur: ["milieu"],
@@ -616,6 +626,9 @@ function verifierDiago(cyclistePrincipal, casePrincipal) {
   }
   return true; // Aucun cycliste n'est dans la diagonale du cycliste principal
 }
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 // Fonction pour vérifier si un cycliste se trouve sur une case adjacente ou la case suivante
 function checkAspiration(cyclistePrincipal, rangee) {
@@ -650,6 +663,10 @@ function checkAspiration(cyclistePrincipal, rangee) {
   return false; // Aucun cycliste n'est à une distance de 2 cases l'un de l'autre ou la case suivante est libre
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
 // Fonction pour profiter de l'aspiration
 function aspiration(nomJoueur, cycliste, rangee) {
   // Vérifie si un cycliste se trouve sur une case adjacente ou la case suivante
@@ -671,7 +688,10 @@ function aspiration(nomJoueur, cycliste, rangee) {
     return "diago";
   }
 }
-
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// fonction pour afficher dans la console les positions des cyclistes
 function logCyclistes() {
   let positionsString = "Positions des cyclistes : ";
   for (let i = 0; i < nomsJoueurs.length; i++) {
@@ -695,6 +715,10 @@ function logCyclistes() {
   console.log(positionsString.substring(0, positionsString.length - 2));
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Fonction pour mettre à jour les positions des cyclistes
 function mettreAJourPositionsJoueur(
   nomJoueur,
   cycliste,
@@ -732,6 +756,10 @@ function mettreAJourPositionsJoueur(
   };
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Fonction pour bouger les jetons des cyclistes
 function bouger_jeton(id, cycliste, nomJoueur) {
   var a = document.getElementById("SVGMap");
   cycliste = parseInt(cycliste);
@@ -810,6 +838,10 @@ function retourArrière(anciennePosition, nomUtilisateur, cycliste) {
   );
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Fonction pour vérifier l'id des cyclistes 
 function verifierID(cyclisteID) {
   for (let i = 0; i < dico_cyclistes.length; i++) {
     let cyclistesDansDico = dico_cyclistes[i];
@@ -826,6 +858,9 @@ function verifierID(cyclisteID) {
   }
   return true; // Aucun cycliste avec l'ID fourni n'a été trouvé
 }
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 function sprintTerminee1() {
   let sprintTerminee = false;
@@ -838,6 +873,10 @@ function sprintTerminee1() {
   return sprintTerminee;
 }
 
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
 function sprintTerminee2() {
   let sprintTerminee = false;
   for (let i = 0; i < nomsJoueurs.length; i++) {
@@ -848,6 +887,10 @@ function sprintTerminee2() {
   }
   return sprintTerminee;
 }
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 // Initialisation des statistiques des joueurs
 function sprintsIntermediaires(nomUtilisateur) {
@@ -895,7 +938,7 @@ function sprintsIntermediaires(nomUtilisateur) {
     dico_score[nomUtilisateur].sprintTermine.sprint2 = true;
   }
 }
-
+// fonction qui verifie si un cycliste a terminé la course
 function cyclisteATermine(nomUtilisateur, cycliste) {
   // Vérifie si tous les cyclistes du joueur ont terminé la course
   if (positions[nomUtilisateur + "_cycliste_" + cycliste].case > 95) {
@@ -903,7 +946,7 @@ function cyclisteATermine(nomUtilisateur, cycliste) {
   }
   return false;
 }
-
+// fonction qui verifie si tous les joueurs ont terminé la course
 function tousJoueursTermines(nomsJoueurs) {
   // Vérifie pour chaque joueur si tous les cyclistes on terminé la course
   for (let i = 0; i < nomsJoueurs.length; i++) {
@@ -917,7 +960,7 @@ function tousJoueursTermines(nomsJoueurs) {
   }
   return true;
 }
-
+// fonction qui verifie si tous les cyclistes d'un joueur ont terminé la course
 function tousCourreursTermines(nomUtilisateur) {
   // Vérifie si tous les cyclistes du joueur ont terminé la course
   for (let i = 1; i <= 3; i++) {
@@ -955,7 +998,7 @@ function majClassementSecondes(nomUtilisateur, cycliste) {
     }
   }
 }
-
+// fonction pour mettre à jour le classement après l'arrivée
 function majClassementAprèsArrivee(nomUtilisateur, cycliste, anciennePosition) {
   if (
     anciennePosition.case <= 95 &&
@@ -1008,7 +1051,7 @@ function nettoyerArrivee(cycliste, nomUtilisateur) {
     }
   }
 }
-
+// fonction pour mettre à jour le classement final et finir le jeu
 function finDuJeu() {
   //On fait le classement final avec le dico des scores 1er = le moins de secondes
   let classement = [];
@@ -1027,6 +1070,10 @@ function finDuJeu() {
   alert("Fin du jeu ! \nPour relancer la partie veuillez recharger la page.");
   console.log(txtAAfficher);
 }
+
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 // Fonction pour avancer
 function avancer(carteJouee, cyclisteAJouer = null) {
