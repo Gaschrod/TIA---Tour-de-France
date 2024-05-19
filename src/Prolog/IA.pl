@@ -41,6 +41,9 @@
 
 %% Alpha-beta pruning: avoid to explore the whole tree => when we find a branch that has a 'better' value than the current one, we stop the exploration of the current branch
 
+:- use_module(library(http/json)).
+:- use_module(library(http/json_convert)).
+
 :- dynamic(board/2).
 
 %% Players definition, each has an empty pack of cards at the beginning of the game %%
@@ -246,11 +249,7 @@ initialize_card :-
     assertz(card(9,8)),
     assertz(card(10,8)),
     assertz(card(11,8)),
-<<<<<<< Updated upstream
     assertz(card(12,8)).
-=======
-    assertz(card(12,8)). 
->>>>>>> Stashed changes
 
 pick_card(Value) :-
     random_between(1, 12, Value),
@@ -266,15 +265,10 @@ pick_card(Value) :-
     (Copies > 0 -> pick_card(Value) 
     ; 
     initialize_card, 
-<<<<<<< Updated upstream
     pick_card(Value),
     display_cards).
-=======
-    pick_card(Value)).
->>>>>>> Stashed changes
 
 %% Use when a player runs out of cards %%
-%% Technically doesn't respect the rules of the game, but will be adjusted when AI and players are linked %%
 
 pack_cards(Player) :-
     player(Player, Pack),
@@ -457,7 +451,6 @@ move_runner(Runner, Card, NewCaseID, OldLineID, OldCaseID) :-
 
                 ; 
                 member(NewLineID, [11, 12, 67, 68, 95, 96]) -> % Case 3: Second part of the turn line
-                    vacate_case(OldLineID, OldCaseID, Runner),
                     NewLineID1 is NewLineID + 2,
                     case_occupation(OldCaseID, NewLineID1, NewCaseID),
                     check_cases_empty(Runner, OldLineID, NewLineID1, NewCaseID),
@@ -592,10 +585,7 @@ play_turn(Runner, Card, CaseID) :-
     assertz(player(Player, NewPack)),
     (NewPack = [] -> pack_cards(Player) ; true),
     display_runners,
-<<<<<<< Updated upstream
-=======
     display_cards,
->>>>>>> Stashed changes
     !.
 
 
@@ -700,26 +690,21 @@ reset_game_state :-
 %% IA part %%
 
 % First heuristic: move the runner which could advance the most
-<<<<<<< Updated upstream
-=======
-% First heuristic: move the runner which could advance the most
->>>>>>> Stashed changes
 best_move_heuristic1(Player, Runner, Card) :-
     runners(Player, Runners),
     player(Player, Pack),
     findall((R, C), (member(R, Runners), member(C, Pack)), Moves),
-<<<<<<< Updated upstream
-    evaluate_moves_heuristic1(Moves, BestMove),
+    prioritize_moves(Player, Moves, PriorityMoves),
+    evaluate_moves_heuristic1(Player, PriorityMoves, BestMove),
     BestMove = (Runner, Card).
 
-evaluate_moves_heuristic1(Moves, BestMove) :-
-    % Example evaluation criteria: maximize the card value
-    max_member(BestMove, Moves).
+% Prioritize moves: runners not on the board should move first
+prioritize_moves(Player, Moves, PriorityMoves) :-
+    partition(not_on_board(Player), Moves, NotOnBoardMoves, OnBoardMoves),
+    append(NotOnBoardMoves, OnBoardMoves, PriorityMoves).
 
-% Second heuristic: move the last runner forward the most
-=======
-    evaluate_moves_heuristic1(Player, Moves, BestMove),
-    BestMove = (Runner, Card).
+not_on_board(_, (Runner, _)) :-
+    \+ runner_on_board(Runner, _, _).
 
 % Evaluate moves and find the best feasible move
 evaluate_moves_heuristic1(Player, Moves, BestMove) :-
@@ -729,7 +714,8 @@ evaluate_moves_heuristic1(Player, Moves, BestMove) :-
     find_best_feasible_move(Player, SortedMoves, BestMove).
 
 % Find the best feasible move from a sorted list of moves
-find_best_feasible_move(_, [], _) :- fail.
+find_best_feasible_move(_, [], _) :-
+    writeln('No more moves'), fail.
 find_best_feasible_move(Player, [(Runner, Card) | RestMoves], BestMove) :-
     (   legal_move(Player, Runner, Card)
     ->  BestMove = (Runner, Card)
@@ -744,47 +730,132 @@ legal_move(_, Runner, Card) :-
     ;   true  % The runner is not on the board, so the move is legal
     ).
 
-
-%% Second heuristic %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Second heuristic: move the last runner forward the most
-
->>>>>>> Stashed changes
 best_move_heuristic2(Player, Runner, Card) :-
     runners(Player, Runners),
     player(Player, Pack),
-    find_last_runner_or_unplaced(Runners, LastRunner),
-    findall((LastRunner, C), member(C, Pack), Moves),
-    evaluate_moves_heuristic2(Moves, BestMove),
-    BestMove = (Runner, Card).
+    find_last_runner_or_unplaced(Player, Runners, LastRunner),
+    (   LastRunner = unplaced
+    ->  % If there are unplaced runners, place them on the board first
+        place_unplaced_runner(Player, LastRunner, Pack, Runner, Card)
+    ;   % Otherwise, move the last runner forward the most
+        findall((LastRunner, C), member(C, Pack), Moves),
+        evaluate_moves_heuristic2(Player, Moves, BestMove),
+        BestMove = (Runner, Card)
+    ).
 
 % Find the last runner on the board, or if none, find an unplaced runner
-find_last_runner_or_unplaced(Runners, LastRunner) :-
+find_last_runner_or_unplaced(Player, Runners, LastRunner) :-
     findall((R, LineID, CaseID), (member(R, Runners), runner_on_board(R, LineID, CaseID)), RunnerPositions),
-    (   RunnerPositions \= [] 
-    ->  sort(2, @=<, RunnerPositions, SortedRunnerPositions),
-        last(SortedRunnerPositions, (LastRunner, _, _))
+    (   RunnerPositions \= []
+    ->  % Find the last runner on the board
+        sort(2, @=<, RunnerPositions, SortedRunnerPositions),
+        last(SortedRunnerPositions, (LastRunner, _, _)),
+        (   runner_can_advance(Player, LastRunner) -> true
+        ;   % If the last runner can't advance, find the next feasible one
+            find_next_feasible_runner2(Player, SortedRunnerPositions, LastRunner)
+        )
     ;   % No runners on the board, choose the first unplaced runner
         member(LastRunner, Runners),
         \+ runner_on_board(LastRunner, _, _)
     ).
 
-evaluate_moves_heuristic2(Moves, BestMove) :-
-    % Evaluate moves to maximize the advancement of the last runner
-    max_member(BestMove, Moves).
+% Place unplaced runners on the board
+place_unplaced_runner(Player, unplaced, Pack, Runner, Card) :-
+    member(Runner, _),
+    runner_on_board(Runner, _, _), % Check if the runner is already on the board
+    member(Card, Pack),
+    legal_move(Player, Runner, Card).
+
+% Check if a runner can advance
+runner_can_advance(Player, Runner) :-
+    player(Player, Pack),
+    member(Card, Pack),
+    legal_move(Player, Runner, Card).
+
+% Find the next feasible runner from a sorted list of runner positions
+find_next_feasible_runner2(Player, [(R, _, _) | Rest], FeasibleRunner) :-
+    (   runner_can_advance(Player, R)
+    ->  FeasibleRunner = R
+    ;   find_next_feasible_runner2(Player, Rest, FeasibleRunner)
+    ).
+
+% Evaluate moves to maximize the advancement of the last runner
+evaluate_moves_heuristic2(Player, Moves, BestMove) :-
+    % Sort moves by card value in descending order
+    sort(2, @>=, Moves, SortedMoves),
+    % Find the best feasible move for the last runner
+    find_best_feasible_move2(Player, SortedMoves, BestMove).
+
+% Find the best feasible move for the last runner from a sorted list of moves
+find_best_feasible_move2(_, [], _) :-
+    writeln('No more moves'), fail.
+
+find_best_feasible_move2(Player, [(Runner, Card) | RestMoves], BestMove) :-
+    (   legal_move1(Player, Runner, Card)
+    ->  BestMove = (Runner, Card)
+    ;   find_best_feasible_move2(Player, RestMoves, BestMove)
+    ).
+
+% Check if a move is legal
+legal_move1(_, Runner, Card) :-
+    (   runner_on_board(Runner, LineID, _)
+    ->  NewLineID is LineID + Card,
+        NewLineID =< 102
+    ;   true  % The runner is not on the board, so the move is legal
+    ).
+
+
 
 % Main loop: pick the best move and play it using the chosen heuristic
-<<<<<<< Updated upstream
-play_best_move(Player, Heuristic) :-
-    ( Heuristic == 1 -> best_move_heuristic1(Player, Runner, Card)
-    ; Heuristic == 2 -> best_move_heuristic2(Player, Runner, Card)
-    ),
-=======
 
 % play_best_move(in,out,out) %
 
 play_best_move(Player, Runner,Card) :-
-    best_move_heuristic1(Player, Runner, Card),
->>>>>>> Stashed changes
+    best_move_heuristic2(Player, Runner, Card),
     % Choose the best case ID, assuming 'a' is the desired case to move to
     play_turn(Runner, Card, a).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Receive the card of the player in JSON, as a list of lists -> [[8,2],[3,1],...] ; we only need the first value as it represents the card of a player
+give_cards(Deck, Player) :-
+    initialize_board,
+    % Extract the first element from each sub-list in Deck
+    findall(Card, (member([Card|_], Deck)), Cards),
+    % Retract the existing cards for the player
+    retractall(player(Player, _)),
+    % Assert the new list of cards for the player
+    assertz(player(Player, Cards)).
+
+
+%%  setup(CyclistInfo) :-
+%%      % Extract cyclist information
+%%      term_to_atom(CyclistInfo, Atom),
+%%      atom_json_dict(Atom, CyclistDict, []),
+%%      get_cyclist_attributes(CyclistDict, Pays, _, Rangee, Case, _),
+%%      print(Pays), nl,
+%%      print(Rangee), nl,
+%%      print(Case), nl.
+%%      % Define mapping rules based on cyclist attributes
+%%      %update_board_mapping(Pays, Section, Rangee, Case, Position).
+%%  
+%%  % Define mapping rules based on cyclist attributes
+%%  %update_board_mapping(Pays, Section, Rangee, Case, Position) :-
+%%  %    % Define your mapping rules here based on the cyclist's attributes
+%%  %    % Example:
+%%  %    (Pays = "Belgique" ->
+%%  %        (Case = 6, Position = b1);
+%%  %    )
+%%  %    % Add more mapping rules as needed...
+%%  
+%%  % Extract cyclist attributes from the provided information
+%%  get_cyclist_attributes(CyclistInfo, Pays, _, Rangee, Case, _) :-
+%%      % Unify the provided attributes with the corresponding values in the CyclistInfo
+%%      member(pays=Pays, CyclistInfo),
+%%      member(rangée=Rangee, CyclistInfo),
+%%      member(case=Case, CyclistInfo).

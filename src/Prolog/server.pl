@@ -54,8 +54,8 @@ get_response(Message, Response) :-
     ).
 
 process_ia_message(Board, Deck, Player, Response) :-
-  setup(Board),
   give_cards(Deck,Player),
+  setup(Board),
   play_best_move(Player, Runner, CardToPlay),
   Response = _{message: Runner, card: CardToPlay}.
 
