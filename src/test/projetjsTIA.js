@@ -270,8 +270,17 @@ function checkWhoStarts(liste) {
 function RandomCarte(playerIndex) {
   // Vérifie si le tableau de cartes est vide
   if (tableau.length === 0) {
-    console.log("Plus de cartes à piocher, mince alors !");
-    return;
+    console.log(
+      "Plus de cartes à piocher, mince alors ! \nRemplissage du tableau en cours ..."
+    );
+    for (var i = 1; i <= 12; i++) {
+      //12 itérations
+      for (var j = 1; j <= 8; j++) {
+        //8 itérations
+        var carte = [i, j];
+        tableau.push(carte);
+      }
+    }
   }
 
   // Choisis aléatoirement une carte du tableau
@@ -478,7 +487,7 @@ function checkTraverser(anciennePosition, rangée) {
 }
 
 function majSections(nomUtilisateur, cycliste, rangée) {
-  const sectionsLimites = [8, 18, 35, 62, 72, 75, 95];
+  const sectionsLimites = [8, 18, 35, 62, 72, 75, 94];
   for (let i = 0; i < sectionsLimites.length; i++) {
     if (
       positions[nomUtilisateur + "_cycliste_" + cycliste].case >
@@ -1049,9 +1058,19 @@ function avancer(carteJouee) {
   checkTraverser(anciennePosition, rangee);
 
   // Mettre à jour la position du cycliste en ajoutant le nombre de cases à avancer
-
-  positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = rangee;
   positions[nomUtilisateur + "_cycliste_" + cycliste].case += casesAAvancer;
+
+  //On vérifie que le cycliste reste sur sa rangée si elle est isolée
+  if (positions[nomUtilisateur + "_cycliste_" + cycliste].section === 7) {
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée =
+      anciennePosition.rangée;
+  } else if (
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case >= 22 &&
+    positions[nomUtilisateur + "_cycliste_" + cycliste].case <= 35 &&
+    anciennePosition.rangée === "exterieur"
+  ) {
+    positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = "exterieur";
+  }
 
   if (anciennePosition.id == "c9_2" || anciennePosition.id == "c10_2") {
     positions[nomUtilisateur + "_cycliste_" + cycliste].rangée = "milieu";
