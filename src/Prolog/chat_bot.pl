@@ -57,7 +57,7 @@ rep_type(7, 'Vous ne pouvez pas avancer sur une case occupee').
 rep_type(8, 'Les cartes chances peuvent soit faire reculer jusqu\'a 3 cases ou au contraire faire avancer.').
 
 % ----------------------------------------------------------------%
-%Nous allons utiliser la fonction de Levenshtein pour comparer la phrase rentrée par l'utilisateur avec chacune des questions-types
+% Nous allons utiliser la fonction de Levenshtein pour comparer la phrase rentrée par l'utilisateur avec chacune des questions-types
 
 regle_rep(String, Rep):-
     %Initialisation des variables

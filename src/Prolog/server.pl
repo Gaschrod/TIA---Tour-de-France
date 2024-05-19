@@ -53,12 +53,18 @@ get_response(Message, Response) :-
     Response = _{message:Prod_Response}
     ).
 
+process_ia_message(Board, Deck, Player, Response) :-
+  setup(Board),
+  give_cards(Deck,Player),
+  play_best_move(Player, Runner, CardToPlay),
+  Response = _{message: Runner, card: CardToPlay}.
+
+
 handle_ia_messages(WebSocket) :-
     ws_receive(WebSocket, Message, [format(json)]),
    ( Message.opcode == close
     -> true
-    ; process_ia_message(Message.data, Response),
+    ; process_ia_message(Message.board, Message.deck, Message.player, Response),
       ws_send(WebSocket, json(Response)),
       handle_ia_messages(WebSocket)
    ).
-

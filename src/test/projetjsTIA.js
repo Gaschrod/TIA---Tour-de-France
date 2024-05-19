@@ -6,7 +6,7 @@ var tourActuel = 1;
 var index = 0;
 var cyclistesJouesDansTour = 0;
 const cyclistesArrives = [];
-dico_score = {};
+var dico_score = {};
 const cases_chances = [
   "c9_0",
   "c10_0",
@@ -42,9 +42,9 @@ var dico_cyclistes = [Joueur1Pion, Joueur2Pion, Joueur3Pion, Joueur4Pion];
 
 // Initialisation des positions des cyclistes
 const positions = {
-  1: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
-  2: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
-  3: { section: 1, rangée: "milieu", case: 0, id: "case_départ" },
+  1: { pays: 0, section: 1, rangée: "milieu", case: 0, id: "case_départ" },
+  2: { pays: 0, section: 1, rangée: "milieu", case: 0, id: "case_départ" },
+  3: { pays: 0, section: 1, rangée: "milieu", case: 0, id: "case_départ" },
 };
 
 const sectionsRangées = {
@@ -122,6 +122,7 @@ function Start_the_game() {
     // afffiche dans la console
     for (var j = 1; j <= 3; j++) {
       positions[joueur + "_cycliste_" + j] = {
+        pays: joueur,
         section: 1,
         rangée: "milieu",
         case: 0,
@@ -407,8 +408,9 @@ function afficherJoueursEtCartesHTML() {
               jouer_carte(joueur, index);
             };
           })(joueur, j);
-
-          carteItem.appendChild(jouerButton);
+          if (nomsJoueurs[i] === "Belgique" || nomsJoueurs[i] === "Italie") {
+            carteItem.appendChild(jouerButton);
+          }
         }
         cartesListe.appendChild(carteItem);
       }
@@ -417,6 +419,24 @@ function afficherJoueursEtCartesHTML() {
       var pasDeCartes = document.createElement("p");
       pasDeCartes.textContent = "Pas de cartes";
       joueurDiv.appendChild(pasDeCartes);
+    }
+    if (nomsJoueurs[i] === "Hollande" || nomsJoueurs[i] === "Allemagne") {
+      var jouerButton = document.createElement("button");
+      jouerButton.textContent = "Jouer";
+
+      jouerButton.onclick = (function (joueur) {
+        return function () {
+          jouer_carte(joueur);
+        };
+      })(joueur);
+      var bot = document.createElement("p");
+      bot.textContent = "Faire jouer le bot:";
+      var br = document.createElement("br");
+      joueurDiv.appendChild(br);
+      joueurDiv.appendChild(bot);
+      if (i == index) {
+        joueurDiv.appendChild(jouerButton);
+      }
     }
     container.appendChild(joueurDiv);
   }
@@ -697,6 +717,7 @@ function mettreAJourPositionsJoueur(
   /* console.log("Objet joueurPion de", nomJoueur, ":", joueurPion); // Ajout du nom du joueur ici*/
 
   joueurPion["cycliste " + cycliste] = {
+    pays: nomJoueur,
     section: section,
     rangée: rangee,
     case: casePosition,
@@ -1440,10 +1461,31 @@ function avancer(carteJouee) {
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
+function envoyerAuServeur(cyclistes, main, nomUtilisateur) {
+  const IA_ROUTE = "/ia";
+  const iaConnection = openWebSocket(IA_ROUTE, "iaWsMessageHandler");
+  const payload = {
+    board: cyclistes,
+    deck: main,
+    player: nomUtilisateur,
+  };
+  sendMessage(iaConnection, JSON.stringify(payload));
+  carteAJouee = iaWsMessageHandler();
+  return carteAJouee;
+}
 
-function jouer_carte(joueur, carteIndex) {
+function jouer_carte(joueur, carteIndex = null) {
   // Pour récupérer les cartes du joueur
   var mainJoueur = window[joueur];
+  if (carteIndex === null) {
+    var element = nomsJoueurs[index];
+    element = element.toLowerCase();
+    let singleQuotedString = element.replace(/"/g, "'");
+    envoyerAuServeur(dico_cyclistes, mainJoueurSuivant, singleQuotedString);
+    if (avancer(carteAJouee) === false) {
+      return;
+    }
+  }
 
   // Vérifie si l'index de la carte est valide
   if (carteIndex >= 0 && carteIndex < mainJoueur.length) {
@@ -1464,9 +1506,8 @@ function jouer_carte(joueur, carteIndex) {
         }
       }
 
-      // Mettre à jour l'interface
-      afficherJoueursEtCartesHTML();
-
+      var mainJoueurSuivant = window[joueurs[index]];
+      console.log("Main du joueur suivant :", mainJoueurSuivant);
       var element = null;
       if (index === 0) {
         element = nomsJoueurs.at(-1);
@@ -1479,7 +1520,15 @@ function jouer_carte(joueur, carteIndex) {
           src: ["/static/sound.mp4"], // Spécifiez le chemin vers votre fichier audio
         });
         sound.play();
+      } else {
+        element = element.toLowerCase();
+        let singleQuotedString = element.replace(/"/g, "'");
+        envoyerAuServeur(dico_cyclistes, mainJoueurSuivant, singleQuotedString);
+        if (avancer(carteAJouee) === false) {
+          return;
+        }
       }
+      afficherJoueursEtCartesHTML();
     }
   } else {
     console.log("Index de carte invalide !");

@@ -68,7 +68,6 @@ function openWebSocket(route, messageHandler) {
 document.addEventListener("DOMContentLoaded", (e) => {
   const inputField = document.getElementById("userInput");
   const echoConnection = openWebSocket(WS_ROUTE, wsMessageHandler);
-  const iaConnection = openWebSocket(IA_ROUTE, iaWsMessageHandler);
   inputField.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
       const command = inputField.value.trim();
